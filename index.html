@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>일본어 여행 문장</title>
+
+<style>
+body {
+  margin: 0;
+  background: #111;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
+}
+
+.box {
+  background: #222;
+  padding: 40px;
+  margin: 10px;
+  border-radius: 12px;
+  font-size: 32px;
+}
+
+button {
+  font-size: 22px;
+  padding: 15px 25px;
+  margin: 10px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+#show { background: #4CAF50; color: white; }
+#next { background: #2196F3; color: white; }
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div id="ko" class="box">시작 버튼을 눌러 주세요</div>
+  <div id="ja" class="box" style="display:none;"></div>
+
+  <div>
+    <button id="show">정답 보기</button>
+    <button id="next">다음</button>
+  </div>
+
+</div>
+
+<script>
+
+// 여행 핵심 문장 (최소 세트)
+const sentences = [
+  ["화장실은 어디인가요?", "トイレはどこですか？"],
+  ["이거 얼마예요?", "これはいくらですか？"],
+  ["천천히 말해 주세요", "ゆっくり話してください"],
+  ["역까지 어떻게 가요?", "駅までどうやって行きますか？"],
+  ["추천 메뉴는 뭐예요?", "おすすめは何ですか？"],
+  ["카드 되나요?", "カードで払えますか？"]
+];
+
+let i = 0;
+
+const ko = document.getElementById("ko");
+const ja = document.getElementById("ja");
+
+function load() {
+  ko.textContent = sentences[i][0];
+  ja.textContent = sentences[i][1];
+  ja.style.display = "none";
+}
+
+document.getElementById("show").onclick = function () {
+  ja.style.display = "block";
+};
+
+document.getElementById("next").onclick = function () {
+  i = (i + 1) % sentences.length;
+  load();
+};
+
+// 선택 기능: 음성 (되면 실행, 안되면 무시)
+function speak(text) {
+  if ('speechSynthesis' in window) {
+    const msg = new SpeechSynthesisUtterance(text);
+    msg.lang = "ja-JP";
+    speechSynthesis.speak(msg);
+  }
+}
+
+// (선택) 일본어 자동 읽기
+document.getElementById("show").onclick = function () {
+  ja.style.display = "block";
+  speak(sentences[i][1]);
+};
+
+load();
+
+</script>
+
+</body>
+</html>
