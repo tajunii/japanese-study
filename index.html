@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>일본어 학습 앱</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #0f172a; color: #f8fafc; font-family: sans-serif; }
+        .view { display: none; }
+        .view.active { display: block; }
+        .card { background-color: #1e293b; border: 1px solid #334155; }
+        button:focus { outline: 3px solid #3b82f6; }
+    </style>
+</head>
+<body class="p-6 md:p-12">
+
+    <div id="app" class="max-w-4xl mx-auto">
+        <header class="mb-8 border-b border-slate-700 pb-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold">Japanese Training</h1>
+            <div id="status-badge" class="text-xs bg-slate-800 px-3 py-1 rounded-full text-slate-400">메뉴</div>
+        </header>
+
+        <!-- 메인 메뉴 -->
+        <div id="main-view" class="view active grid grid-cols-1 md:grid-cols-2 gap-6">
+            <button onclick="setMode('intensive')" class="card p-8 rounded-xl text-left hover:border-blue-500 transition">
+                <h2 class="text-xl font-bold mb-2">1. Intensive Study</h2>
+                <p class="text-slate-400 text-sm">스크립트 쉐도잉, 어휘 및 문법 분석</p>
+            </button>
+            <button onclick="setMode('fluency')" class="card p-8 rounded-xl text-left hover:border-blue-500 transition">
+                <h2 class="text-xl font-bold mb-2">2. Fluency Drill</h2>
+                <p class="text-slate-400 text-sm">상황별 즉각 발화 연습</p>
+            </button>
+        </div>
+
+        <!-- Intensive Study 뷰 -->
+        <div id="intensive-view" class="view">
+            <button onclick="setMode('menu')" class="mb-4 text-blue-400 hover:text-blue-300">← 메뉴로</button>
+            <div class="card p-6 rounded-xl space-y-6">
+                <h2 class="text-xl font-bold">Intensive Study</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mb-4">
+                    <button onclick="playAudio('full')" class="bg-slate-700 hover:bg-slate-600 p-2 rounded text-sm">전체 듣기</button>
+                    <button onclick="playAudio('dialogue')" class="bg-slate-700 hover:bg-slate-600 p-2 rounded text-sm">2인 대화</button>
+                    <button onclick="playAudio('personA')" class="bg-slate-700 hover:bg-slate-600 p-2 rounded text-sm">A 파트</button>
+                    <button onclick="playAudio('personB')" class="bg-slate-700 hover:bg-slate-600 p-2 rounded text-sm">B 파트</button>
+                </div>
+                <audio id="main-audio" controls class="w-full mb-4"></audio>
+                <div id="script-area" class="p-5 bg-slate-900 rounded border border-slate-700">
+                    <p id="script-text" class="text-lg text-slate-200">데이터 로딩 중...</p>
+                </div>
+                <ul id="vocab-list" class="text-slate-300 list-disc pl-5"></ul>
+            </div>
+        </div>
+
+        <!-- Fluency Drill 뷰 -->
+        <div id="fluency-view" class="view">
+            <button onclick="setMode('menu')" class="mb-4 text-blue-400">← 메뉴로</button>
+            <div class="card p-8 text-center">
+                <div id="fluency-kr" class="text-3xl font-bold mb-8">준비 중...</div>
+                <button onclick="alert('다음 단계에서 구현 예정')" class="bg-blue-600 px-10 py-4 rounded-lg font-bold">정답 확인</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentData = null;
+
+        // 파일을 불러오는 경로를 절대 경로가 아닌 '현재 위치에서 data 폴더로' 이동하도록 고정했습니다.
+        async function loadData() {
+            try {
+                // TV 브라우저에서 가장 잘 인식하는 상대 경로 방식입니다.
+                const response = await fetch('data/week_01.json');
+                if (!response.ok) throw new Error('파일을 찾을 수 없음');
+                currentData = await response.json();
+                
+                // 데이터 적용
+                document.getElementById('script-text').innerText = currentData.script;
+                document.getElementById('vocab-list').innerHTML = currentData.vocab.map(v => 
+                    `<li>${v.word}: ${v.meaning}</li>`).join('');
+            } catch (err) {
+                document.getElementById('script-text').innerText = "데이터 로드 실패: 파일을 찾을 수 없습니다.";
+                console.error(err);
+            }
+        }
+
+        function playAudio(type) {
+            const audio = document.getElementById('main-audio');
+            if (currentData && currentData.audio[type]) {
+                audio.src = currentData.audio[type];
+                audio.play();
+            }
+        }
+
+        function setMode(mode) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            if (mode === 'intensive') document.getElementById('intensive-view').classList.add('active');
+            else if (mode === 'fluency') document.getElementById('fluency-view').classList.add('active');
+            else document.getElementById('main-view').classList.add('active');
+        }
+
+        window.onload = loadData;
+    </script>
+</body>
+</html>
