@@ -10,98 +10,50 @@
         .view { display: none; } .view.active { display: block; }
         .card { background-color: #1e293b; border: 1px solid #334155; padding: 2rem; border-radius: 1rem; }
         .content-box { background-color: #334155; border-radius: 0.5rem; padding: 1.5rem; margin-top: 0.5rem; font-size: 1.25rem; }
-        ruby rt { color: #ef4444; font-size: 0.75rem; }
-        .example-text { color: #fbbf24; font-size: 1.1rem; }
-        .trans-text { color: #94a3b8; font-size: 1.1rem; }
+        ruby rt { color: #f87171; font-size: 0.75rem; }
     </style>
 </head>
 <body class="p-6">
     <div id="app" class="max-w-4xl mx-auto">
-        <!-- 메인 메뉴 -->
+        <!-- 1. 메인 메뉴 -->
         <div id="main-view" class="view active">
-            <h1 class="text-4xl font-extrabold mb-10 text-center text-white">학습 센터</h1>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <button onclick="showView('script')" class="p-8 rounded-2xl text-left bg-gradient-to-br from-indigo-900 to-slate-800 border border-slate-700 hover:border-indigo-500 shadow-xl">
-                    <span class="text-2xl font-bold text-white">쉐도잉 연습</span>
-                </button>
-                <button onclick="showView('trans')" class="p-8 rounded-2xl text-left bg-gradient-to-br from-blue-900 to-slate-800 border border-slate-700 hover:border-blue-500 shadow-xl">
-                    <span class="text-2xl font-bold text-white">원문 해석</span>
-                </button>
-                <button onclick="showView('grammar')" class="p-8 rounded-2xl text-left bg-gradient-to-br from-emerald-900 to-slate-800 border border-slate-700 hover:border-emerald-500 shadow-xl">
-                    <span class="text-2xl font-bold text-white">단어 및 문법</span>
-                </button>
-                <button onclick="showView('dialog')" class="p-8 rounded-2xl text-left bg-gradient-to-br from-purple-900 to-slate-800 border border-slate-700 hover:border-purple-500 shadow-xl">
-                    <span class="text-2xl font-bold text-white">대화문</span>
-                </button>
+            <h1 class="text-3xl font-bold mb-8">학습 메뉴</h1>
+            <div class="grid grid-cols-1 gap-4">
+                <button onclick="showView('script')" class="card text-2xl font-bold hover:bg-slate-700">쉐도잉 연습</button>
+                <button onclick="showView('trans')" class="card text-2xl font-bold hover:bg-slate-700">원문 해석</button>
+                <button onclick="showView('grammar')" class="card text-2xl font-bold hover:bg-slate-700">단어 및 문법</button>
+                <button onclick="showView('dialog')" class="card text-2xl font-bold hover:bg-slate-700">대화문</button>
             </div>
         </div>
 
-        <!-- 각 항목별 상세 페이지 -->
+        <!-- 쉐도잉 연습 -->
         <div id="script-view" class="view">
             <h2 class="text-2xl font-bold mb-4">쉐도잉 연습</h2>
-            <!-- 오디오 재생기 추가 -->
+            <!-- 오디오 재생기 (파일명 수정함) -->
             <audio controls class="w-full mb-4 bg-slate-700 rounded-lg p-2">
-                <source src="audio/스크립트.mp3" type="audio/mpeg">
+                <source src="audio/script.mp3" type="audio/mpeg">
                 브라우저가 오디오를 지원하지 않습니다.
             </audio>
-            <div class="content-box leading-relaxed" id="script-text"></div>
-            <button onclick="showView('main')" class="mt-6 text-blue-400 font-bold hover:text-blue-300">← 메뉴로 돌아가기</button>
+            <div class="content-box" id="script-text"></div>
+            <button onclick="showView('main')" class="mt-6 text-blue-400">← 뒤로</button>
         </div>
 
-        <div id="trans-view" class="view">
-            <h2 class="text-2xl font-bold mb-4">원문 해석</h2>
-            <div class="content-box leading-relaxed" id="trans-text"></div>
-            <button onclick="showView('main')" class="mt-6 text-blue-400 font-bold hover:text-blue-300">← 메뉴로 돌아가기</button>
-        </div>
-
-        <div id="grammar-view" class="view">
-            <h2 class="text-2xl font-bold mb-4">단어 및 문법</h2>
-            <div class="content-box" id="grammar-text"></div>
-            <button onclick="showView('main')" class="mt-6 text-blue-400 font-bold hover:text-blue-300">← 메뉴로 돌아가기</button>
-        </div>
-
-        <div id="dialog-view" class="view">
-            <h2 class="text-2xl font-bold mb-4">대화문</h2>
-            <div class="content-box" id="dialog-text"></div>
-            <button onclick="showView('main')" class="mt-6 text-blue-400 font-bold hover:text-blue-300">← 메뉴로 돌아가기</button>
-        </div>
+        <!-- 원문 해석 -->
+        <div id="trans-view" class="view"><h2 class="text-2xl font-bold mb-4">원문 해석</h2><div class="content-box" id="trans-text"></div><button onclick="showView('main')" class="mt-6 text-blue-400">← 뒤로</button></div>
+        
+        <!-- 단어 및 문법 -->
+        <div id="grammar-view" class="view"><h2 class="text-2xl font-bold mb-4">단어 및 문법</h2><div class="content-box" id="grammar-text"></div><button onclick="showView('main')" class="mt-6 text-blue-400">← 뒤로</button></div>
+        
+        <!-- 대화문 -->
+        <div id="dialog-view" class="view"><h2 class="text-2xl font-bold mb-4">대화문</h2><div class="content-box" id="dialog-text"></div><button onclick="showView('main')" class="mt-6 text-blue-400">← 뒤로</button></div>
     </div>
 
     <script>
-        const data = {
-            script: `「<ruby>風<rt>ふう</rt>鈴<rt>りん</rt></ruby>」を<ruby>飾<rt>かざ</rt></ruby>る<ruby>季節<rt>きせつ</rt></ruby>になりました。<br>
-<ruby>愛媛県<rt>えひめけん</rt>松山市<rt>まつやまし</rt></ruby>の<ruby>商店街<rt>しょうてんがい</rt></ruby>では、<ruby>毎年<rt>まいとし</rt></ruby>、<ruby>観光<rt>かんこう</rt></ruby>に<ruby>来<rt>き</rt></ruby>た<ruby>人<rt>ひと</rt></ruby>などに<ruby>涼<rt>すず</rt></ruby>しく<ruby>感<rt>かん</rt></ruby>じてもらうため、<ruby>店<rt>みせ</rt></ruby>の<ruby>前<rt>まえ</rt></ruby>に<ruby>風<rt>ふう</rt>鈴<rt>りん</rt></ruby>を<ruby>飾<rt>かざ</rt></ruby>ります。<br>
-<ruby>今年<rt>ことし</rt></ruby>も、<ruby>店<rt>みせ</rt></ruby>の<ruby>人<rt>ひと</rt></ruby>や<ruby>高校生<rt>こうこうせい</rt></ruby>たちが、<ruby>愛媛県<rt>えひめけん</rt></ruby>でつくった<ruby>砥部焼<rt>とべやき</rt></ruby>の<ruby>風<rt>ふう</rt>鈴<rt>りん</rt></ruby>を<ruby>飾<rt>かざ</rt></ruby>りました。<ruby>金魚<rt>きんぎょ</rt></ruby>や<ruby>朝顔<rt>あさがお</rt></ruby>など<ruby>夏<rt>なつ</rt></ruby>らしい<ruby>絵<rt>え</rt></ruby>がかいてあります。<br>
-<ruby>風<rt>ふう</rt>鈴<rt>りん</rt></ruby>を<ruby>飾<rt>かざ</rt></ruby>った<ruby>高校生<rt>こうこうせい</rt></ruby>は「<ruby>音<rt>おと</rt></ruby>を<ruby>聞<rt>き</rt></ruby>いて、<ruby>涼<rt>すず</rt></ruby>しく<ruby>感<rt>かん</rt></ruby>じてほしいです」と<ruby>話<rt>はな</rt></ruby>していました。<br>
-<ruby>大分県<rt>おおいたけん</rt></ruby>から<ruby>来<rt>き</rt></ruby>た<ruby>女性<rt>じょせい</rt></ruby>は「<ruby>今<rt>いま</rt></ruby>はあまり<ruby>風<rt>ふう</rt>鈴<rt>りん</rt></ruby>を<ruby>見<rt>み</rt></ruby>ないので、<ruby>昔<rt>むかし</rt></ruby>のようでいいですね。<ruby>涼<rt>すず</rt></ruby>しくなりました」と<ruby>話<rt>はな</rt></ruby>していました。`,
-            trans: `[원문]<br>「風鈴」を飾る季節になりました。愛媛県松山市の商店街では、毎年、観光に来た人などに涼しく感じてもらうため、店の前に風鈴を飾ります。今年も、店の人や高校生たちが、愛媛県でつくった砥部焼の風鈴を飾りました。金魚や朝顔など夏らしい絵がかいてあります。風鈴を飾った高校生は「音を聞いて、涼しく感じてほしいです」と話していました。大分県から来た女性は「今はあまり風鈴を見ないので、昔のようでいいですね。とても涼しくなりました」と話していました。<br><br>
-[해석]<br>'풍경(바람종)'을 장식하는 계절이 되었습니다. 에히메현 마츠야마시의 상점가에서는 매년 관광객들에게 시원함을 느끼게 해주기 위해 가게 앞에 풍경을 장식합니다. 올해도 가게 사람들과 고등학생들이 에히메현에서 만든 토베야키(도자기) 풍경을 장식했습니다. 금붕어나 나팔꽃 등 여름다운 그림이 그려져 있습니다. 풍경을 장식한 고등학생은 "소리를 듣고 시원함을 느꼈으면 좋겠어요"라고 말했습니다. 오이타현에서 온 여성은 "지금은 풍경을 잘 볼 수 없어서, 옛날 같아서 좋네요. 매우 시원해졌어요"라고 말했습니다.`,
-            grammar: `
-                <h3 class="text-blue-400 font-bold mb-2">단어</h3>
-                <ul class="mb-6 space-y-2">
-                    <li><strong>風鈴(ふうりん)</strong>: 1. 풍경, 2. 바람종<br><span class="example-text">예: 風鈴の音が涼しいです。(풍경 소리가 시원합니다.)</span></li>
-                    <li><strong>昔(むかし)</strong>: 1. 과거, 2. 옛날<br><span class="example-text">예: 昔の友達に会いました。(옛 친구를 만났습니다.)</span></li>
-                    <li><strong>涼しい(すずしい)</strong>: 1. 서늘하다, 2. 쾌적하다<br><span class="example-text">예: 今日は風が涼しいです。(오늘은 바람이 시원합니다.)</span></li>
-                </ul>
-                <h3 class="text-blue-400 font-bold mb-2">문법</h3>
-                <ul class="space-y-2">
-                    <li><strong>~ので</strong>: ~하므로, ~하기 때문에<br><span class="example-text">예: 雨が降ったので帰りましょう。(비가 오니까 돌아갑시다.)</span></li>
-                    <li><strong>~てもらう</strong>: ~해 받다<br><span class="example-text">예: 友達に教えてもらいました。(친구에게 가르침을 받았습니다.)</span></li>
-                    <li><strong>~てほしい</strong>: ~해주길 원하다<br><span class="example-text">예: もっと練習してほしいです。(더 연습해주길 바랍니다.)</span></li>
-                </ul>`,
-            dialog: `
-                <p class="mb-4">風鈴の季節になりましたね。<br><span class="trans-text">풍경의 계절이 되었네요.</span></p>
-                <p class="mb-4">そうですね、もう夏を感じます。<br><span class="trans-text">그러네요, 벌써 여름을 느껴요.</span></p>
-                <p class="mb-4">松山の商店街では何をしているんですか。<br><span class="trans-text">마츠야마 상점가에서는 무엇을 하고 있나요?</span></p>
-                <p class="mb-4">涼しく感じてもらうために風鈴を飾っています。<br><span class="trans-text">시원함을 느끼게 해주기 위해 풍경을 장식하고 있어요.</span></p>
-                <p class="mb-4">どんな風鈴を飾っているんですか。<br><span class="trans-text">어떤 풍경을 장식하고 있나요?</span></p>
-                <p class="mb-4">砥部焼の風鈴だそうです。<br><span class="trans-text">토베야키(도자기) 풍경이라고 하네요.</span></p>
-                <p class="mb-4">砥部焼って有名なんですか。<br><span class="trans-text">토베야키는 유명한가요?</span></p>
-                <p class="mb-4">愛媛県の伝統的な焼き物です。<br><span class="trans-text">에히메현의 전통적인 도자기입니다.</span></p>
-                <p class="mb-4">風鈴にはどんな絵がありますか。<br><span class="trans-text">풍경에는 어떤 그림이 있나요?</span></p>
-                <p class="mb-4">金魚や朝顔など夏らしい絵です。<br><span class="trans-text">금붕어나 나팔꽃 같은 여름다운 그림이에요.</span></p>
-                <p class="mb-4">高校生たちは何をしていたんですか。<br><span class="trans-text">고등학생들은 무엇을 하고 있었나요?</span></p>
-                <p class="mb-4">店の人と一緒に風鈴を飾っていました。<br><span class="trans-text">가게 사람들과 함께 풍경을 장식하고 있었어요.</span></p>`
+        const content = {
+            script: "<ruby>風<rt>ふう</rt>鈴<rt>りん</rt></ruby>」を<ruby>飾<rt>かざ</rt></ruby>る<ruby>季節<rt>きせつ</rt></ruby>になりました。<br>愛媛県松山市の商店街では、毎年、観光に来た人などに涼しく感じてもらうため、店の前に風鈴を飾ります。<br>今年も、店の人や高校生たちが、愛媛県でつくった砥部焼の風鈴を飾りました。金魚や朝顔など夏らしい絵がかいてあります。<br>風鈴を飾った高校生は「音を聞いて、涼しく感じてほしいです」と話していました。<br>大分県から来た女性は「今はあまり風鈴を見ないので、昔のようでいいですね。とても涼しくなりました」と話していました。",
+            trans: "[원문]<br>「風鈴」を飾る季節になりました。愛媛県松山市の商店街では、毎年、観光に来た人などに涼しく感じてもらうため、店の前に風鈴を飾ります。<br>[해석]<br>'풍경'을 장식하는 계절이 되었습니다. 에히메현 마츠야마시의 상점가에서는 매년 관광객들에게 시원함을 느끼게 해주기 위해 가게 앞에 풍경을 장식합니다.",
+            grammar: "<h3 class='text-blue-400 font-bold'>단어</h3><ul><li><strong>風鈴(ふうりん)</strong>: 풍경</li><li><strong>昔(むかし)</strong>: 옛날</li><li><strong>涼しい(すずしい)</strong>: 서늘하다</li></ul><br><h3 class='text-blue-400 font-bold'>문법</h3><ul><li><strong>~ので</strong>: ~하기 때문에 <span style='color: #fbbf24;'>(예: 비가 와서 우산을 썼어요.)</span></li><li><strong>~てもらう</strong>: ~해 받다 <span style='color: #fbbf24;'>(예: 친구에게 부탁했어요.)</span></li><li><strong>~てほしい</strong>: ~해주길 바란다 <span style='color: #fbbf24;'>(예: 연습해주길 바라요.)</span></li></ul>",
+            dialog: "<p>風鈴の季節になりましたね。<br><span style='color: #94a3b8;'>풍경의 계절이 되었네요.</span></p><p>そうですね、もう夏を感じます。<br><span style='color: #94a3b8;'>그러네요, 벌써 여름을 느껴요.</span></p><p>松山の商店街では何をしているんですか。<br><span style='color: #94a3b8;'>마츠야마 상점가에서는 무엇을 하고 있나요?</span></p><p>涼しく感じてもらうために風鈴を飾っています。<br><span style='color: #94a3b8;'>시원함을 느끼게 해주기 위해 풍경을 장식하고 있어요.</span></p>"
         };
 
         function showView(v) {
@@ -109,10 +61,10 @@
             document.getElementById(v + '-view').classList.add('active');
         }
 
-        document.getElementById('script-text').innerHTML = data.script;
-        document.getElementById('trans-text').innerHTML = data.trans;
-        document.getElementById('grammar-text').innerHTML = data.grammar;
-        document.getElementById('dialog-text').innerHTML = data.dialog;
+        document.getElementById('script-text').innerHTML = content.script;
+        document.getElementById('trans-text').innerHTML = content.trans;
+        document.getElementById('grammar-text').innerHTML = content.grammar;
+        document.getElementById('dialog-text').innerHTML = content.dialog;
     </script>
 </body>
 </html>
