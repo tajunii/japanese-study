@@ -3,101 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>일본어 학습 앱</title>
+    <title>일본어 학습 시스템</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { background-color: #0f172a; color: #f8fafc; font-family: sans-serif; }
-        .view { display: none; }
-        .view.active { display: block; }
+        .view { display: none; } .view.active { display: block; }
         .card { background-color: #1e293b; border: 1px solid #334155; }
-        button:focus { outline: 3px solid #3b82f6; }
     </style>
 </head>
-<body class="p-6 md:p-12">
-
+<body class="p-6">
     <div id="app" class="max-w-4xl mx-auto">
-        <header class="mb-8 border-b border-slate-700 pb-4 flex justify-between items-center">
-            <h1 class="text-2xl font-bold">Japanese Training</h1>
-            <div id="status-badge" class="text-xs bg-slate-800 px-3 py-1 rounded-full text-slate-400">메뉴</div>
+        <header class="mb-6 border-b border-slate-700 pb-4">
+            <h1 class="text-3xl font-bold">일본어 학습 시스템</h1>
+            <p class="text-slate-400">데이터는 GitHub(data/week_01.json)에서 실시간으로 불러옵니다.</p>
         </header>
 
-        <!-- 메인 메뉴 -->
-        <div id="main-view" class="view active grid grid-cols-1 md:grid-cols-2 gap-6">
-            <button onclick="setMode('intensive')" class="card p-8 rounded-xl text-left hover:border-blue-500 transition">
-                <h2 class="text-xl font-bold mb-2">1. Intensive Study</h2>
-                <p class="text-slate-400 text-sm">스크립트 쉐도잉, 어휘 및 문법 분석</p>
+        <!-- 메뉴 -->
+        <div id="main-view" class="view active grid grid-cols-2 gap-4">
+            <button onclick="showView('intensive')" class="card p-8 rounded-lg text-left hover:bg-slate-700 transition">
+                <h2 class="text-2xl font-bold mb-2">모드 1: Intensive</h2>
+                <p class="text-slate-400">쉐도잉, 어휘, 대화 연습</p>
             </button>
-            <button onclick="setMode('fluency')" class="card p-8 rounded-xl text-left hover:border-blue-500 transition">
-                <h2 class="text-xl font-bold mb-2">2. Fluency Drill</h2>
-                <p class="text-slate-400 text-sm">상황별 즉각 발화 연습</p>
+            <button onclick="showView('fluency')" class="card p-8 rounded-lg text-left hover:bg-slate-700 transition">
+                <h2 class="text-2xl font-bold mb-2">모드 2: Fluency</h2>
+                <p class="text-slate-400">즉각 발화 훈련</p>
             </button>
         </div>
 
-        <!-- Intensive Study 뷰 -->
+        <!-- 모드 1 View -->
         <div id="intensive-view" class="view">
-            <button onclick="setMode('menu')" class="mb-4 text-blue-400 hover:text-blue-300">← 메뉴로</button>
-            <div class="card p-6 rounded-xl space-y-6">
-                <h2 class="text-xl font-bold">Intensive Study</h2>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-2 mb-4">
-                    <button onclick="playAudio('full')" class="bg-slate-700 hover:bg-slate-600 p-2 rounded text-sm">전체 듣기</button>
-                    <button onclick="playAudio('dialogue')" class="bg-slate-700 hover:bg-slate-600 p-2 rounded text-sm">2인 대화</button>
-                    <button onclick="playAudio('personA')" class="bg-slate-700 hover:bg-slate-600 p-2 rounded text-sm">A 파트</button>
-                    <button onclick="playAudio('personB')" class="bg-slate-700 hover:bg-slate-600 p-2 rounded text-sm">B 파트</button>
-                </div>
-                <audio id="main-audio" controls class="w-full mb-4"></audio>
-                <div id="script-area" class="p-5 bg-slate-900 rounded border border-slate-700">
-                    <p id="script-text" class="text-lg text-slate-200">데이터 로딩 중...</p>
-                </div>
-                <ul id="vocab-list" class="text-slate-300 list-disc pl-5"></ul>
+            <button onclick="showView('main')" class="text-blue-400 mb-4">← 뒤로</button>
+            <div id="int-content" class="card p-8 rounded-lg space-y-6">
+                <!-- 데이터가 여기로 로드됨 -->
             </div>
         </div>
 
-        <!-- Fluency Drill 뷰 -->
+        <!-- 모드 2 View -->
         <div id="fluency-view" class="view">
-            <button onclick="setMode('menu')" class="mb-4 text-blue-400">← 메뉴로</button>
-            <div class="card p-8 text-center">
-                <div id="fluency-kr" class="text-3xl font-bold mb-8">준비 중...</div>
-                <button onclick="alert('다음 단계에서 구현 예정')" class="bg-blue-600 px-10 py-4 rounded-lg font-bold">정답 확인</button>
+            <button onclick="showView('main')" class="text-blue-400 mb-4">← 뒤로</button>
+            <div class="card p-10 text-center rounded-lg">
+                <h2 class="text-2xl font-bold mb-8">즉각 발화 훈련</h2>
+                <div id="drill-kr" class="text-4xl font-bold mb-6"></div>
+                <div id="drill-jp" class="text-4xl text-blue-400 font-bold mb-10 hidden"></div>
+                <button onclick="nextDrill()" class="bg-blue-600 px-12 py-4 rounded-xl text-xl font-bold">정답 확인 / 다음</button>
             </div>
         </div>
     </div>
 
     <script>
-        let currentData = null;
+        let data = null;
+        let drillIdx = 0;
 
-        // 파일을 불러오는 경로를 절대 경로가 아닌 '현재 위치에서 data 폴더로' 이동하도록 고정했습니다.
         async function loadData() {
             try {
-                // TV 브라우저에서 가장 잘 인식하는 상대 경로 방식입니다.
-                const response = await fetch('data/week_01.json');
-                if (!response.ok) throw new Error('파일을 찾을 수 없음');
-                currentData = await response.json();
-                
-                // 데이터 적용
-                document.getElementById('script-text').innerText = currentData.script;
-                document.getElementById('vocab-list').innerHTML = currentData.vocab.map(v => 
-                    `<li>${v.word}: ${v.meaning}</li>`).join('');
-            } catch (err) {
-                document.getElementById('script-text').innerText = "데이터 로드 실패: 파일을 찾을 수 없습니다.";
-                console.error(err);
+                // TV와 PC가 동일하게 읽을 수 있도록 GitHub의 raw 데이터 주소를 사용하세요.
+                // 배포 주소 뒤에 data/week_01.json을 붙여서 불러옵니다.
+                const response = await fetch('data/week_01.json?t=' + new Date().getTime());
+                data = await response.json();
+                render();
+            } catch(e) {
+                document.getElementById('int-content').innerHTML = `<p class="text-red-400">데이터를 불러오지 못했습니다. 경로를 확인하세요.</p>`;
             }
         }
 
-        function playAudio(type) {
-            const audio = document.getElementById('main-audio');
-            if (currentData && currentData.audio[type]) {
-                audio.src = currentData.audio[type];
-                audio.play();
-            }
+        function render() {
+            const m1 = data.mode1_intensive;
+            document.getElementById('int-content').innerHTML = `
+                <h2 class="text-3xl font-bold text-blue-400">${m1.title}</h2>
+                <div><h3 class="text-sm text-slate-400">스크립트</h3><p class="p-4 bg-slate-900 rounded">${m1.script}</p></div>
+                <div><h3 class="text-sm text-slate-400">해석</h3><p class="p-4 bg-slate-900 rounded">${m1.translation}</p></div>
+                <div><h3 class="text-sm text-slate-400">단어/문법</h3><ul class="list-disc pl-5">${m1.grammar_vocab.map(v => `<li>${v.item}: ${v.desc}</li>`).join('')}</ul></div>
+            `;
+            renderDrill();
         }
 
-        function setMode(mode) {
-            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-            if (mode === 'intensive') document.getElementById('intensive-view').classList.add('active');
-            else if (mode === 'fluency') document.getElementById('fluency-view').classList.add('active');
-            else document.getElementById('main-view').classList.add('active');
+        function renderDrill() {
+            const d = data.mode2_fluency.drills[drillIdx];
+            document.getElementById('drill-kr').innerText = d.kr;
+            document.getElementById('drill-jp').innerText = d.jp;
+            document.getElementById('drill-jp').classList.add('hidden');
         }
 
+        function nextDrill() {
+            const el = document.getElementById('drill-jp');
+            if(el.classList.contains('hidden')) el.classList.remove('hidden');
+            else { drillIdx = (drillIdx + 1) % data.mode2_fluency.drills.length; renderDrill(); }
+        }
+
+        function showView(v) {
+            document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
+            document.getElementById(v + '-view').classList.add('active');
+        }
         window.onload = loadData;
     </script>
 </body>
