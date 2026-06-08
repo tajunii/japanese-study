@@ -1,0 +1,14 @@
+{
+  "script": "학습할 스크립트 텍스트 내용...",
+  "analysis": "문법 및 어휘 설명 내용...",
+  "vocab": [
+    { "word": "단어1", "meaning": "뜻1" },
+    { "word": "단어2", "meaning": "뜻2" }
+  ],
+  "audio": {
+    "full": "audio/full.mp3",
+    "dialogue": "audio/dialogue.mp3",
+    "personA": "audio/a.mp3",
+    "personB": "audio/b.mp3"
+  }
+}
