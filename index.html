@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>일본어 학습 앱</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #0f172a; color: #f8fafc; font-family: sans-serif; }
+        .view { display: none; }
+        .view.active { display: block; }
+        .card { background-color: #1e293b; border: 1px solid #334155; }
+        button:focus { outline: 3px solid #3b82f6; }
+    </style>
+</head>
+<body class="p-6 md:p-12">
+
+    <div id="app" class="max-w-4xl mx-auto">
+        <header class="mb-8 border-b border-slate-700 pb-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold">Japanese Training</h1>
+            <div id="status-badge" class="text-xs bg-slate-800 px-3 py-1 rounded-full text-slate-400">메뉴</div>
+        </header>
+
+        <!-- 1. 메인 메뉴 -->
+        <div id="main-view" class="view active grid grid-cols-1 md:grid-cols-2 gap-6">
+            <button onclick="setMode('intensive')" class="card p-8 rounded-xl text-left hover:border-blue-500 transition">
+                <h2 class="text-xl font-bold mb-2">1. Intensive Study</h2>
+                <p class="text-slate-400 text-sm">스크립트 쉐도잉, 어휘 및 문법 분석</p>
+            </button>
+            <button onclick="setMode('fluency')" class="card p-8 rounded-xl text-left hover:border-blue-500 transition">
+                <h2 class="text-xl font-bold mb-2">2. Fluency Drill</h2>
+                <p class="text-slate-400 text-sm">상황별 즉각 발화 연습</p>
+            </button>
+        </div>
+
+        <!-- 2. Intensive Study 뷰 -->
+        <div id="intensive-view" class="view">
+            <button onclick="setMode('menu')" class="mb-4 text-blue-400 hover:text-blue-300">← 메뉴로</button>
+            <div class="card p-6 rounded-xl space-y-6">
+                <h2 class="text-xl font-bold">Intensive Study</h2>
+                
+                <div id="script-area" class="p-5 bg-slate-900 rounded border border-slate-700 min-h-[150px]">
+                    <p id="script-text" class="text-lg text-slate-200 leading-relaxed mb-4">데이터를 불러오는 중입니다...</p>
+                </div>
+
+                <div id="analysis-area" class="border-t border-slate-700 pt-6">
+                    <h3 class="text-sm font-semibold text-slate-500 uppercase mb-3">어휘 및 문법 분석</h3>
+                    <ul id="vocab-list" class="text-slate-300 space-y-2 list-disc pl-5">
+                        <li>데이터 로딩 시 여기에 표시됩니다.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. Fluency Drill 뷰 -->
+        <div id="fluency-view" class="view">
+            <div class="mb-4 flex justify-between">
+                <button onclick="setMode('menu')" class="text-blue-400 hover:text-blue-300">← 메뉴로</button>
+                <span class="text-slate-500 text-sm">반사적 발화 훈련</span>
+            </div>
+            <div class="card p-8 rounded-xl text-center">
+                <div id="fluency-kr" class="text-3xl font-bold mb-8 min-h-[4rem]">Loading...</div>
+                <div id="fluency-jp" class="text-3xl text-blue-400 font-bold mb-10 hidden"></div>
+                <button id="fluency-action" onclick="toggleFluencyAnswer()" class="bg-blue-600 hover:bg-blue-700 px-10 py-4 rounded-lg font-bold text-xl">정답 확인</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 데모 데이터 (fetch 실패 시 사용)
+        const demoData = {
+            script: "안녕하세요, 이것은 데모 데이터입니다.",
+            analysis: "데이터 파일을 찾을 수 없을 때 표시됩니다.",
+            vocab: [
+                { word: "Test", meaning: "데이터 로딩 확인용" }
+            ]
+        };
+
+        const fluencyData = [
+            { kr: "화장실은 어디에 있습니까?", jp: "トイレはどこですか？" },
+            { kr: "이것은 얼마입니까?", jp: "いくらですか？" }
+        ];
+
+        let currentFluencyIndex = 0;
+        let isAnswerVisible = false;
+
+        // 데이터 로드
+        async function loadData() {
+            try {
+                const response = await fetch('data/week_01.json');
+                if (!response.ok) throw new Error("파일 없음");
+                const data = await response.json();
+                applyData(data);
+            } catch (err) {
+                console.warn("데이터 로드 실패, 데모 모드 작동", err);
+                applyData(demoData);
+            }
+        }
+
+        // 화면 적용
+        function applyData(data) {
+            document.getElementById('script-text').innerText = data.script;
+            const list = document.getElementById('vocab-list');
+            list.innerHTML = data.vocab.map(v => `<li>${v.word}: ${v.meaning}</li>`).join('');
+        }
+
+        function setMode(mode) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            const status = document.getElementById('status-badge');
+            
+            if (mode === 'menu') {
+                document.getElementById('main-view').classList.add('active');
+                status.innerText = '메뉴';
+            } else if (mode === 'intensive') {
+                document.getElementById('intensive-view').classList.add('active');
+                status.innerText = 'Intensive Study';
+            } else if (mode === 'fluency') {
+                document.getElementById('fluency-view').classList.add('active');
+                status.innerText = 'Fluency Drill';
+                renderFluency();
+            }
+        }
+
+        function renderFluency() {
+            isAnswerVisible = false;
+            document.getElementById('fluency-kr').innerText = fluencyData[currentFluencyIndex].kr;
+            document.getElementById('fluency-jp').innerText = fluencyData[currentFluencyIndex].jp;
+            document.getElementById('fluency-jp').classList.add('hidden');
+            document.getElementById('fluency-action').innerText = "정답 확인";
+        }
+
+        function toggleFluencyAnswer() {
+            if (!isAnswerVisible) {
+                document.getElementById('fluency-jp').classList.remove('hidden');
+                document.getElementById('fluency-action').innerText = "다음 문제";
+                isAnswerVisible = true;
+            } else {
+                currentFluencyIndex = (currentFluencyIndex + 1) % fluencyData.length;
+                renderFluency();
+            }
+        }
+
+        window.onload = loadData;
+    </script>
+</body>
+</html>
