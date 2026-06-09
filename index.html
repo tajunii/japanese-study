@@ -7,11 +7,27 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { background-color: #0f172a; color: #f8fafc; font-family: sans-serif; }
-        .view { display: none; } .view.active { display: block; }
+        
+        /* 모든 뷰 숨김 기본 설정 */
+        .view { display: none; } 
+        
+        /* 활성화된 뷰 표시 (일반) */
+        .view.active { display: block; }
+        
+        /* 메인 뷰 특수 레이아웃: 중앙 정렬 */
+        #main-view.active { 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 80vh; 
+        }
+        
         .card { padding: 1.5rem; border-radius: 0.75rem; background-color: #1e293b; }
         .content-box { padding: 1.5rem; border-radius: 0.5rem; margin-top: 0.5rem; font-size: 1.25rem; line-height: 2; }
         .interpretation-box { background-color: #0f172a; border: 1px solid #334155; padding: 1.5rem; border-radius: 0.5rem; margin-top: 0.5rem; font-size: 1.25rem; line-height: 2; }
         ruby rt { color: #f87171; font-size: 0.75rem; }
+        
         .menu-btn {
             background: linear-gradient(90deg, #1e3a8a 0%, #334155 100%);
             transition: all 0.3s ease;
@@ -28,8 +44,8 @@
         
         <!-- 메인 메뉴 -->
         <div id="main-view" class="view active">
-            <h1 class="text-3xl font-bold mb-6 text-white tracking-tight text-center">학습 메뉴</h1>
-            <div class="space-y-4">
+            <h1 class="text-3xl font-bold mb-10 text-white tracking-tight text-center">학습 메뉴</h1>
+            <div class="w-full max-w-md space-y-4">
                 <button onclick="showView('script')" class="menu-btn w-full card text-xl font-bold text-left text-white shadow-lg">쉐도잉 연습</button>
                 <button onclick="showView('grammar')" class="menu-btn w-full card text-xl font-bold text-left text-white shadow-lg">단어 및 문법</button>
                 <button onclick="showView('dialog')" class="menu-btn w-full card text-xl font-bold text-left text-white shadow-lg">대화문</button>
@@ -69,18 +85,18 @@
             <div class="card space-y-6">
                 <div class="content-box bg-slate-700 leading-loose">
                     <h3 class="text-blue-400 font-bold mb-2">공부할 단어</h3>
-                    <p class="font-bold"><ruby>飾<rt>かざ</rt></ruby>る (장식하다, 꾸미다) - <span class="text-sm text-emerald-400">ex) <ruby>部屋<rt>へや</rt></ruby>に<ruby>花<rt>はな</rt></ruby>を<ruby>飾<rt>かざ</rt></ruby>る。(방에 꽃을 장식한다.)</span></p>
+                    <p class="font-bold"><ruby>飾<rt>かざ</rt></ruby>る (장식하다) - <span class="text-sm text-emerald-400">ex) <ruby>部屋<rt>へや</rt></ruby>に<ruby>花<rt>はな</rt></ruby>を<ruby>飾<rt>かざ</rt></ruby>る。(방에 꽃을 장식한다.)</span></p>
                     <hr class="border-slate-600 my-4">
-                    <p class="font-bold"><ruby>涼<rt>すず</rt></ruby>しい (시원하다, 서늘하다) - <span class="text-sm text-emerald-400">ex) <ruby>秋<rt>あき</rt></ruby>になって<ruby>涼<rt>すず</rt></ruby>しくなった。(가을이 되어 시원해졌다.)</span></p>
+                    <p class="font-bold"><ruby>涼<rt>すず</rt></ruby>しい (시원하다) - <span class="text-sm text-emerald-400">ex) <ruby>秋<rt>あき</rt></ruby>になって<ruby>涼<rt>すず</rt></ruby>しくなった。(가을이 되어 시원해졌다.)</span></p>
                     <hr class="border-slate-600 my-4">
-                    <p class="font-bold"><ruby>感<rt>かん</rt></ruby>じる (느끼다, 실감하다) - <span class="text-sm text-emerald-400">ex) <ruby>風<rt>かぜ</rt></ruby>を<ruby>感<rt>かん</rt></ruby>じる。(바람을 느낀다.)</span></p>
+                    <p class="font-bold"><ruby>感<rt>かん</rt></ruby>じる (느끼다) - <span class="text-sm text-emerald-400">ex) <ruby>風<rt>かぜ</rt></ruby>を<ruby>感<rt>かん</rt></ruby>じる。(바람을 느낀다.)</span></p>
                 </div>
                 <div class="content-box bg-slate-700 leading-loose">
                     <h3 class="text-blue-400 font-bold mb-2">오늘의 문법</h3>
-                    <p class="font-bold">～て もらう (상대방의 행동으로 혜택을 받다, ~해주기를 받다)</p>
+                    <p class="font-bold">～て もらう (상대방의 행동으로 혜택을 받다)</p>
                     <p class="text-sm text-emerald-400">ex) <ruby>友達<rt>ともだち</rt></ruby>に<ruby>日本語<rt>にほんご</rt></ruby>を<ruby>教<rt>おし</rt></ruby>えてもらう。(친구에게 일본어를 가르쳐 받는다.)</p>
                     <hr class="border-slate-600 my-4">
-                    <p class="font-bold">～て ほしい (상대방이 ~해주기를 바랄 때, ~했으면 좋겠다)</p>
+                    <p class="font-bold">～て ほしい (상대방이 ~해주기를 바랄 때)</p>
                     <p class="text-sm text-emerald-400">ex) <ruby>早<rt>はや</rt></ruby>く<ruby>帰<rt>かえ</rt></ruby>ってほしい。(빨리 돌아와 줬으면 좋겠다.)</p>
                     <hr class="border-slate-600 my-4">
                     <p class="font-bold">～らしい (~답다, ~인 것 같다)</p>
