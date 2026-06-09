@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>일본어 학습 시스템 (완벽 복구본)</title>
+    <title>일본어 학습 시스템</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { background-color: #0f172a; color: #f8fafc; font-family: sans-serif; }
@@ -31,19 +31,23 @@
             <h1 class="text-3xl font-bold mb-6 text-white tracking-tight text-center">학습 메뉴</h1>
             <div class="space-y-4">
                 <button onclick="showView('script')" class="menu-btn w-full card text-xl font-bold text-left text-white shadow-lg">쉐도잉 연습</button>
-                <button onclick="showView('trans')" class="menu-btn w-full card text-xl font-bold text-left text-white shadow-lg">원문 해석</button>
                 <button onclick="showView('grammar')" class="menu-btn w-full card text-xl font-bold text-left text-white shadow-lg">단어 및 문법</button>
                 <button onclick="showView('dialog')" class="menu-btn w-full card text-xl font-bold text-left text-white shadow-lg">대화문</button>
             </div>
         </div>
 
-        <!-- 쉐도잉 연습 -->
+        <!-- 쉐도잉 연습 (해석 통합됨) -->
         <div id="script-view" class="view">
             <button onclick="showView('main')" class="text-blue-400 mb-4 hover:underline">← 메뉴로</button>
             <div class="card space-y-4">
-                <audio controls class="w-full mb-4">
+                <audio controls class="w-full h-10 mb-2">
                     <source src="audio/script.mp3" type="audio/mpeg">
                 </audio>
+                
+                <button onclick="toggleTrans()" class="bg-slate-600 hover:bg-slate-500 text-sm text-white px-4 py-2 rounded-lg transition-colors">
+                    해석 보기/숨기기
+                </button>
+
                 <div class="content-box bg-slate-700" id="script-text">
                     「<ruby>風鈴<rt>ふうりん</rt></ruby>」を<ruby>飾<rt>かざ</rt></ruby>る<ruby>季節<rt>きせつ</rt></ruby>になりました。<br>
                     <ruby>愛媛県<rt>えひめけん</rt></ruby><ruby>松山市<rt>まつやまし</rt></ruby>の<ruby>商店街<rt>しょうてんがい</rt></ruby>では、<ruby>毎年<rt>まいとし</rt></ruby>、<ruby>観光<rt>かんこう</rt></ruby>に<ruby>来<rt>き</rt></ruby>た<ruby>人<rt>ひと</rt></ruby>などに<ruby>涼<rt>すず</rt></ruby>しく<ruby>感<rt>かん</rt></ruby>じてもらうため、<ruby>店<rt>みせ</rt></ruby>の<ruby>前<rt>まえ</rt></ruby>に<ruby>風鈴<rt>ふうりん</rt></ruby>を<ruby>飾<rt>かざ</rt></ruby>ります。<br>
@@ -51,17 +55,11 @@
                     <ruby>風鈴<rt>ふうりん</rt></ruby>を<ruby>飾<rt>かざ</rt></ruby>った<ruby>高校生<rt>こうこうせい</rt></ruby>は「<ruby>音<rt>おと</rt></ruby>を<ruby>聞<rt>き</rt></ruby>いて、<ruby>涼<rt>すず</rt></ruby>しく<ruby>感<rt>かん</rt></ruby>じてほしいです」と<ruby>話<rt>はな</rt></ruby>していました。<br>
                     <ruby>大分県<rt>おおいたけん</rt></ruby>から<ruby>来<rt>き</rt></ruby>た<ruby>女性<rt>じょせい</rt></ruby>は「<ruby>今<rt>いま</rt></ruby>はあまり<ruby>風鈴<rt>ふうりん</rt></ruby>を<ruby>見<rt>み</rt></ruby>ないので、<ruby>昔<rt>むかし</rt></ruby>のようでいいですね。とても<ruby>涼<rt>すず</rt></ruby>しくなりました」と<ruby>話<rt>はな</rt></ruby>していました。
                 </div>
-            </div>
-        </div>
 
-        <!-- 원문 해석 -->
-        <div id="trans-view" class="view">
-            <button onclick="showView('main')" class="text-blue-400 mb-4 hover:underline">← 메뉴로</button>
-            <div class="card space-y-6">
-                <p class="text-slate-400 text-sm uppercase tracking-wider">원문</p>
-                <div class="content-box bg-slate-700 text-xl leading-loose">「風鈴」을 장식하는 계절이 되었습니다. 에히메현 마츠야마시의 상점가에서는 매년 관광객들에게 시원함을 느끼게 해주기 위해 가게 앞에 풍경을 장식합니다. 올해도 가게 사람들과 고등학생들이 에히메현에서 만든 토베야키 풍경을 장식했습니다. 금붕어나 나팔꽃 등 여름다운 그림이 그려져 있습니다. 풍경을 장식한 고등학생은 '소리를 듣고 시원함을 느꼈으면 좋겠어요'라고 말했습니다. 오이타현에서 온 여성은 '요즘은 풍경을 잘 볼 수 없어서 옛날 같아서 좋네요. 아주 시원해졌어요'라고 말했습니다.</div>
-                <p class="text-slate-400 text-sm uppercase tracking-wider">해석</p>
-                <div class="interpretation-box text-xl leading-loose">'풍경'을 장식하는 계절이 되었습니다. 에히메현 마츠야마시의 상점가에서는 매년 관광객들에게 시원함을 느끼게 해주기 위해 가게 앞에 풍경을 장식합니다. 올해도 가게 사람들과 고등학생들이 에히메현에서 만든 토베야키 풍경을 장식했습니다. 금붕어나 나팔꽃 등 여름다운 그림이 그려져 있습니다. 풍경을 장식한 고등학생은 '소리를 듣고 시원함을 느꼈으면 좋겠어요'라고 말했습니다. 오이타현에서 온 여성은 '요즘은 풍경을 잘 볼 수 없어서 옛날 같아서 좋네요. 아주 시원해졌어요'라고 말했습니다.</div>
+                <div id="trans-content" class="hidden interpretation-box mt-4">
+                    <p class="text-slate-400 text-sm mb-2 uppercase tracking-wider">해석</p>
+                    '풍경'을 장식하는 계절이 되었습니다. 에히메현 마츠야마시의 상점가에서는 매년 관광객들에게 시원함을 느끼게 해주기 위해 가게 앞에 풍경을 장식합니다. 올해도 가게 사람들과 고등학생들이 에히메현에서 만든 토베야키 풍경을 장식했습니다. 금붕어나 나팔꽃 등 여름다운 그림이 그려져 있습니다. 풍경을 장식한 고등학생은 '소리를 듣고 시원함을 느꼈으면 좋겠어요'라고 말했습니다. 오이타현에서 온 여성은 '요즘은 풍경을 잘 볼 수 없어서 옛날 같아서 좋네요. 아주 시원해졌어요'라고 말했습니다.
+                </div>
             </div>
         </div>
 
@@ -71,22 +69,22 @@
             <div class="card space-y-6">
                 <div class="content-box bg-slate-700 leading-loose">
                     <h3 class="text-blue-400 font-bold mb-2">첨부 단어</h3>
-                    <p class="font-bold"><ruby>飾<rt>かざ</rt></ruby>る (장식하다, 꾸미다) - <span class="text-emerald-400">예문) <ruby>部屋<rt>へや</rt></ruby>에 <ruby>花<rt>はな</rt></ruby>를 <ruby>飾<rt>かざ</rt></ruby>る。(방에 꽃을 장식하다.)</span></p>
+                    <p class="font-bold"><ruby>飾<rt>かざ</rt></ruby>る (장식하다) - <span class="text-emerald-400">예문) <ruby>部屋<rt>へや</rt></ruby>に<ruby>花<rt>はな</rt></ruby>を<ruby>飾<rt>かざ</rt></ruby>る。(방에 꽃을 장식한다.)</span></p>
                     <hr class="border-slate-600 my-4">
-                    <p class="font-bold"><ruby>涼<rt>すず</rt></ruby>しい (시원하다, 서늘하다) - <span class="text-emerald-400">예문) <ruby>秋<rt>あき</rt></ruby>가 되어 <ruby>涼<rt>すず</rt></ruby>しく 되었다。(가을이 되어 시원해졌다.)</span></p>
+                    <p class="font-bold"><ruby>涼<rt>すず</rt></ruby>しい (시원하다) - <span class="text-emerald-400">예문) <ruby>秋<rt>あき</rt></ruby>になって<ruby>涼<rt>すず</rt></ruby>しくなった。(가을이 되어 시원해졌다.)</span></p>
                     <hr class="border-slate-600 my-4">
-                    <p class="font-bold"><ruby>感<rt>かん</rt></ruby>じる (느끼다, 감동하다) - <span class="text-emerald-400">예문) <ruby>風<rt>かぜ</rt></ruby>를 <ruby>感<rt>かん</rt></ruby>じる。(바람을 느끼다.)</span></p>
+                    <p class="font-bold"><ruby>感<rt>かん</rt></ruby>じる (느끼다) - <span class="text-emerald-400">예문) <ruby>風<rt>かぜ</rt></ruby>を<ruby>感<rt>かん</rt></ruby>じる。(바람을 느낀다.)</span></p>
                 </div>
                 <div class="content-box bg-slate-700 leading-loose">
                     <h3 class="text-blue-400 font-bold mb-2">문법</h3>
-                    <p class="font-bold">～て もらう (다른 사람에게 ~해달라고 하여 혜택을 받을 때 사용)</p>
-                    <p class="text-emerald-400">예문) <ruby>友達<rt>ともだち</rt></ruby>에게 <ruby>日本語<rt>にほんご</rt></ruby>를 <ruby>教<rt>おし</rt></ruby>えて 받았다.(친구에게 일본어를 가르쳐 받았다.)</p>
+                    <p class="font-bold">～て もらう (상대방의 행동으로 혜택을 받다)</p>
+                    <p class="text-emerald-400">예문) <ruby>友達<rt>ともだち</rt></ruby>に<ruby>日本語<rt>にほんご</rt></ruby>を<ruby>教<rt>おし</rt></ruby>えてもらう。(친구에게 일본어를 가르쳐 받는다.)</p>
                     <hr class="border-slate-600 my-4">
-                    <p class="font-bold">～て ほしい (상대방이 ~해주기를 바랄 때 사용)</p>
-                    <p class="text-emerald-400">예문) <ruby>早<rt>はや</rt></ruby>く <ruby>帰<rt>かえ</rt></ruby>어 줬으면 좋겠다.(빨리 돌아와 줬으면 좋겠다.)</p>
+                    <p class="font-bold">～て ほしい (상대방이 ~해주기를 바랄 때)</p>
+                    <p class="text-emerald-400">예문) <ruby>早<rt>はや</rt></ruby>く<ruby>帰<rt>かえ</rt></ruby>ってほしい。(빨리 돌아와 줬으면 좋겠다.)</p>
                     <hr class="border-slate-600 my-4">
                     <p class="font-bold">～らしい (~답다)</p>
-                    <p class="text-emerald-400">예문) <ruby>子<rt>こ</rt></ruby>ども 다운 <ruby>服<rt>ふく</rt></ruby>를 입고 있다.(어린이다운 옷을 입고 있다.)</p>
+                    <p class="text-emerald-400">예문) <ruby>子供<rt>こども</rt></ruby>らしい<ruby>服<rt>ふく</rt></ruby>を<ruby>着<rt>き</rt></ruby>ている。(어린이다운 옷을 입고 있다.)</p>
                 </div>
             </div>
         </div>
@@ -99,15 +97,15 @@
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 border-b border-slate-600 pb-6">
                     <div>
                         <p class="text-xs text-slate-400 mb-1">전체 (twin.mp3)</p>
-                        <audio controls class="w-full h-10"><source src="audio/twin.mp3" type="audio/mpeg"></audio>
+                        <audio controls class="w-full h-10" onerror="console.error('오디오 파일 확인 필요: audio/twin.mp3')"><source src="audio/twin.mp3" type="audio/mpeg"></audio>
                     </div>
                     <div>
                         <p class="text-xs text-slate-400 mb-1">A 파트 (A.mp3)</p>
-                        <audio controls class="w-full h-10"><source src="audio/A.mp3" type="audio/mpeg"></audio>
+                        <audio controls class="w-full h-10" onerror="console.error('오디오 파일 확인 필요: audio/A.mp3')"><source src="audio/A.mp3" type="audio/mpeg"></audio>
                     </div>
                     <div>
                         <p class="text-xs text-slate-400 mb-1">B 파트 (B.mp3)</p>
-                        <audio controls class="w-full h-10"><source src="audio/B.mp3" type="audio/mpeg"></audio>
+                        <audio controls class="w-full h-10" onerror="console.error('오디오 파일 확인 필요: audio/B.mp3')"><source src="audio/B.mp3" type="audio/mpeg"></audio>
                     </div>
                 </div>
 
@@ -131,6 +129,12 @@
         function showView(v) {
             document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
             document.getElementById(v + '-view').classList.add('active');
+        }
+
+        // 해석 토글 함수
+        function toggleTrans() {
+            const trans = document.getElementById('trans-content');
+            trans.classList.toggle('hidden');
         }
     </script>
 </body>
