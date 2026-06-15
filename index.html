@@ -3,170 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>일본어 학습 시스템</title>
+    <title>쉐도잉 연습</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { background-color: #0f172a; color: #f8fafc; font-family: sans-serif; }
-        
-        /* 모든 뷰 숨김 기본 설정 */
-        .view { display: none; } 
-        
-        /* 활성화된 뷰 표시 (일반) */
-        .view.active { display: block; }
-        
-        /* 메인 뷰 특수 레이아웃: 중앙 정렬 */
-        #main-view.active { 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center; 
-            align-items: center; 
-            min-height: 80vh; 
-        }
-        
         .card { padding: 1.5rem; border-radius: 0.75rem; background-color: #1e293b; }
-        .content-box { padding: 1.5rem; border-radius: 0.5rem; margin-top: 0.5rem; font-size: 1.25rem; line-height: 2; }
-        .interpretation-box { background-color: #0f172a; border: 1px solid #334155; padding: 1.5rem; border-radius: 0.5rem; margin-top: 0.5rem; font-size: 1.25rem; line-height: 2; }
+        .sentence-container { margin-bottom: 1.5rem; }
+        .sentence-box { display: flex; align-items: center; gap: 10px; padding: 0.5rem; background-color: #334155; border-radius: 0.5rem; }
+        .translation { display: none; margin-top: 0.5rem; padding: 0.5rem 1rem; color: #cbd5e1; font-size: 0.95rem; }
         ruby rt { color: #f87171; font-size: 0.75rem; }
-        
-        .menu-btn {
-            background: linear-gradient(90deg, #1e3a8a 0%, #334155 100%);
-            transition: all 0.3s ease;
-            border: 1px solid #3b82f6;
-        }
-        .menu-btn:hover {
-            background: linear-gradient(90deg, #1e40af 0%, #475569 100%);
-            transform: scale(1.02);
-        }
+        audio { height: 30px; width: 200px; }
     </style>
 </head>
 <body class="p-4">
-    <div id="app" class="max-w-4xl mx-auto">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-2xl font-bold mb-4">쉐도잉 연습</h1>
         
-        <!-- 메인 메뉴 -->
-        <div id="main-view" class="view active">
-            <h1 class="text-3xl font-bold mb-10 text-white tracking-tight text-center">학습 메뉴</h1>
-            <div class="w-full max-w-md space-y-4">
-                <button onclick="showView('script')" class="menu-btn w-full card text-xl font-bold text-left text-white shadow-lg">쉐도잉 연습</button>
-                <button onclick="showView('grammar')" class="menu-btn w-full card text-xl font-bold text-left text-white shadow-lg">단어 및 문법</button>
-                <button onclick="showView('dialog')" class="menu-btn w-full card text-xl font-bold text-left text-white shadow-lg">대화문</button>
-            </div>
-        </div>
-
-        <!-- 쉐도잉 연습 -->
-        <div id="script-view" class="view">
-            <button onclick="showView('main')" class="text-blue-400 mb-4 hover:underline">← 메뉴로</button>
-            <div class="card space-y-4">
-                <audio controls loop class="w-full h-10 mb-2">
-                    <source src="audio/script.mp3" type="audio/mpeg">
-                </audio>
-                
-                <button onclick="toggleTrans()" class="bg-slate-600 hover:bg-slate-500 text-sm text-white px-4 py-2 rounded-lg transition-colors">
-                    해석 보기/숨기기
+        <div class="card space-y-4">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-lg font-semibold text-slate-300">전체 듣기</h2>
+                <button id="toggleAll" class="bg-blue-600 hover:bg-blue-500 text-sm px-4 py-2 rounded-lg transition-colors font-bold">
+                    해석 전체 보기/숨기기
                 </button>
-
-                <div class="content-box bg-slate-700" id="script-text">
-                    <ruby>音楽<rt>おんがく</rt></ruby>が聞こえますね。これは、５<ruby>時<rt>じ</rt></ruby>を<ruby>知<rt>し</rt></ruby>らせる<ruby>音楽<rt>おんがく</rt></ruby>です。<ruby>学校<rt>がっこう</rt></ruby>では、この<ruby>音楽<rt>おんがく</rt></ruby>が<ruby>聞<rt>き</rt></ruby>こえたら<ruby>家<rt>いえ</rt></ruby>に<ruby>帰<rt>かえ</rt></ruby>りなさい、とよく<ruby>教<rt>おし</rt></ruby>えています。<br>
-                    <ruby>日本<rt>にほん</rt></ruby>では、<ruby>小学生<rt>しょうがくせい</rt></ruby><ruby>以上<rt>いじょう</rt></ruby>になっていれば、<ruby>子<rt>こ</rt></ruby>どもたちだけで<ruby>外<rt>そと</rt></ruby>で<ruby>遊<rt>あそ</rt></ruby>んだりします。<br>
-                    なので、この<ruby>音楽<rt>おんがく</rt></ruby>は<ruby>役<rt>やく</rt></ruby>に<ruby>立<rt>た</rt></ruby>ちます。<ruby>夏<rt>なつ</rt></ruby>は、<ruby>夕方<rt>ゆうがた</rt></ruby>６<ruby>時<rt>じ</rt></ruby>に<ruby>流<rt>なが</rt></ruby>れます。<br>
-                    <ruby>夏<rt>なつ</rt></ruby>は<ruby>日<rt>ひ</rt></ruby>が<ruby>長<rt>なが</rt></ruby>い、つまり、<ruby>明<rt>あか</rt></ruby>るい<ruby>時間<rt>じかん</rt></ruby>が<ruby>長<rt>なが</rt></ruby>いからです。<br>
-                    <ruby>流<rt>なが</rt></ruby>れる<ruby>音楽<rt>おんがく</rt></ruby>は、<ruby>地域<rt>ちいき</rt></ruby>によって<ruby>違<rt>ちが</rt></ruby>います。<ruby>今<rt>いま</rt></ruby>、<ruby>流<rt>なが</rt></ruby>れていたのは『<ruby>夕焼<rt>ゆうや</rt></ruby>け<ruby>小焼<rt>こや</rt></ruby>け』という<ruby>有名<rt>ゆうめい</rt></ruby>な<ruby>曲<rt>きょく</rt></ruby>です。
-                </div>
-
-                <div id="trans-content" class="hidden interpretation-box mt-4">
-                    <p class="text-slate-400 text-sm mb-2 uppercase tracking-wider">해석</p>
-                    음악이 들리네요. 이것은 5시를 알리는 음악입니다. 학교에서는 이 음악이 들리면 집에 돌아가라고 자주 가르칩니다.<br>
-                    일본에서는 초등학생 이상이 되면 아이들끼리만 밖에서 놀기도 합니다.<br>
-                    그래서 이 음악은 도움이 됩니다. 여름에는 저녁 6시에 흘러나옵니다.<br>
-                    여름에는 해가 길다, 즉 밝은 시간이 길기 때문입니다.<br>
-                    흘러나오는 음악은 지역에 따라 다릅니다. 지금 흘러나오고 있던 것은 '유야케 코야케(노을빛 꼬마 노을)'라는 유명한 곡입니다.
-                </div>
             </div>
-        </div>
+            
+            <audio controls class="w-full mb-4">
+                <source src="audio/script.mp3" type="audio/mpeg">
+            </audio>
 
-        <!-- 단어 및 문법 -->
-        <div id="grammar-view" class="view">
-            <button onclick="showView('main')" class="text-blue-400 mb-4 hover:underline">← 메뉴로</button>
-            <div class="card space-y-6">
-                <div class="content-box bg-slate-700 leading-loose">
-                    <h3 class="text-blue-400 font-bold mb-2">공부할 단어</h3>
-                    <p class="font-bold"><ruby>浴<rt>あ</rt></ruby>びる (1. (물, 햇빛 등을) 끼얹다/쏘이다, 2. (비난, 찬사 등을) 한몸에 받다) - <span class="text-sm text-emerald-400">ex) <ruby>毎朝<rt>まいあさ</rt></ruby>シャワーを<ruby>浴<rt>あ</rt></ruby>びます。(매일 아침 샤워를 합니다.)</span></p>
-                    <hr class="border-slate-600 my-4">
-                    <p class="font-bold"><ruby>返<rt>かえ</rt></ruby>す (1. 돌려주다/반환하다, 2. 되돌리다) - <span class="text-sm text-emerald-400">ex) <ruby>図書館<rt>としょかん</rt></ruby>に<ruby>本<rt>ほん</rt></ruby>を<ruby>返<rt>かえ</rt></ruby>します。(도서관에 책을 돌려줍니다.)</span></p>
-                    <hr class="border-slate-600 my-4">
-                    <p class="font-bold"><ruby>被<rt>かぶ</rt></ruby>る (1. (모자 등을) 쓰다/뒤집어쓰다, 2. 떠맡다/입다) - <span class="text-sm text-emerald-400">ex) <ruby>帽子<rt>ぼうし</rt></ruby>を<ruby>被<rt>かぶ</rt></ruby>る。(모자를 쓰다.)</span></p>
-                    <hr class="border-slate-600 my-4">
-                    <p class="font-bold"><ruby>役<rt>やく</rt></ruby>に<ruby>立<rt>た</rt></ruby>ち (1. 도움이 됨, 2. 유용함) - <span class="text-sm text-emerald-400">ex) <ruby>日本語<rt>にほんご</rt></ruby>の<ruby>勉強<rt>べんきょう</rt></ruby>に<ruby>役<rt>やく</rt></ruby>に<ruby>立<rt>た</rt></ruby>ちます。(일본어 공부에 도움이 됩니다.)</span></p>
-                    <hr class="border-slate-600 my-4">
-                    <p class="font-bold"><ruby>夜更<rt>よふ</rt></ruby>かし (1. 밤늦게까지 자지 않음/밤샘, 2. 늦잠) - <span class="text-sm text-emerald-400">ex) <ruby>夜更<rt>よふ</rt></ruby>かしは<ruby>健康<rt>けんこう</rt></ruby>によくないです。(밤샘은 건강에 좋지 않습니다.)</span></p>
-                    <hr class="border-slate-600 my-4">
-                    <p class="font-bold"><ruby>苦<rt>くる</rt></ruby>しい (1. 괴롭다/아프다, 2. 답답하다/어렵다) - <span class="text-sm text-emerald-400">ex) <ruby>息<rt>いき</rt></ruby>が<ruby>苦<rt>くる</rt></ruby>しいです。(숨이 가쁩니다 / 숨쉬기 괴롭습니다.)</span></p>
+            <hr class="border-slate-600">
+
+            <h2 class="text-lg font-semibold text-slate-300 mb-4">문장별 연습</h2>
+            
+            <!-- 문장 1 -->
+            <div class="sentence-container">
+                <div class="sentence-box">
+                    <audio controls><source src="audio/s1.mp3" type="audio/mpeg"></audio>
+                    <p><ruby>一日<rt>いちにち</rt></ruby>が<ruby>終<rt>お</rt></ruby>わり、<ruby>人々<rt>ひとびと</rt></ruby>が<ruby>家路<rt>いえじ</rt></ruby>へと<ruby>急<rt>いそ</rt></ruby>ぐころ、<ruby>俺<rt>おれ</rt></ruby>の<ruby>一日<rt>いちにち</rt></ruby>は<ruby>始<rt>はじ</rt></ruby>まる。</p>
                 </div>
-                <div class="content-box bg-slate-700 leading-loose">
-                    <h3 class="text-blue-400 font-bold mb-2">오늘의 문법</h3>
-                    <p class="font-bold">～たら (~하면, ~했더니)</p>
-                    <p class="text-xs text-slate-300 mb-1">쓰임새: 동사나 형용사의 가정형에 연결되어, 어떤 조건이 충족되었을 때의 결과나 가정을 나타냅니다.</p>
-                    <p class="text-sm text-emerald-400">ex) <ruby>家<rt>いえ</rt></ruby>に<ruby>帰<rt>かえ</rt></ruby>ったら、すぐお<ruby>風呂<rt>ふろ</rt></ruby>に<ruby>入<rt>はい</rt></ruby>ます。(집에 가면 바로 목욕을 합니다.)</p>
-                    <hr class="border-slate-600 my-4">
-                    <p class="font-bold">～になっていれば (~가 되어 있으면)</p>
-                    <p class="text-xs text-slate-300 mb-1">쓰임새: 명사 뒤에 'になる'의 상태 지속 형태인 'になっている'의 가정형 'いれば'를 접속시켜, 어떤 조건이나 자격을 갖추고 있음을 가정합니다.</p>
-                    <p class="text-sm text-emerald-400">ex) <ruby>小学生<rt>しょう가くせい</rt></ruby>になっていれば、いつでも<ruby>出<rt>で</rt></ruby>られます。(초등학생이 되어 있다면 언제든 나갈 수 있습니다.)</p>
-                    <hr class="border-slate-600 my-4">
-                    <p class="font-bold">～たりする (~하기도 하다, ~하거나 하다)</p>
-                    <p class="text-xs text-slate-300 mb-1">쓰임새: 여러 동작이나 상태를 나열하거나, 대표적인 동작 하나를 예시로 들어 그러한 행위를 함을 나타냅니다.</p>
-                    <p class="text-sm text-emerald-400">ex) <ruby>週末<rt>しゅうまつ</rt></ruby>は<ruby>映画<rt>えいが</rt></ruby>を<ruby>見<rt>み</rt></ruby>たりします。(주말에는 영화를 보기도 합니다.)</p>
-                    <hr class="border-slate-600 my-4">
-                    <p class="font-bold">～つまり (즉, 결국/요컨대)</p>
-                    <p class="text-xs text-slate-300 mb-1">쓰임새: 앞서 말한 내용을 다른 말로 바꾸어 알기 쉽게 설명하거나 요약할 때 문두에 사용합니다.</p>
-                    <p class="text-sm text-emerald-400">ex) <ruby>彼女<rt>かのじょ</rt></ruby>は<ruby>母<rt>はは</rt></ruby>の<ruby>妹<rt>いもうと</rt></ruby>、つまり<ruby>叔母<rt>おば</rt></ruby>です。(그녀는 어머니의 여동생, 즉 이모입니다.)</p>
-                    <hr class="border-slate-600 my-4">
-                    <p class="font-bold">～によって違います (~에 따라 다릅니다, ~에 의해 달라집니다)</p>
-                    <p class="text-xs text-slate-300 mb-1">쓰임새: 기준이나 상황, 대상에 따라 그 뒤의 결과가 달라짐을 나타낼 때 사용합니다.</p>
-                    <p class="text-sm text-emerald-400">ex) <ruby>人<rt>ひと</rt></ruby>によって<ruby>考<rt>かんが</rt></ruby>え<ruby>方<rt>かた</rt></ruby>가<ruby>違<rt>ちが</rt></ruby>います。(사람에 따라 생각하는 방식이 다릅니다.)</p>
-                </div>
+                <div class="translation">하루가 끝나고 사람들이 집으로 서두를 때, 나의 하루는 시작된다.</div>
             </div>
-        </div>
 
-        <!-- 대화문 -->
-        <div id="dialog-view" class="view">
-            <button onclick="showView('main')" class="text-blue-400 mb-4 hover:underline">← 메뉴로</button>
-            <div class="card bg-slate-700 content-box leading-normal">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 border-b border-slate-600 pb-6">
-                    <div>
-                        <p class="text-xs text-slate-400 mb-1">전체</p>
-                        <audio controls loop class="w-full h-10"><source src="audio/twin.mp3" type="audio/mpeg"></audio>
-                    </div>
-                    <div>
-                        <p class="text-xs text-slate-400 mb-1">A 파트</p>
-                        <audio controls loop class="w-full h-10"><source src="audio/a.mp3" type="audio/mpeg"></audio>
-                    </div>
-                    <div>
-                        <p class="text-xs text-slate-400 mb-1">B 파트</p>
-                        <audio controls loop class="w-full h-10"><source src="audio/b.mp3" type="audio/mpeg"></audio>
-                    </div>
+            <!-- 문장 2 -->
+            <div class="sentence-container">
+                <div class="sentence-box">
+                    <audio controls><source src="audio/s2.mp3" type="audio/mpeg"></audio>
+                    <p>メニューはこれだけ、あとは<ruby>勝手<rt>かって</rt></ruby>に<ruby>注文<rt>ちゅうもん</rt></ruby>してくりゃできるもんなら<ruby>作<rt>つく</rt></ruby>るよってのが、<ruby>俺<rt>おれ</rt></ruby>の<ruby>営業方針<rt>えいぎょうほうしん</rt></ruby>さ。</p>
                 </div>
+                <div class="translation">메뉴는 이것뿐, 나머지는 마음대로 주문해서 할 수 있는 거라면 만드는 게 내 영업 방침이지.</div>
+            </div>
 
-                <p>A: このお<ruby>肉<rt>にく</rt></ruby>、<ruby>高<rt>たか</rt></ruby>いだけあっておいしいですね。 <span class="text-xs text-blue-300 ml-2">이 고기, 비싼 만큼 맛있네요.</span></p>
-                <p class="mt-1">B: うん。ほんとにおいしいよね。 <span class="text-xs text-blue-300 ml-2">응, 정말 맛있다.</span></p>
-                <p class="mt-4">A: やっぱりおいしいもの<ruby>食<rt>た</rt></ruby>べてる<ruby>時<rt>とき</rt></ruby>が、<ruby>一番<rt>いちばん</rt></ruby><ruby>幸<rt>しあわ</rt></ruby>せだな。 <span class="text-xs text-blue-300 ml-2">역시 맛있는 걸 먹고 있을 때가 제일 행복해.</span></p>
-                <p class="mt-1">B: そういえば、ダイエットするとか<ruby>言<rt>い</rt></ruby>ってなかった？ <span class="text-xs text-blue-300 ml-2">그러고 보니 다이어트한다고 말하지 않았어?</span></p>
-                <p class="mt-4">A: あれ、そんなこと<ruby>言<rt>い</rt></ruby>いましたっけ？ <span class="text-xs text-blue-300 ml-2">어라, 제가 그런 말을 했었나요?</span></p>
-                <p class="mt-1">B: うん。<ruby>言<rt>い</rt></ruby>ってたけど？ <span class="text-xs text-blue-300 ml-2">응, 말했었는데?</span></p>
-                <p class="mt-4">A: <ruby>食<rt>た</rt></ruby>べたいものを<ruby>我慢<rt>がまん</rt></ruby>してまで、ダイエットするのは、もうやめようと<ruby>思<rt>おも</rt></ruby>って。 <span class="text-xs text-blue-300 ml-2">먹고 싶은 걸 참아가면서까지 다이어트하는 건 이제 그만두려고 해서요.</span></p>
-                <p class="mt-1">B: ふうん。そうなの？まあ、<ruby>無理<rt>むり</rt></ruby>しないに<ruby>越<rt>こ</rt></ruby>したことはないけど。 <span class="text-xs text-blue-300 ml-2">흐음, 그래? 뭐, 무리하지 않는 게 제일 좋지만.</span></p>
+            <!-- 문장 3 -->
+            <div class="sentence-container">
+                <div class="sentence-box">
+                    <audio controls><source src="audio/s3.mp3" type="audio/mpeg"></audio>
+                    <p><ruby>営業時間<rt>えいぎょうじかん</rt></ruby>は<ruby>夜<rt>よる</rt></ruby>12<ruby>時<rt>じ</rt></ruby>から<ruby>朝<rt>あさ</rt></ruby>7<ruby>時<rt>じ</rt></ruby>まで、<ruby>人<rt>ひと</rt></ruby>は<ruby>深夜食堂<rt>しんやしょくどう</rt></ruby>って<ruby>言<rt>い</rt></ruby>ってるよ。</p>
+                </div>
+                <div class="translation">영업시간은 밤 12시부터 아침 7시까지, 사람들은 심야식당이라고 불러.</div>
+            </div>
+
+            <!-- 문장 4 -->
+            <div class="sentence-container">
+                <div class="sentence-box">
+                    <audio controls><source src="audio/s4.mp3" type="audio/mpeg"></audio>
+                    <p><ruby>客<rt>きゃく</rt></ruby>が<ruby>来<rt>く</rt></ruby>るかって？</p>
+                </div>
+                <div class="translation">손님이 오냐고?</div>
+            </div>
+
+            <!-- 문장 5 -->
+            <div class="sentence-container">
+                <div class="sentence-box">
+                    <audio controls><source src="audio/s5.mp3" type="audio/mpeg"></audio>
+                    <p>それが<ruby>結構<rt>けっこう</rt></ruby><ruby>来<rt>く</rt></ruby>るんだよ。</p>
+                </div>
+                <div class="translation">그게 꽤 온단 말이지.</div>
             </div>
         </div>
     </div>
 
     <script>
-        function showView(v) {
-            document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
-            document.getElementById(v + '-view').classList.add('active');
-        }
+        const toggleBtn = document.getElementById('toggleAll');
+        const translations = document.querySelectorAll('.translation');
+        let isVisible = false;
 
-        function toggleTrans() {
-            const trans = document.getElementById('trans-content');
-            trans.classList.toggle('hidden');
-        }
+        toggleBtn.addEventListener('click', () => {
+            isVisible = !isVisible;
+            translations.forEach(t => {
+                t.style.display = isVisible ? 'block' : 'none';
+            });
+        });
     </script>
 </body>
 </html>
