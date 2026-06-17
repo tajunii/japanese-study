@@ -635,7 +635,7 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly; /* 내부 요소들을 균등하게 자동 배치 */
-    padding: -2vh 5vw;       /* px 대신 화면 비율(vh, vw) 단위 사용하여 더 유연한 정보 */
+    padding: 4vh 5vw;       /* px 대신 화면 비율(vh, vw) 단위 사용하여 더 유연한 정보 */
 }
 
 /* 5. 여백을 줄여서 한 화면에 압축 */
