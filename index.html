@@ -26,10 +26,38 @@
                     해석 전체 보기/숨기기
                 </button>
             </div>
+
+            <div class="mb-4">
+                <label class="text-sm text-slate-400">재생 속도 조절: </label>
+                <select id="playbackRate" class="bg-slate-700 text-white px-2 py-1 rounded">
+                    <option value="0.5">0.5x</option>
+                    <option value="0.75">0.75x</option>
+                    <option value="1" selected>1.0x</option>
+                    <option value="1.25">1.25x</option>
+                    <option value="1.5">1.5x</option>
+                </select>
+            </div>
             
-            <audio controls loop class="w-full mb-4">
+            <audio controls loop class="w-1/2 mb-4">
                 <source src="audio/full.mp3" type="audio/mpeg">
             </audio>
+
+            <!-- 전체 스크립트 -->
+            <div class="text-lg text-sky-200 bg-slate-800 p-4 rounded-lg mb-4 leading-relaxed">
+                <p>
+                    あの・・・豚汁定食ていしょく以外いがいに何なにかできます？ 生姜焼定食ていしょくとか....<br>
+                    ああ、大丈夫だよ。 <br> 
+                    あっ、じゃあ、それで。 <br> 
+                    あいよ。<br>
+                    マスター、ただいま。
+                    よう、お帰り. どうだったマカオは?<br>
+                    向こうの社長にもう少し踊ってくれないかって頼まれたけど・・・。 運命の出会であいってあんのよねえ。<br>
+                    相手は日本人かい？<br>
+                    カジノの腕利きディーラーなの。カードさばきがとってもきれいでさあ。<br>
+                    そういや前まえの男はピアニストだったもんな。<br>
+                    男は指使いが大事なの。<br>
+                </p>
+            </div>
 
             <hr class="border-slate-600">
 
@@ -39,45 +67,89 @@
             <div class="sentence-container">
                 <div class="sentence-box">
                     <audio controls loop><source src="audio/1.mp3" type="audio/mpeg"></audio>
-                    <p><ruby>一日<rt>いちにち</rt></ruby>が<ruby>終<rt>お</rt></ruby>わり、<ruby>人々<rt>ひとびと</rt></ruby>が<ruby>家路<rt>いえじ</rt></ruby>へと<ruby>急<rt>いそ</rt></ruby>ぐころ、<ruby>俺<rt>おれ</rt></ruby>の<ruby>一日<rt>いちにち</rt></ruby>は<ruby>始<rt>はじ</rt></ruby>まる。</p>
+                    <p>あの・・・<ruby>豚汁<rt>とんじる</rt></ruby><ruby>定食<rt>ていしょく</rt></ruby><ruby>以外<rt>いがい</rt></ruby>に<ruby>何<rt>なに</rt></ruby>かできます？<ruby>生姜焼<rt>しょうがや</rt></ruby><ruby>定食<rt>ていしょく</rt></ruby>とか....</p>
                 </div>
-                <div class="translation">하루가 끝나고 사람들이 집으로 서두를 때, 나의 하루는 시작된다.</div>
+                <div class="translation">저기... 돈지루 정식 말고 뭐 다른 거 되나요? 쇼가야키 정식이라든가...</div>
             </div>
-
             <!-- 문장 2 -->
             <div class="sentence-container">
                 <div class="sentence-box">
                     <audio controls loop><source src="audio/2.mp3" type="audio/mpeg"></audio>
-                    <p>メニューはこれだけ、あとは<ruby>勝手<rt>かって</rt></ruby>に<ruby>注文<rt>ちゅうもん</rt></ruby>してくれりゃできるもんなら<ruby>作<rt>つく</rt></ruby>るよってのが、<ruby>俺<rt>おれ</rt></ruby>の<ruby>営業方針<rt>えいぎょうほうしん</rt></ruby>さ。</p>
+                    <p>ああ、<ruby>大丈夫<rt>だいじょうぶ</rt></ruby>だよ.</p>
                 </div>
-                <div class="translation">메뉴는 이것뿐, 나머지는 마음대로 주문해서 할 수 있는 거라면 만드는 게 내 영업 방침이지.</div>
+                <div class="translation">아, 괜찮아.</div>
             </div>
-
             <!-- 문장 3 -->
             <div class="sentence-container">
                 <div class="sentence-box">
                     <audio controls loop><source src="audio/3.mp3" type="audio/mpeg"></audio>
-                    <p><ruby>営業時間<rt>えいぎょうじかん</rt></ruby>は<ruby>夜<rt>よる</rt></ruby>12<ruby>時<rt>じ</rt></ruby>から<ruby>朝<rt>あさ</rt></ruby>7<ruby>時<rt>じ</rt></ruby>ごろまで、<ruby>人<rt>ひと</rt></ruby>は<ruby>深夜食堂<rt>しんやしょくどう</rt></ruby>って<ruby>言<rt>い</rt></ruby>ってるよ。</p>
+                    <p>あっ、じゃあ、それで.</p>
                 </div>
-                <div class="translation">영업시간은 밤 12시부터 아침 7시경까지, 사람들은 심야식당이라고 불러.</div>
+                <div class="translation">앗, 그럼 그걸로.</div>
             </div>
-
             <!-- 문장 4 -->
             <div class="sentence-container">
                 <div class="sentence-box">
                     <audio controls loop><source src="audio/4.mp3" type="audio/mpeg"></audio>
-                    <p><ruby>客<rt>きゃく</rt></ruby>が<ruby>来<rt>く</rt></ruby>るかって？</p>
+                    <p>あいよ。</p>
                 </div>
-                <div class="translation">손님이 오냐고?</div>
+                <div class="translation">알겠어.</div>
             </div>
-
             <!-- 문장 5 -->
             <div class="sentence-container">
                 <div class="sentence-box">
                     <audio controls loop><source src="audio/5.mp3" type="audio/mpeg"></audio>
-                    <p>それが<ruby>結構<rt>けっこう</rt></ruby><ruby>来<rt>く</rt></ruby>るんだよ。</p>
+                    <p>マスター、ただいま.</p>
                 </div>
-                <div class="translation">그게 꽤 온단 말이지.</div>
+                <div class="translation">마스터, 다녀왔어.</div>
+            </div>
+            <!-- 문장 6 -->
+            <div class="sentence-container">
+                <div class="sentence-box">
+                    <audio controls loop><source src="audio/6.mp3" type="audio/mpeg"></audio>
+                    <p>よう、お<ruby>帰<rt>かえ</rt></ruby>り. どうだったマカオは?</p>
+                </div>
+                <div class="translation">어이, 어서 와. 마카오는 어땠어?</div>
+            </div>
+            <!-- 문장 7 -->
+            <div class="sentence-container">
+                <div class="sentence-box">
+                    <audio controls loop><source src="audio/7.mp3" type="audio/mpeg"></audio>
+                    <p><ruby>向<rt>む</rt></ruby>こうの<ruby>社長<rt>しゃちょう</rt></ruby>にもう<ruby>少<rt>すこ</rt></ruby>し<ruby>踊<rt>おど</rt></ruby>ってくれないかって<ruby>頼<rt>たの</rt></ruby>まれたけど・・・. <ruby>運命<rt>うんめい</rt></ruby>の<ruby>出会<rt>であ</rt></ruby>いってあんのよねえ。</p>
+                </div>
+                <div class="translation">저쪽 사장이 조금 더 춤춰주지 않겠냐고 부탁받았지만... 운명적인 만남이란 게 있더라고요.</div>
+            </div>
+            <!-- 문장 8 -->
+            <div class="sentence-container">
+                <div class="sentence-box">
+                    <audio controls loop><source src="audio/8.mp3" type="audio/mpeg"></audio>
+                    <p><ruby>相手<rt>あいて</rt></ruby>は<ruby>日本人<rt>にほんじん</rt></ruby>かい？</p>
+                </div>
+                <div class="translation">상대는 일본인이야?</div>
+            </div>
+            <!-- 문장 9 -->
+            <div class="sentence-container">
+                <div class="sentence-box">
+                    <audio controls loop><source src="audio/9.mp3" type="audio/mpeg"></audio>
+                    <p>カジノの<ruby>腕利<rt>うでき</rt></ruby>きディーラーなの。カードさばきがとってもきれいでさあ。</p>
+                </div>
+                <div class="translation">카지노의 실력 좋은 딜러야. 카드 다루는 솜씨가 정말 예뻐서 말이야.</div>
+            </div>
+            <!-- 문장 10 -->
+            <div class="sentence-container">
+                <div class="sentence-box">
+                    <audio controls loop><source src="audio/10.mp3" type="audio/mpeg"></audio>
+                    <p>そういや<ruby>前<rt>まえ</rt></ruby>の<ruby>男<rt>おとこ</rt></ruby>はピアニストだったもんな。</p>
+                </div>
+                <div class="translation">그러고 보니 전 남자는 피아니스트였지.</div>
+            </div>
+            <!-- 문장 11 -->
+            <div class="sentence-container">
+                <div class="sentence-box">
+                    <audio controls loop><source src="audio/11.mp3" type="audio/mpeg"></audio>
+                    <p><ruby>男<rt>おとこ</rt></ruby>は<ruby>指使<rt>ゆびづか</rt></ruby>いが<ruby>大事<rt>だいじ</rt></ruby>なの。</p>
+                </div>
+                <div class="translation">남자는 손가락 놀림이 중요하거든.</div>
             </div>
         </div>
     </div>
@@ -85,12 +157,21 @@
     <script>
         const toggleBtn = document.getElementById('toggleAll');
         const translations = document.querySelectorAll('.translation');
+        const playbackRate = document.getElementById('playbackRate');
+        const allAudios = document.querySelectorAll('audio');
         let isVisible = false;
 
         toggleBtn.addEventListener('click', () => {
             isVisible = !isVisible;
             translations.forEach(t => {
                 t.style.display = isVisible ? 'block' : 'none';
+            });
+        });
+
+        playbackRate.addEventListener('change', (e) => {
+            const rate = e.target.value;
+            allAudios.forEach(audio => {
+                audio.playbackRate = rate;
             });
         });
     </script>
