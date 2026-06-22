@@ -16,8 +16,26 @@
     </style>
 </head>
 <body class="p-4">
-    <div class="max-w-4xl mx-auto">
-        <h1 class="text-4xl font-bold mb-8 text-center">쉐도잉 연습</h1>
+<div class="max-w-4xl mx-auto">
+
+    <div class="flex justify-between items-center mb-8">
+
+        <div></div>
+
+        <h1 class="text-4xl font-bold">
+            쉐도잉 연습
+        </h1>
+
+        <button
+            id="homeBtn"
+            class="bg-slate-700 hover:bg-slate-600 w-14 h-14 rounded-full text-2xl transition-colors"
+            title="홈">
+
+            🏠
+
+        </button>
+
+    </div>
         
         <div class="card space-y-4">
             <div class="flex justify-between items-center mb-4">
@@ -174,6 +192,19 @@
                 audio.playbackRate = rate;
             });
         });
+
+const homeBtn = document.getElementById("homeBtn");
+
+if (homeBtn) {
+
+    homeBtn.addEventListener("click", () => {
+
+        location.href =
+        "https://사용자명.github.io/study-home/";
+
+    });
+
+}
     </script>
 </body>
 </html>
