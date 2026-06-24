@@ -47,13 +47,6 @@
 
             <div class="mb-4">
                 <label class="text-sm text-slate-400">재생 속도 조절: </label>
-                <select id="playbackRate" class="bg-slate-700 text-white px-2 py-1 rounded">
-                    <option value="0.5">0.5x</option>
-                    <option value="0.75">0.75x</option>
-                    <option value="1" selected>1.0x</option>
-                    <option value="1.25">1.25x</option>
-                    <option value="1.5">1.5x</option>
-                </select>
             </div>
             
             <audio controls loop class="w-1/2 mb-4">
@@ -186,12 +179,68 @@
             });
         });
 
-        playbackRate.addEventListener('change', (e) => {
-            const rate = e.target.value;
-            allAudios.forEach(audio => {
-                audio.playbackRate = rate;
-            });
-        });
+        const speedSelector = document.getElementById('playbackRate');
+
+speedSelector.addEventListener('change', function () {
+
+```
+const speed = this.value;
+
+document.querySelectorAll('audio').forEach(audio => {
+
+    const source = audio.querySelector('source');
+
+    if (!source) return;
+
+    let originalSrc = source.dataset.originalSrc;
+
+    if (!originalSrc) {
+        originalSrc = source.getAttribute('src');
+        source.dataset.originalSrc = originalSrc;
+    }
+
+    const wasPlaying = !audio.paused;
+    const currentTime = audio.currentTime;
+
+    if (speed === "1") {
+
+        source.src = originalSrc;
+
+    } else {
+
+        source.src = originalSrc.replace(
+            ".mp3",
+            `_${speed}.mp3`
+        );
+
+    }
+
+    audio.load();
+
+    audio.addEventListener(
+        'loadedmetadata',
+        function restore() {
+
+            audio.currentTime = currentTime;
+
+            if (wasPlaying) {
+                audio.play();
+            }
+
+            audio.removeEventListener(
+                'loadedmetadata',
+                restore
+            );
+
+        },
+        { once: true }
+    );
+
+});
+```
+
+});
+
 
 const homeBtn = document.getElementById("homeBtn");
 
