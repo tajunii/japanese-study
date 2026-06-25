@@ -47,6 +47,10 @@
 
             <div class="mb-4">
                 <label class="text-sm text-slate-400">재생 속도 조절: </label>
+                <select id="playbackRate" class="bg-slate-700 text-white px-2 py-1 rounded">
+                    <option value="075">0.75x</option>
+                    <option value="1" selected>1.0x</option>
+                </select>
             </div>
             
             <audio controls loop class="w-1/2 mb-4">
@@ -168,8 +172,6 @@
     <script>
         const toggleBtn = document.getElementById('toggleAll');
         const translations = document.querySelectorAll('.translation');
-        const playbackRate = document.getElementById('playbackRate');
-        const allAudios = document.querySelectorAll('audio');
         let isVisible = false;
 
         toggleBtn.addEventListener('click', () => {
@@ -179,69 +181,35 @@
             });
         });
 
-        const speedSelector = document.getElementById('playbackRate');
+        const playbackRate = document.getElementById('playbackRate');
 
-speedSelector.addEventListener('change', function () {
+playbackRate.addEventListener('change', () => {
 
-```
-const speed = this.value;
+    const speed = playbackRate.value;
 
-document.querySelectorAll('audio').forEach(audio => {
+    document.querySelectorAll('audio').forEach(audio => {
 
-    const source = audio.querySelector('source');
+        const source = audio.querySelector('source');
 
-    if (!source) return;
+        if (!source) return;
 
-    let originalSrc = source.dataset.originalSrc;
+        if (!source.dataset.originalSrc) {
+            source.dataset.originalSrc = source.getAttribute('src');
+        }
 
-    if (!originalSrc) {
-        originalSrc = source.getAttribute('src');
-        source.dataset.originalSrc = originalSrc;
-    }
+        const originalSrc = source.dataset.originalSrc;
 
-    const wasPlaying = !audio.paused;
-    const currentTime = audio.currentTime;
+        if (speed === "1") {
+            source.src = originalSrc;
+        } else {
+            source.src = originalSrc.replace(".mp3", "_075.mp3");
+        }
 
-    if (speed === "1") {
+        audio.load();
 
-        source.src = originalSrc;
-
-    } else {
-
-        source.src = originalSrc.replace(
-            ".mp3",
-            `_${speed}.mp3`
-        );
-
-    }
-
-    audio.load();
-
-    audio.addEventListener(
-        'loadedmetadata',
-        function restore() {
-
-            audio.currentTime = currentTime;
-
-            if (wasPlaying) {
-                audio.play();
-            }
-
-            audio.removeEventListener(
-                'loadedmetadata',
-                restore
-            );
-
-        },
-        { once: true }
-    );
+    });
 
 });
-```
-
-});
-
-
 const homeBtn = document.getElementById("homeBtn");
 
 if (homeBtn) {
