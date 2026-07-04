@@ -3,191 +3,214 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>쉐도잉 연습</title>
+    <title>일본어 연습</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { background-color: #0f172a; color: #f8fafc; font-family: sans-serif; }
         .card { padding: 1.5rem; border-radius: 0.75rem; background-color: #1e293b; }
-        .sentence-container { margin-bottom: 1.5rem; }
-        .sentence-box { display: flex; align-items: center; gap: 10px; padding: 0.5rem; background-color: #334155; border-radius: 0.5rem; }
-        .translation { display: none; margin-top: 0.5rem; padding: 0.5rem 1rem; color: #cbd5e1; font-size: 0.95rem; }
+        .translation { display: none; margin-top: 0.375rem; color: #94a3b8; font-size: 0.95rem; }
+        .vocab-content { display: none; margin-top: 0.75rem; border-top: 1px dashed #475569; padding-top: 0.75rem; }
         ruby rt { color: #f87171; font-size: 0.75rem; }
         audio { height: 30px; width: 200px; }
+        /* 스크롤바 커스텀 (단어장 영역) */
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #1e293b; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
     </style>
 </head>
 <body class="p-4">
-<div class="max-w-4xl mx-auto">
+<div class="max-w-6xl mx-auto">
 
     <div class="flex justify-between items-center mb-8">
-
         <div></div>
-
         <h1 class="text-5xl font-bold text-[#11f1a3]">
-            쉐도잉 연습
+            일본어 연습
         </h1>
-
         <button
             id="homeBtn"
             class="bg-slate-700 hover:bg-slate-600 w-14 h-14 rounded-full text-2xl transition-colors"
             title="홈">
-
             🏠
-
         </button>
-
     </div>
         
-        <div class="card space-y-4">
+    <div class="flex flex-col lg:flex-row gap-6 items-start">
+        
+        <div class="flex-1 w-full card space-y-4">
             <div class="flex justify-between items-center mb-4">
-                <h2 class="text-lg font-semibold text-slate-300">전체 듣기</h2>
+                <h2 class="text-lg font-semibold text-slate-300">오늘의 문장</h2>
                 <button id="toggleAll" class="bg-blue-600 hover:bg-blue-500 text-sm px-4 py-2 rounded-lg transition-colors font-bold">
                     해석 전체 보기/숨기기
                 </button>
             </div>
 
-            <div class="mb-4">
-                <label class="text-sm text-slate-400">재생 속도 조절: </label>
-                <select id="playbackRate" class="bg-slate-700 text-white px-2 py-1 rounded">
-                    <option value="075">0.75x</option>
-                    <option value="1" selected>1.0x</option>
-                </select>
-            </div>
-            
             <audio controls loop class="w-1/2 mb-4">
                 <source src="audio/full.mp3" type="audio/mpeg">
             </audio>
 
-            <div class="text-lg text-white bg-slate-800 p-4 rounded-lg mb-4 leading-relaxed">
-                <p>
-                    この子<span class="furigana text-sm text-sky-200">(こ)</span>の名前はマリリン。<br>
-                    いわゆる踊子<span class="furigana text-sm text-sky-200">(おどりこ)</span>さんってやつで、<br>
-                    うちの常連<span class="furigana text-sm text-sky-200">(じょうれん)</span>にもひいきがいる。<br>
-                    新宿ニューアートの看板<span class="furigana text-sm text-sky-200">(かんばん)</span>ストリッパーだ。<br>
-                    マスター、タラコと焼酎<span class="furigana text-sm text-sky-200">(しょうちゅう)</span>ロックで。<br>
-                    タラコは焼くのかい？<br>
-                    うん、ミディアムレアね。<br>
-                    マリリンはとっても惚<span class="furigana text-sm text-sky-200">(ほ)</span>れっぽくって、<br>
-                    惚れるとなんでも惚れた男の真似<span class="furigana text-sm text-sky-200">(まね)</span>をしたがるとこがある。<br>
-                </p>
-            </div>
-
-            <hr class="border-slate-600">
-
-            <h2 class="text-lg font-semibold text-slate-300 mb-4">문장별 연습</h2>
-            
-            <!-- 문장 1 -->
-            <div class="sentence-container">
-                <div class="sentence-box">
-                    <audio controls loop><source src="audio/1.mp3" type="audio/mpeg"></audio>
+            <div class="text-lg text-white bg-slate-800 p-5 rounded-lg mb-4 space-y-5 leading-relaxed">
+                <div>
                     <p>この<ruby>子<rt>こ</rt></ruby>の<ruby>名前<rt>なまえ</rt></ruby>はマリリン。</p>
+                    <div class="translation">이 아이의 이름은 마릴린.</div>
                 </div>
-                <div class="translation">이 아이의 이름은 마릴린.</div>
-            </div>
-            <!-- 문장 2 -->
-            <div class="sentence-container">
-                <div class="sentence-box">
-                    <audio controls loop><source src="audio/2.mp3" type="audio/mpeg"></audio>
+                <div>
                     <p>いわゆる<ruby>踊<rt>おど</rt></ruby><ruby>子<rt>りこ</rt></ruby>さんってやつで、</p>
+                    <div class="translation">이른바 무희라는 건데,</div>
                 </div>
-                <div class="translation">이른바 무희라는 건데,</div>
-            </div>
-            <!-- 문장 3 -->
-            <div class="sentence-container">
-                <div class="sentence-box">
-                    <audio controls loop><source src="audio/3.mp3" type="audio/mpeg"></audio>
+                <div>
                     <p>うちの<ruby>常連<rt>じょうれん</rt></ruby>にもひいきがいる。</p>
+                    <div class="translation">우리 단골 중에도 아끼는 사람이 있지.</div>
                 </div>
-                <div class="translation">우리 단골 중에도 아끼는 사람이 있지.</div>
-            </div>
-            <!-- 문장 4 -->
-            <div class="sentence-container">
-                <div class="sentence-box">
-                    <audio controls loop><source src="audio/4.mp3" type="audio/mpeg"></audio>
+                <div>
                     <p><ruby>新宿<rt>しんじゅく</rt></ruby>ニューアートの<ruby>看板<rt>かんばん</rt></ruby>ストリッパーだ。</p>
+                    <div class="translation">신주쿠 뉴 아트의 간판 스트리퍼야.</div>
                 </div>
-                <div class="translation">신주쿠 뉴 아트의 간판 스트리퍼야.</div>
-            </div>
-            <!-- 문장 5 -->
-            <div class="sentence-container">
-                <div class="sentence-box">
-                    <audio controls loop><source src="audio/5.mp3" type="audio/mpeg"></audio>
+                <div>
                     <p>マスター、タラコと<ruby>焼酎<rt>しょうちゅう</rt></ruby>ロックで。</p>
+                    <div class="translation">마스터, 타라코와 소주 온더락으로.</div>
                 </div>
-                <div class="translation">마스터, 타라코와 소주 온더락으로.</div>
-            </div>
-            <!-- 문장 6 -->
-            <div class="sentence-container">
-                <div class="sentence-box">
-                    <audio controls loop><source src="audio/6.mp3" type="audio/mpeg"></audio>
+                <div>
                     <p>タラコは<ruby>焼<rt>や</rt></ruby>くのかい？</p>
+                    <div class="translation">타라코는 구울까?</div>
                 </div>
-                <div class="translation">타라코는 구울까?</div>
-            </div>
-            <!-- 문장 7 -->
-            <div class="sentence-container">
-                <div class="sentence-box">
-                    <audio controls loop><source src="audio/7.mp3" type="audio/mpeg"></audio>
+                <div>
                     <p>うん、ミディアムレアね。</p>
+                    <div class="translation">응, 미디엄 레어로.</div>
                 </div>
-                <div class="translation">응, 미디엄 레어로.</div>
-            </div>
-            <!-- 문장 8 -->
-            <div class="sentence-container">
-                <div class="sentence-box">
-                    <audio controls loop><source src="audio/8.mp3" type="audio/mpeg"></audio>
+                <div>
                     <p>マリリンはとっても<ruby>惚<rt>ほ</rt></ruby>れっぽくって、</p>
+                    <div class="translation">마릴린은 아주 잘 반하는 성격이라서,</div>
                 </div>
-                <div class="translation">마릴린은 아주 잘 반하는 성격이라서,</div>
-            </div>
-            <!-- 문장 9 -->
-            <div class="sentence-container">
-                <div class="sentence-box">
-                    <audio controls loop><source src="audio/9.mp3" type="audio/mpeg"></audio>
+                <div>
                     <p><ruby>惚<rt>ほ</rt></ruby>れるとなんでも<ruby>惚<rt>ほ</rt></ruby>れた<ruby>男<rt>おとこ</rt></ruby>の<ruby>真似<rt>まね</rt></ruby>をしたがるとこがある。</p>
+                    <div class="translation">반하면 뭐든 반한 남자의 흉내를 내고 싶어 하는 구석이 있어.</div>
                 </div>
-                <div class="translation">반하면 뭐든 반한 남자의 흉내를 내고 싶어 하는 구석이 있어.</div>
             </div>
         </div>
+
+        <div class="w-full lg:w-96 card sticky top-4 max-h-[90vh] overflow-y-auto custom-scrollbar">
+            <div class="flex justify-between items-center mb-5">
+                <h2 class="text-lg font-semibold text-slate-300">오늘의 단어 & 복습</h2>
+                <button id="toggleVocab" class="bg-indigo-600 hover:bg-indigo-500 text-sm px-4 py-2 rounded-lg transition-colors font-bold">
+                    뜻/예문 보기
+                </button>
+            </div>
+
+            <div class="space-y-4">
+                <div class="bg-slate-800 p-4 rounded-lg">
+                    <div class="font-bold text-xl text-white">名前 <span class="text-sm font-normal text-sky-200">(なまえ)</span></div>
+                    <div class="vocab-content">
+                        <div class="text-slate-200 text-sm mb-3 leading-relaxed">
+                            1. 이름<br>2. 명칭
+                        </div>
+                        <div class="bg-slate-900 p-3 rounded-md">
+                            <div class="text-xs font-bold text-indigo-400 mb-2">💡 뇌새김 예문 5</div>
+                            <ul class="text-sm text-slate-400 space-y-1.5 list-disc pl-4">
+                                <li>お名前は何ですか。</li>
+                                <li>名前を書いてください。</li>
+                                <li>彼の名前を忘れました。</li>
+                                <li>会社の名前に由来がある。</li>
+                                <li>名前が呼ばれるまで待つ。</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-800 p-4 rounded-lg">
+                    <div class="font-bold text-xl text-white">いわゆる</div>
+                    <div class="vocab-content">
+                        <div class="text-slate-200 text-sm mb-3 leading-relaxed">
+                            1. 소위<br>2. 이른바
+                        </div>
+                        <div class="bg-slate-900 p-3 rounded-md">
+                            <div class="text-xs font-bold text-indigo-400 mb-2">💡 뇌새김 예문 5</div>
+                            <ul class="text-sm text-slate-400 space-y-1.5 list-disc pl-4">
+                                <li>彼がいわゆる天才だ。</li>
+                                <li>いわゆる「ゆとり世代」。</li>
+                                <li>これがいわゆる日本の美。</li>
+                                <li>いわゆるオタク文化。</li>
+                                <li>いわゆる常識を疑う。</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-800 p-4 rounded-lg">
+                    <div class="font-bold text-xl text-white">看板 <span class="text-sm font-normal text-sky-200">(かんばん)</span></div>
+                    <div class="vocab-content">
+                        <div class="text-slate-200 text-sm mb-3 leading-relaxed">
+                            1. 간판<br>2. 겉치레, (그곳을 대표하는) 사람이나 물건
+                        </div>
+                        <div class="bg-slate-900 p-3 rounded-md">
+                            <div class="text-xs font-bold text-indigo-400 mb-2">💡 뇌새김 예문 5</div>
+                            <ul class="text-sm text-slate-400 space-y-1.5 list-disc pl-4">
+                                <li>お店の看板メニュー。</li>
+                                <li>看板を下ろす。</li>
+                                <li>彼女は番組の看板だ。</li>
+                                <li>看板に偽りなし。</li>
+                                <li>新しい看板を出す。</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-800 p-4 rounded-lg">
+                    <div class="font-bold text-xl text-white">焼く <span class="text-sm font-normal text-sky-200">(やく)</span></div>
+                    <div class="vocab-content">
+                        <div class="text-slate-200 text-sm mb-3 leading-relaxed">
+                            1. 굽다<br>2. 태우다, 애태우다
+                        </div>
+                        <div class="bg-slate-900 p-3 rounded-md">
+                            <div class="text-xs font-bold text-indigo-400 mb-2">💡 뇌새김 예문 5</div>
+                            <ul class="text-sm text-slate-400 space-y-1.5 list-disc pl-4">
+                                <li>パンを焼く。</li>
+                                <li>魚を焼く匂いがする。</li>
+                                <li>世話を焼く。 (참견하다)</li>
+                                <li>手を焼く。 (애를 먹다)</li>
+                                <li>嫉妬に身を焼く。</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+
     </div>
+</div>
 
-    <script>
-        const toggleBtn = document.getElementById('toggleAll');
-        const translations = document.querySelectorAll('.translation');
-        let isVisible = false;
+<script>
+    // 문장 해석 토글 로직
+    const toggleBtn = document.getElementById('toggleAll');
+    const translations = document.querySelectorAll('.translation');
+    let isTranslationVisible = false;
 
-        toggleBtn.addEventListener('click', () => {
-            isVisible = !isVisible;
-            translations.forEach(t => {
-                t.style.display = isVisible ? 'block' : 'none';
-            });
+    toggleBtn.addEventListener('click', () => {
+        isTranslationVisible = !isTranslationVisible;
+        translations.forEach(t => {
+            t.style.display = isTranslationVisible ? 'block' : 'none';
         });
+    });
 
-        const playbackRate = document.getElementById('playbackRate');
+    // 단어장 토글 로직
+    const toggleVocabBtn = document.getElementById('toggleVocab');
+    const vocabContents = document.querySelectorAll('.vocab-content');
+    let isVocabVisible = false;
 
-        playbackRate.addEventListener('change', () => {
-            const speed = playbackRate.value;
-            document.querySelectorAll('audio').forEach(audio => {
-                const source = audio.querySelector('source');
-                if (!source) return;
-                if (!source.dataset.originalSrc) {
-                    source.dataset.originalSrc = source.getAttribute('src');
-                }
-                const originalSrc = source.dataset.originalSrc;
-                if (speed === "1") {
-                    source.src = originalSrc;
-                } else {
-                    source.src = originalSrc.replace(".mp3", "_75.mp3");
-                }
-                audio.load();
-            });
+    toggleVocabBtn.addEventListener('click', () => {
+        isVocabVisible = !isVocabVisible;
+        vocabContents.forEach(c => {
+            c.style.display = isVocabVisible ? 'block' : 'none';
         });
+    });
 
-        const homeBtn = document.getElementById("homeBtn");
-        if (homeBtn) {
-            homeBtn.addEventListener("click", () => {
-                location.href = "https://tajunii.github.io/study-home/";
-            });
-        }
-    </script>
+    // 홈 버튼 로직
+    const homeBtn = document.getElementById("homeBtn");
+    if (homeBtn) {
+        homeBtn.addEventListener("click", () => {
+            location.href = "https://tajunii.github.io/study-home/";
+        });
+    }
+</script>
 </body>
 </html>
