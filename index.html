@@ -3,28 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>일본어 연습</title>
+    <title>문장 독해 연습</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { background-color: #0f172a; color: #f8fafc; font-family: sans-serif; }
         .card { padding: 1.5rem; border-radius: 0.75rem; background-color: #1e293b; }
-        .translation { display: none; margin-top: 0.375rem; color: #94a3b8; font-size: 0.95rem; }
-        .vocab-content { display: none; margin-top: 0.75rem; border-top: 1px dashed #475569; padding-top: 0.75rem; }
+        .translation { display: none; margin-top: 0.75rem; color: #93c5fd; font-size: 1rem; }
+        .explanation { display: none; margin-top: 1rem; border-top: 1px dashed #475569; padding-top: 1rem; color: #cbd5e1; font-size: 0.95rem; }
         ruby rt { color: #f87171; font-size: 0.75rem; }
         audio { height: 30px; width: 200px; }
-        /* 스크롤바 커스텀 (단어장 영역) */
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: #1e293b; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
     </style>
 </head>
 <body class="p-4">
-<div class="max-w-6xl mx-auto">
+<div class="max-w-6xl mx-auto w-full">
 
+    <!-- Header -->
     <div class="flex justify-between items-center mb-8">
         <div></div>
         <h1 class="text-5xl font-bold text-[#11f1a3]">
-            일본어 연습
+            문장 독해 연습
         </h1>
         <button
             id="homeBtn"
@@ -34,357 +31,153 @@
         </button>
     </div>
         
-    <div class="flex flex-col lg:flex-row gap-6 items-start">
-        
-        <div class="flex-1 w-full card space-y-4">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-lg font-semibold text-slate-300">오늘의 문장</h2>
-                <button id="toggleAll" class="bg-blue-600 hover:bg-blue-500 text-sm px-4 py-2 rounded-lg transition-colors font-bold">
+    <div class="w-full card space-y-4">
+        <!-- Controls -->
+        <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
+            <h2 class="text-2xl font-semibold text-slate-300">오늘의 문장</h2>
+            <div class="flex gap-3">
+                <button id="toggleTranslation" class="bg-blue-600 hover:bg-blue-500 text-sm px-4 py-2 rounded-lg transition-colors font-bold">
                     해석 전체 보기/숨기기
                 </button>
-            </div>
-
-            <audio controls loop class="w-1/2 mb-4">
-                <source src="audio/full.mp3" type="audio/mpeg">
-            </audio>
-
-            <div class="text-lg text-white bg-slate-800 p-5 rounded-lg mb-4 space-y-5 leading-relaxed">
-                <div>
-                    <p>その<ruby>日<rt>ひ</rt></ruby>、<ruby>夫<rt>おっと</rt></ruby>が、<ruby>名古屋<rt>なごや</rt></ruby>の「<ruby>味噌煮込<rt>みそにこ</rt></ruby>みうどん」を<ruby>食<rt>た</rt></ruby>べようといいだした。</p>
-                    <div class="translation">그날, 남편이 나고야의 '미소니코미 우동'을 먹자고 말을 꺼냈다.</div>
-                </div>
-                <div>
-                    <p><ruby>食欲<rt>しょくよく</rt></ruby>をそそるパッケージの<ruby>写真<rt>しゃしん</rt></ruby>ではなく、<ruby>消費期限<rt>しょうひきげん</rt></ruby>が<ruby>近<rt>ちか</rt></ruby>づいていることに<ruby>気付<rt>きづ</rt></ruby>いたからである。</p>
-                    <div class="translation">식욕을 돋우는 포장 사진 때문이 아니라, 소비기한이 임박했다는 것을 깨달았기 때문이다.</div>
-                </div>
-                <div>
-                    <p>ならば、といろどりやバランスを<ruby>考<rt>かんが</rt></ruby>えつつ、ニンジンや<ruby>椎茸<rt>しいたけ</rt></ruby>、カマボコ、たまご、などを<ruby>冷蔵庫<rt>れいぞうこ</rt></ruby>から<ruby>取<rt>と</rt></ruby>り<ruby>出<rt>だ</rt></ruby>した。</p>
-                    <div class="translation">그렇다면, 하고 색감과 균형을 생각하면서 당근과 표고버섯, 어묵, 달걀 등을 냉장고에서 꺼냈다.</div>
-                </div>
-                <div>
-                    <p>それらを<ruby>見<rt>み</rt></ruby>て、<ruby>夫<rt>おっと</rt></ruby>は<ruby>牛肉<rt>ぎゅうにく</rt></ruby>とネギを<ruby>忘<rt>わす</rt></ruby>れるな、という。あわてて<ruby>冷凍<rt>れいとう</rt></ruby>していた<ruby>赤身<rt>あかみ</rt></ruby>の<ruby>牛肉<rt>ぎゅうにく</rt></ruby>を<ruby>電子<rt>でんし</rt></ruby>レンジに<ruby>入<rt>い</rt></ruby>れ、<ruby>解凍<rt>かいとう</rt></ruby>スイッチを<ruby>押<rt>お</rt></ruby>す。</p>
-                    <div class="translation">그것들을 보고 남편은 소고기와 대파를 잊지 말라고 한다. 서둘러 냉동해 두었던 살코기 소고기를 전자레인지에 넣고 해동 버튼을 누른다.</div>
-                </div>
-                <div>
-                    <p>そこまで<ruby>準備<rt>じゅんび</rt></ruby>をしたところで、<ruby>屋外<rt>おくがい</rt></ruby>に<ruby>保存<rt>ほぞん</rt></ruby>しているネギを<ruby>取<rt>て</rt></ruby>りに<ruby>出<rt>で</rt></ruby>た。</p>
-                    <div class="translation">거기까지 준비를 마친 뒤, 야외에 보관해 둔 대파를 가지러 나갔다.</div>
-                </div>
-                <div>
-                    <p><ruby>段取<rt>だんどり</rt></ruby>の<ruby>悪<rt>わる</rt></ruby>さに<ruby>我<rt>われ</rt></ruby>ながらあきれつつ、<ruby>農家<rt>のうか</rt></ruby>さんからいただいた<ruby>自慢<rt>じまん</rt></ruby>のネギの<ruby>束<rt>たば</rt></ruby>の<ruby>中<rt>なか</rt></ruby>から<ruby>何本<rt>なんぼん</rt></ruby>か<ruby>選<rt>えら</rt></ruby>んだ。</p>
-                    <div class="translation">일의 순서가 서툰 것에 나 스스로도 어이가 없으면서도, 농가에서 얻은 자랑거리인 대파 다발 중에서 몇 개 골랐다.</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="w-full lg:w-96 card sticky top-4 max-h-[90vh] overflow-y-auto custom-scrollbar">
-            <div class="flex justify-between items-center mb-5">
-                <h2 class="text-lg font-semibold text-slate-300">오늘의 단어 & 복습</h2>
-                <button id="toggleVocab" class="bg-indigo-600 hover:bg-indigo-500 text-sm px-4 py-2 rounded-lg transition-colors font-bold">
-                    뜻/예문 보기
+                <button id="toggleExplanation" class="bg-indigo-600 hover:bg-indigo-500 text-sm px-4 py-2 rounded-lg transition-colors font-bold">
+                    해설 전체 보기/숨기기
                 </button>
             </div>
-
-            <div class="space-y-4">
-                <!-- Word 1 -->
-                <div class="bg-slate-800 p-4 rounded-lg">
-                    <div class="font-bold text-xl text-white">味噌煮込み <span class="text-sm font-normal text-sky-200">(みそにこみ)</span></div>
-                    <div class="vocab-content">
-                        <div class="text-slate-200 text-sm mb-3 leading-relaxed">
-                            1. 된장 조림 2. 된장 전골 (우동 등)
-                        </div>
-                        <div class="bg-slate-900 p-3 rounded-md">
-                            <div class="text-xs font-bold text-indigo-400 mb-2">💡 뇌새김 예문 2</div>
-                            <ul class="text-sm text-slate-400 space-y-1.5 list-disc pl-4">
-                                <li>名古屋の味噌煮込みうどんは有名だ。</li>
-                                <li>寒い日には味噌煮込みが食べたくなる。</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Word 2 -->
-                <div class="bg-slate-800 p-4 rounded-lg">
-                    <div class="font-bold text-xl text-white">そそる</div>
-                    <div class="vocab-content">
-                        <div class="text-slate-200 text-sm mb-3 leading-relaxed">
-                            1. (식욕·흥미 등을) 돋우다 2. 자아내다 (눈물 등)
-                        </div>
-                        <div class="bg-slate-900 p-3 rounded-md">
-                            <div class="text-xs font-bold text-indigo-400 mb-2">💡 뇌새김 예문 2</div>
-                            <ul class="text-sm text-slate-400 space-y-1.5 list-disc pl-4">
-                                <li>美味しそうな匂いが食欲をそそる。</li>
-                                <li>彼の話は興味をそそる。</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Word 3 -->
-                <div class="bg-slate-800 p-4 rounded-lg">
-                    <div class="font-bold text-xl text-white">パッケージ</div>
-                    <div class="vocab-content">
-                        <div class="text-slate-200 text-sm mb-3 leading-relaxed">
-                            1. 패키지, 포장 2. 일괄 (포괄적인 상품 묶음)
-                        </div>
-                        <div class="bg-slate-900 p-3 rounded-md">
-                            <div class="text-xs font-bold text-indigo-400 mb-2">💡 뇌새김 예문 2</div>
-                            <ul class="text-sm text-slate-400 space-y-1.5 list-disc pl-4">
-                                <li>パッケージのデザインが可愛い。</li>
-                                <li>旅行のパッケージツアーを予約した。</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Word 4 -->
-                <div class="bg-slate-800 p-4 rounded-lg">
-                    <div class="font-bold text-xl text-white">近づく <span class="text-sm font-normal text-sky-200">(ちかづく)</span></div>
-                    <div class="vocab-content">
-                        <div class="text-slate-200 text-sm mb-3 leading-relaxed">
-                            1. 가까워지다, 다가오다 2. 친해지다, 접근하다
-                        </div>
-                        <div class="bg-slate-900 p-3 rounded-md">
-                            <div class="text-xs font-bold text-indigo-400 mb-2">💡 뇌새김 예문 2</div>
-                            <ul class="text-sm text-slate-400 space-y-1.5 list-disc pl-4">
-                                <li>台風が近づいている。</li>
-                                <li>試験の日が近づく。</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Word 5 -->
-                <div class="bg-slate-800 p-4 rounded-lg">
-                    <div class="font-bold text-xl text-white">気付く <span class="text-sm font-normal text-sky-200">(きづく)</span></div>
-                    <div class="vocab-content">
-                        <div class="text-slate-200 text-sm mb-3 leading-relaxed">
-                            1. 알아차리다, 깨닫다 2. 정신을 차리다 (의식을 되찾다)
-                        </div>
-                        <div class="bg-slate-900 p-3 rounded-md">
-                            <div class="text-xs font-bold text-indigo-400 mb-2">💡 뇌새김 예문 2</div>
-                            <ul class="text-sm text-slate-400 space-y-1.5 list-disc pl-4">
-                                <li>間違いに気付く。</li>
-                                <li>彼の変化に気付いた。</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Word 6 -->
-                <div class="bg-slate-800 p-4 rounded-lg">
-                    <div class="font-bold text-xl text-white">ならば</div>
-                    <div class="vocab-content">
-                        <div class="text-slate-200 text-sm mb-3 leading-relaxed">
-                            1. 그렇다면, 그렇다면야 2. ~라면 (가정형)
-                        </div>
-                        <div class="bg-slate-900 p-3 rounded-md">
-                            <div class="text-xs font-bold text-indigo-400 mb-2">💡 뇌새김 예문 2</div>
-                            <ul class="text-sm text-slate-400 space-y-1.5 list-disc pl-4">
-                                <li>嫌ならばやめなさい。</li>
-                                <li>必要ならば連絡してください。</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Word 7 -->
-                <div class="bg-slate-800 p-4 rounded-lg">
-                    <div class="font-bold text-xl text-white">いろどり <span class="text-sm font-normal text-sky-200">(いろどり)</span></div>
-                    <div class="vocab-content">
-                        <div class="text-slate-200 text-sm mb-3 leading-relaxed">
-                            1. 배색, 색깔의 조화 2. 화려함, 운치를 더함
-                        </div>
-                        <div class="bg-slate-900 p-3 rounded-md">
-                            <div class="text-xs font-bold text-indigo-400 mb-2">💡 뇌새김 예문 2</div>
-                            <ul class="text-sm text-slate-400 space-y-1.5 list-disc pl-4">
-                                <li>料理にいろどりを添える。</li>
-                                <li>秋の山はいろどりが美しい。</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Word 8 -->
-                <div class="bg-slate-800 p-4 rounded-lg">
-                    <div class="font-bold text-xl text-white">つつ</div>
-                    <div class="vocab-content">
-                        <div class="text-slate-200 text-sm mb-3 leading-relaxed">
-                            1. ~하면서 (동시 진행) 2. ~이면서도 (역접)
-                        </div>
-                        <div class="bg-slate-900 p-3 rounded-md">
-                            <div class="text-xs font-bold text-indigo-400 mb-2">💡 뇌새김 예문 2</div>
-                            <ul class="text-sm text-slate-400 space-y-1.5 list-disc pl-4">
-                                <li>テレビを見つつご飯を食べる。</li>
-                                <li>悪いと知りつつ嘘をついた。</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Word 9 -->
-                <div class="bg-slate-800 p-4 rounded-lg">
-                    <div class="font-bold text-xl text-white">椎茸 <span class="text-sm font-normal text-sky-200">(しいたけ)</span></div>
-                    <div class="vocab-content">
-                        <div class="text-slate-200 text-sm mb-3 leading-relaxed">
-                            1. 표고버섯
-                        </div>
-                        <div class="bg-slate-900 p-3 rounded-md">
-                            <div class="text-xs font-bold text-indigo-400 mb-2">💡 뇌새김 예문 2</div>
-                            <ul class="text-sm text-slate-400 space-y-1.5 list-disc pl-4">
-                                <li>椎茸は出汁がよく出る。</li>
-                                <li>椎茸を焼いて食べる。</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Word 10 -->
-                <div class="bg-slate-800 p-4 rounded-lg">
-                    <div class="font-bold text-xl text-white">あわてる <span class="text-sm font-normal text-sky-200">(あわてる)</span></div>
-                    <div class="vocab-content">
-                        <div class="text-slate-200 text-sm mb-3 leading-relaxed">
-                            1. 당황하다, 허둥대다 2. 허겁지겁하다
-                        </div>
-                        <div class="bg-slate-900 p-3 rounded-md">
-                            <div class="text-xs font-bold text-indigo-400 mb-2">💡 뇌새김 예문 2</div>
-                            <ul class="text-sm text-slate-400 space-y-1.5 list-disc pl-4">
-                                <li>あわてて家を出た。</li>
-                                <li>慌てずに準備しなさい。</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Word 11 -->
-                <div class="bg-slate-800 p-4 rounded-lg">
-                    <div class="font-bold text-xl text-white">赤身 <span class="text-sm font-normal text-sky-200">(あかみ)</span></div>
-                    <div class="vocab-content">
-                        <div class="text-slate-200 text-sm mb-3 leading-relaxed">
-                            1. (생선·육류의) 살코기, 붉은 살 2. (나무 등의) 붉은 부분
-                        </div>
-                        <div class="bg-slate-900 p-3 rounded-md">
-                            <div class="text-xs font-bold text-indigo-400 mb-2">💡 뇌새김 예문 2</div>
-                            <ul class="text-sm text-slate-400 space-y-1.5 list-disc pl-4">
-                                <li>マグロの赤身が好きだ。</li>
-                                <li>赤身の肉を解凍する。</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Word 12 -->
-                <div class="bg-slate-800 p-4 rounded-lg">
-                    <div class="font-bold text-xl text-white">段取り <span class="text-sm font-normal text-sky-200">(だんどり)</span></div>
-                    <div class="vocab-content">
-                        <div class="text-slate-200 text-sm mb-3 leading-relaxed">
-                            1. 일의 순서, 절차 2. 준비, 계획
-                        </div>
-                        <div class="bg-slate-900 p-3 rounded-md">
-                            <div class="text-xs font-bold text-indigo-400 mb-2">💡 뇌새김 예문 2</div>
-                            <ul class="text-sm text-slate-400 space-y-1.5 list-disc pl-4">
-                                <li>仕事の段取りを決める。</li>
-                                <li>段取りが悪い。</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Word 13 -->
-                <div class="bg-slate-800 p-4 rounded-lg">
-                    <div class="font-bold text-xl text-white">われながら <span class="text-sm font-normal text-sky-200">(われながら)</span></div>
-                    <div class="vocab-content">
-                        <div class="text-slate-200 text-sm mb-3 leading-relaxed">
-                            1. 내 자신도 생각해도, 나 스스로도 2. 제법, 나답지 않게
-                        </div>
-                        <div class="bg-slate-900 p-3 rounded-md">
-                            <div class="text-xs font-bold text-indigo-400 mb-2">💡 뇌새김 예문 2</div>
-                            <ul class="text-sm text-slate-400 space-y-1.5 list-disc pl-4">
-                                <li>我ながらよくやったと思う。</li>
-                                <li>我ながら情けない。</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Word 14 -->
-                <div class="bg-slate-800 p-4 rounded-lg">
-                    <div class="font-bold text-xl text-white">あきれる <span class="text-sm font-normal text-sky-200">(あきれる)</span></div>
-                    <div class="vocab-content">
-                        <div class="text-slate-200 text-sm mb-3 leading-relaxed">
-                            1. 어이없다, 기가 막히다 2. 질리다, 한심하게 여기다
-                        </div>
-                        <div class="bg-slate-900 p-3 rounded-md">
-                            <div class="text-xs font-bold text-indigo-400 mb-2">💡 뇌새김 예문 2</div>
-                            <ul class="text-sm text-slate-400 space-y-1.5 list-disc pl-4">
-                                <li>彼の態度にあきれる。</li>
-                                <li>あきれて物も言えない。</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Word 15 -->
-                <div class="bg-slate-800 p-4 rounded-lg">
-                    <div class="font-bold text-xl text-white">自慢 <span class="text-sm font-normal text-sky-200">(じまん)</span></div>
-                    <div class="vocab-content">
-                        <div class="text-slate-200 text-sm mb-3 leading-relaxed">
-                            1. 자랑, 자긍심 2. 스스로 뽐냄
-                        </div>
-                        <div class="bg-slate-900 p-3 rounded-md">
-                            <div class="text-xs font-bold text-indigo-400 mb-2">💡 뇌새김 예문 2</div>
-                            <ul class="text-sm text-slate-400 space-y-1.5 list-disc pl-4">
-                                <li>料理の腕前を自慢する。</li>
-                                <li>自慢의 息子です。(자랑스러운 아들입니다.)</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Word 16 -->
-                <div class="bg-slate-800 p-4 rounded-lg">
-                    <div class="font-bold text-xl text-white">束 <span class="text-sm font-normal text-sky-200">(たば)</span></div>
-                    <div class="vocab-content">
-                        <div class="text-slate-200 text-sm mb-3 leading-relaxed">
-                            1. 묶음, 다발 2. 단, 송이
-                        </div>
-                        <div class="bg-slate-900 p-3 rounded-md">
-                            <div class="text-xs font-bold text-indigo-400 mb-2">💡 뇌새김 예문 2</div>
-                            <ul class="text-sm text-slate-400 space-y-1.5 list-disc pl-4">
-                                <li>ネギの束を買う。</li>
-                                <li>お札の束。</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                
-            </div>
         </div>
 
+        <audio controls loop class="w-1/2 mb-6">
+            <source src="audio/full.mp3" type="audio/mpeg">
+        </audio>
+
+        <!-- Sentence Cards -->
+        <div class="space-y-6">
+            
+            <!-- Card 1 -->
+            <div class="bg-slate-800 p-6 rounded-xl shadow-md">
+                <p class="text-xl leading-relaxed text-white">その<ruby>日<rt>ひ</rt></ruby>、<ruby>夫<rt>おっと</rt></ruby>が、<ruby>名古屋<rt>なごや</rt></ruby>の「<ruby>味噌煮込<rt>みそにこ</rt></ruby>みうどん」を<ruby>食<rt>た</rt></ruby>べようといいだした。</p>
+                <div class="translation">그날, 남편이 나고야의 '미소 니코미 우동(된장 조림 우동)'을 먹자고 하기 시작했다.</div>
+                <div class="explanation">
+                    <ul class="space-y-1">
+                        <li><span class="font-bold text-sky-300">～ようと言い出す</span> : "~하자고 말을 꺼내다."</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="bg-slate-800 p-6 rounded-xl shadow-md">
+                <p class="text-xl leading-relaxed text-white"><ruby>食欲<rt>しょくよく</rt></ruby>をそそるパッケージの<ruby>写真<rt>しゃしん</rt></ruby>ではなく、<ruby>消費期限<rt>しょうひきげん</rt></ruby>が<ruby>近<rt>ちか</rt></ruby>づいていることに<ruby>気付<rt>きづ</rt></ruby>いたからである。</p>
+                <div class="translation">식욕을 자극하는 포장 사진 때문이 아니라, 소비기한이 가까워지고 있다는 사실을 알아차렸기 때문이다.</div>
+                <div class="explanation">
+                    <ul class="space-y-1">
+                        <li><span class="font-bold text-sky-300">食欲をそそる</span> : 식욕을 돋우다, 자극하다.</li>
+                        <li><span class="font-bold text-sky-300">～ではなく</span> : ~가 아니라.</li>
+                        <li><span class="font-bold text-sky-300">消費期限</span> : 소비기한(상하기 쉬운 식품에 쓰임).</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="bg-slate-800 p-6 rounded-xl shadow-md">
+                <p class="text-xl leading-relaxed text-white">ならば、といろどりやバランスを<ruby>考<rt>かんが</rt></ruby>えつつ、ニンジンや<ruby>椎茸<rt>しいたけ</rt></ruby>、カマボコ、たまご、などを<ruby>冷蔵庫<rt>れいぞうこ</rt></ruby>から<ruby>取<rt>と</rt></ruby>り<ruby>出<rt>だ</rt></ruby>した。</p>
+                <div class="translation">그렇다면 하고, 색감과 영양의 균형을 생각하면서 당근, 표고버섯, 어묵(가마보코), 달걀 등을 냉장고에서 꺼냈다.</div>
+                <div class="explanation">
+                    <ul class="space-y-1">
+                        <li><span class="font-bold text-sky-300">ならば</span> : 그렇다면, 그렇다면 말이지.</li>
+                        <li><span class="font-bold text-sky-300">いろどり</span> : 색감, 보기 좋은 색의 조화.</li>
+                        <li><span class="font-bold text-sky-300">バランス</span> : 여기서는 영양 균형.</li>
+                        <li><span class="font-bold text-sky-300">～つつ</span> : ~하면서.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="bg-slate-800 p-6 rounded-xl shadow-md">
+                <p class="text-xl leading-relaxed text-white">それらを<ruby>見<rt>み</rt></ruby>て、<ruby>夫<rt>おっと</rt></ruby>は<ruby>牛肉<rt>ぎゅうにく</rt></ruby>とネギを<ruby>忘<rt>わす</rt></ruby>れるな、という。</p>
+                <div class="translation">그것들을 본 남편이 소고기와 파를 빼먹지 말라고 한다.</div>
+                <div class="explanation">
+                    <ul class="space-y-1">
+                        <li><span class="font-bold text-sky-300">忘れるな</span> : 잊지 마라. (강한 명령형)</li>
+                        <li><span class="font-bold text-sky-300">～という</span> : "~라고 말한다."</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Card 5 -->
+            <div class="bg-slate-800 p-6 rounded-xl shadow-md">
+                <p class="text-xl leading-relaxed text-white">あわてて<ruby>冷凍<rt>れいとう</rt></ruby>していた<ruby>赤身<rt>あかみ</rt></ruby>の<ruby>牛肉<rt>ぎゅうにく</rt></ruby>を<ruby>電子<rt>でんし</rt></ruby>レンジに<ruby>入<rt>い</rt></ruby>れ、<ruby>解凍<rt>かいとう</rt></ruby>スイッチを<ruby>押<rt>お</rt></ruby>す。</p>
+                <div class="translation">서둘러 냉동해 두었던 살코기 소고기를 전자레인지에 넣고 해동 버튼을 눌렀다.</div>
+                <div class="explanation">
+                    <ul class="space-y-1">
+                        <li><span class="font-bold text-sky-300">赤身</span> : 기름기가 적은 살코기.</li>
+                        <li><span class="font-bold text-sky-300">解凍</span> : 해동.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Card 6 -->
+            <div class="bg-slate-800 p-6 rounded-xl shadow-md">
+                <p class="text-xl leading-relaxed text-white">そこまで<ruby>準備<rt>じゅんび</rt></ruby>をしたところで、<ruby>屋外<rt>おくがい</rt></ruby>に<ruby>保存<rt>ほぞん</rt></ruby>しているネギを<ruby>取<rt>て</rt></ruby>りに<ruby>出<rt>で</rt></ruby>た。</p>
+                <div class="translation">거기까지 준비를 마친 뒤, 밖에 보관해 둔 파를 가지러 나갔다.</div>
+                <div class="explanation">
+                    <ul class="space-y-1">
+                        <li><span class="font-bold text-sky-300">～したところで</span> : ~한 시점에서, ~까지 하고 나서.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Card 7 -->
+            <div class="bg-slate-800 p-6 rounded-xl shadow-md">
+                <p class="text-xl leading-relaxed text-white"><ruby>段取<rt>だんどり</rt></ruby>の<ruby>悪<rt>わる</rt></ruby>さに<ruby>我<rt>われ</rt></ruby>ながらあきれつつ、<ruby>農家<rt>のうか</rt></ruby>さんからいただいた<ruby>自慢<rt>じまん</rt></ruby>のネギの<ruby>束<rt>たば</rt></ruby>の<ruby>中<rt>なか</rt></ruby>から<ruby>何本<rt>なんぼん</rt></ruby>か<ruby>選<rt>えら</rt></ruby>んだ。</p>
+                <div class="translation">일의 순서를 제대로 짜지 못한 자신이 스스로도 한심하다고 생각하면서, 농가에서 받은 자랑거리인 파 한 단 가운데 몇 대를 골랐다.</div>
+                <div class="explanation">
+                    <p class="font-bold text-indigo-300 mb-4">💡 표현 설명</p>
+                    <ul class="space-y-4">
+                        <li>
+                            <div class="font-bold text-sky-300 mb-1">段取り / 段取りの悪さ</div>
+                            <p class="text-slate-300">段取り : 일의 순서, 준비, 진행 방식.<br>段取りの悪さ : 준비나 순서가 서툰 것.</p>
+                        </li>
+                        <li>
+                            <div class="font-bold text-sky-300 mb-1">我ながら</div>
+                            <p class="text-slate-300">직역: '나 스스로 생각해도'<br>자연스럽게는 '나도 내 자신이 어이가 없지만', '스스로도' 정도의 뉘앙스입니다.</p>
+                        </li>
+                        <li>
+                            <div class="font-bold text-sky-300 mb-1">あきれつつ</div>
+                            <p class="text-slate-300">呆れる(질리다, 어이없어하다)의 ～つつ형.<br>→ "어이없어하면서도", "한심하게 여기면서도".</p>
+                        </li>
+                        <li>
+                            <div class="font-bold text-sky-300 mb-1">自慢のネギ</div>
+                            <p class="text-slate-300">직역하면 "자랑의 파".<br>여기서는 '아끼는 파', '자랑거리인 파'라는 의미입니다. 글쓴이가 농가에서 직접 받은 좋은 파라 애착이 있는 것입니다.</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
     </div>
 </div>
 
 <script>
     // 문장 해석 토글 로직
-    const toggleBtn = document.getElementById('toggleAll');
+    const toggleTranslationBtn = document.getElementById('toggleTranslation');
     const translations = document.querySelectorAll('.translation');
     let isTranslationVisible = false;
 
-    toggleBtn.addEventListener('click', () => {
+    toggleTranslationBtn.addEventListener('click', () => {
         isTranslationVisible = !isTranslationVisible;
         translations.forEach(t => {
             t.style.display = isTranslationVisible ? 'block' : 'none';
         });
     });
 
-    // 단어장 토글 로직
-    const toggleVocabBtn = document.getElementById('toggleVocab');
-    const vocabContents = document.querySelectorAll('.vocab-content');
-    let isVocabVisible = false;
+    // 해설 토글 로직
+    const toggleExplanationBtn = document.getElementById('toggleExplanation');
+    const explanations = document.querySelectorAll('.explanation');
+    let isExplanationVisible = false;
 
-    toggleVocabBtn.addEventListener('click', () => {
-        isVocabVisible = !isVocabVisible;
-        vocabContents.forEach(c => {
-            c.style.display = isVocabVisible ? 'block' : 'none';
+    toggleExplanationBtn.addEventListener('click', () => {
+        isExplanationVisible = !isExplanationVisible;
+        explanations.forEach(e => {
+            e.style.display = isExplanationVisible ? 'block' : 'none';
         });
     });
 
