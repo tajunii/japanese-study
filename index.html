@@ -7,7 +7,7 @@
     <!-- 구글 폰트: 일본어 가독성에 최적화된 Noto Sans JP 및 UI용 Outfit -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght=400;500;700&family=Outfit:wght=400;600;800&display=swap" rel="stylesheet">
     <!-- 아이콘 라이브러리 (FontAwesome) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <!-- 테일윈드 CSS -->
@@ -34,15 +34,15 @@
 
         /* TV 모니터 가로 레이아웃에 가독성을 최적화한 콤팩트 폰트 스펙 */
         .japanese-sentence {
-            font-size: 22px;               /* 28px에서 22px로 소폭 축소 */
-            line-height: 2.1;              /* 후리가나 탑재에 무리 없는 콤팩트 행간 */
+            font-size: 22px;               
+            line-height: 2.1;              
             letter-spacing: 0.05em;
             color: #e5e9f0;
         }
 
-        /* 한글 해설 가독성 및 눈의 편안함 고려 */
+        /* 한글 해설 (들여쓰기 없이 원문 바로 밑에 정렬) */
         .korean-sentence {
-            font-size: 16px;               /* 20px에서 16px로 소폭 축소 */
+            font-size: 16px;               
             line-height: 1.5;
             letter-spacing: 0.03em;
             color: #94a3b8;
@@ -56,12 +56,12 @@
         }
 
         ruby rt {
-            font-size: 0.52em;             /* 발음 크기 */
-            color: var(--accent-warm);     /* 가시성 높은 골드옐로우 컬러 */
+            font-size: 0.52em;             
+            color: var(--accent-warm);     
             font-weight: 500;
             letter-spacing: 0px;
             padding-bottom: 2px;
-            user-select: none;             /* 한자 텍스트 복사 시 발음은 잡히지 않도록 방지 */
+            user-select: none;             
         }
 
         /* 후리가나 숨김 상태 클래스 */
@@ -101,14 +101,12 @@
 </head>
 <body class="w-screen h-screen flex justify-center items-center p-4">
 
-    <div class="w-full h-full max-w-7xl flex flex-col gap-4 bg-[#131a2e] border-2 border-[#222f4c] rounded-2xl p-5 shadow-2xl relative overflow-hidden">
+    <div class="w-full h-full max-w-[1400px] flex flex-col gap-4 bg-[#131a2e] border-2 border-[#222f4c] rounded-2xl p-5 shadow-2xl relative overflow-hidden">
         
-        <!-- 상단 바: 오디오 재생 컨트롤러와 옵션 토글 버튼들 구성 (콤팩트 단일 라인) -->
         <div class="flex flex-wrap items-center justify-between gap-4 pb-3 border-b-2 border-[#222f4c] shrink-0">
             
             <!-- 슬림 커스텀 오디오 컨트롤러 -->
             <div class="flex items-center gap-4 bg-[#1a243f] border border-[#2d3d66] rounded-xl px-4 py-1.5 flex-grow max-w-2xl">
-                <!-- 미디어 조작 버튼 그룹 -->
                 <div class="flex items-center gap-2">
                     <button id="audio-back" class="focusable w-8 h-8 rounded-full bg-[#222f4c] border border-[#2d3d66] flex items-center justify-center text-xs transition-all duration-150" tabindex="0" title="10초 뒤로">
                         <i class="fa-solid fa-backward-step"></i>
@@ -121,7 +119,6 @@
                     </button>
                 </div>
                 
-                <!-- 슬림 진행률 바 및 타이머 -->
                 <div class="flex-grow flex items-center gap-3">
                     <div class="flex-grow h-1.5 bg-white/10 rounded-full overflow-hidden cursor-pointer relative" id="progress-bg">
                         <div class="h-full w-0 bg-gradient-to-r from-[#00ffd2] to-[#00b4d8] rounded-full transition-all duration-100" id="progress-fill"></div>
@@ -145,43 +142,43 @@
                     <span>한글 해설 숨기기</span>
                 </button>
             </div>
-
         </div>
 
-        <!-- 좌측 사진 영역(약 30% 폭)과 우측 텍스트 영역(나머지 폭) 분할 -->
-        <div id="content-container" class="flex-grow flex flex-col md:flex-row gap-5 overflow-hidden">
+        <div id="content-container" class="flex-grow flex flex-col md:flex-row gap-6 overflow-hidden">
             
-            <!-- 왼쪽: 다중 사진 갤러리 영역 (최대 3장 세로 누적 배치) -->
-            <div class="w-full md:w-80 flex flex-col gap-3 overflow-y-auto pr-1 shrink-0">
-                <!-- 사진 1 (기존의 photo.jpg 도 호환되도록 처리) -->
-                <div class="w-full h-32 rounded-lg overflow-hidden border border-[#222f4c] shrink-0 bg-[#1a243f]">
-                    <img id="article-img-1" src="images/photo1.jpg" class="w-full h-full object-cover" alt="학습 대표 사진 1" onerror="handleImageError(this, 'images/photo.jpg')">
+            <!-- 왼쪽: 사진 갤러리 영역 (비율 16:9 완벽 고정) -->
+            <!-- w-[30%] 정도로 넓혀서 사진이 찌그러지지 않고 시원하게 보이게 설정 -->
+            <div id="image-sidebar" class="w-full md:w-[32%] flex flex-col gap-4 shrink-0 overflow-y-auto pr-1">
+                
+                <!-- 사진 1 (16:9 비율) -->
+                <div class="image-wrapper w-full aspect-video rounded-xl overflow-hidden border border-[#222f4c] bg-[#1a243f] shrink-0 shadow-lg">
+                    <img id="article-img-1" src="images/photo1.jpg" class="w-full h-full object-cover" alt="학습 사진 1" onerror="handleImageError(this, 'images/photo.jpg')">
                 </div>
-                <!-- 사진 2 (존재하지 않으면 자동 숨김 처리) -->
-                <div class="w-full h-32 rounded-lg overflow-hidden border border-[#222f4c] shrink-0 bg-[#1a243f]" id="img-container-2">
-                    <img id="article-img-2" src="images/photo2.jpg" class="w-full h-full object-cover" alt="학습 대표 사진 2" onerror="handleImageError(this)">
+                
+                <!-- 사진 2 (16:9 비율) -->
+                <div class="image-wrapper w-full aspect-video rounded-xl overflow-hidden border border-[#222f4c] bg-[#1a243f] shrink-0 shadow-lg">
+                    <img id="article-img-2" src="images/photo2.jpg" class="w-full h-full object-cover" alt="학습 사진 2" onerror="handleImageError(this)">
                 </div>
-                <!-- 사진 3 (존재하지 않으면 자동 숨김 처리) -->
-                <div class="w-full h-32 rounded-lg overflow-hidden border border-[#222f4c] shrink-0 bg-[#1a243f]" id="img-container-3">
-                    <img id="article-img-3" src="images/photo3.jpg" class="w-full h-full object-cover" alt="학습 대표 사진 3" onerror="handleImageError(this)">
+                
+                <!-- 사진 3 (16:9 비율) -->
+                <div class="image-wrapper w-full aspect-video rounded-xl overflow-hidden border border-[#222f4c] bg-[#1a243f] shrink-0 shadow-lg">
+                    <img id="article-img-3" src="images/photo3.jpg" class="w-full h-full object-cover" alt="학습 사진 3" onerror="handleImageError(this)">
                 </div>
             </div>
 
-            <!-- 오른쪽: 깔끔한 메인 제목 및 1:1 한일 교대 텍스트 학습 본문 -->
             <div class="flex-grow flex flex-col gap-4 overflow-y-auto pr-2">
                 
-                <!-- 깔끔하게 후리가나와 해석을 걷어낸 한자 원문 대형 기사 타이틀 -->
+                <!-- 제목란: 후리가나 없이 깔끔한 텍스트 -->
                 <div class="border-b border-[#222f4c] pb-3 shrink-0">
                     <h1 class="text-2xl font-bold leading-normal tracking-wide text-white">
                         雨がたくさん降った　九州北部は災害に気をつけて
                     </h1>
                 </div>
 
-                <!-- 원문 문장 밑에 한글 해설이 한 줄씩 들어오는 1:1 교대 매핑 공간 (1분 분량 수용) -->
-                <div class="space-y-5 pb-6">
+                <!-- 1:1 교대 매핑 기사 본문 영역 -->
+                <div class="space-y-6 pb-6">
                     
-                    <!-- 문장 세트 1 -->
-                    <div class="sentence-pair border-b border-[#222f4c]/20 pb-3">
+                    <div class="sentence-pair border-b border-[#222f4c]/20 pb-4">
                         <div class="japanese-sentence">
                             6<ruby>日<rt>むいか</rt></ruby>は、<ruby>熊本県<rt>くまもとけん</rt></ruby>や<ruby>長崎県<rt>ながさきけん</rt></ruby>など<ruby>九州<rt>きゅうしゅう</rt></ruby>の<ruby>北部<rt>ほくぶ</rt></ruby>でとてもたくさんの<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>りました。
                         </div>
@@ -190,8 +187,7 @@
                         </div>
                     </div>
 
-                    <!-- 문장 세트 2 -->
-                    <div class="sentence-pair border-b border-[#222f4c]/20 pb-3">
+                    <div class="sentence-pair border-b border-[#222f4c]/20 pb-4">
                         <div class="japanese-sentence">
                             <ruby>雨<rt>あめ</rt></ruby>の<ruby>多<rt>おお</rt></ruby>いときは<ruby>過<rt>す</rt></ruby>ぎました。
                         </div>
@@ -200,8 +196,7 @@
                         </div>
                     </div>
 
-                    <!-- 문장 세트 3 -->
-                    <div class="sentence-pair border-b border-[#222f4c]/20 pb-3">
+                    <div class="sentence-pair border-b border-[#222f4c]/20 pb-4">
                         <div class="japanese-sentence">
                             しかし、<ruby>気象庁<rt>きしょうちょう</rt></ruby>は「<ruby>山<rt>やま</rt></ruby>が<ruby>崩<rt>くず</rt></ruby>れることがあるかもしれません。<ruby>気<rt>き</rt></ruby>をつけてください」と<ruby>言<rt>い</rt></ruby>っています。
                         </div>
@@ -210,8 +205,7 @@
                         </div>
                     </div>
 
-                    <!-- 문장 세트 4 -->
-                    <div class="sentence-pair border-b border-[#222f4c]/20 pb-3">
+                    <div class="sentence-pair border-b border-[#222f4c]/20 pb-4">
                         <div class="japanese-sentence">
                             そして、<ruby>大<rt>おお</rt></ruby>きくてとても<ruby>強<rt>つよ</rt></ruby>い<ruby>台風<rt>たいふう</rt></ruby>9<ruby>号<rt>ごう</rt></ruby>が、<ruby>日本<rt>にほん</rt></ruby>の<ruby>南<rt>みなみ</rt></ruby>の<ruby>海<rt>うみ</rt></ruby>を<ruby>西<rt>にし</rt></ruby>に<ruby>進<rt>すす</rt></ruby>んでいます。
                         </div>
@@ -220,8 +214,7 @@
                         </div>
                     </div>
 
-                    <!-- 문장 세트 5 -->
-                    <div class="sentence-pair pb-3">
+                    <div class="sentence-pair pb-4">
                         <div class="japanese-sentence">
                             <ruby>台風<rt>たいふう</rt></ruby>は10<ruby>日<rt>とおか</rt></ruby><ruby>金曜日<rt>きんようび</rt></ruby>ごろに<ruby>沖縄<rt>おきなわ</rt></ruby>の<ruby>近<rt>ちか</rt></ruby>くに<ruby>来<rt>く</rt></ruby>るかもしれません。<ruby>台風<rt>たいふう</rt></ruby>の<ruby>新<rt>あたら</rt></ruby>しい<ruby>情報<rt>じょうほう</rt></ruby>を<ruby>確認<rt>かくにん</rt></ruby>してください。
                         </div>
@@ -231,18 +224,13 @@
                     </div>
 
                 </div>
-
             </div>
-
         </div>
-
     </div>
 
-    <!-- 실제 브라우저 TV 음성 매핑용 오디오 태그 (깃허브 서브디렉토리 audio/audio.mp3 바인딩) -->
     <audio id="main-audio" src="audio/audio.mp3" style="display: none;"></audio>
 
     <script>
-        // 글로벌 상태 변수
         let isFuriganaHidden = false;
         let isTranslationHidden = false;
 
@@ -257,28 +245,17 @@
         const toggleTranslationBtn = document.getElementById('btn-toggle-translation');
         const contentContainer = document.getElementById('content-container');
 
-        // ==========================================================================
-        // 1. 다중 사진 로드 예외 처리기 (사진 파일 부재 시 깔끔히 감춤)
-        // ==========================================================================
+        // 사진 파일 없을 시 박스 자체를 투명화 (16:9 공간 차지 안하도록 완전 제거)
         function handleImageError(img, fallbackSrc) {
-            // 이미지 1번에 한해 기존의 photo.jpg 대체 검색 허용
             if (img.id === 'article-img-1' && fallbackSrc && !img.dataset.attemptedFallback) {
                 img.dataset.attemptedFallback = "true";
                 img.src = fallbackSrc;
                 return;
             }
-            // 그 외 및 2, 3번 이미지는 없으면 상위 부모 컨테이너 자체를 완전 제거/감춤
-            const parent = img.closest('.w-full.h-32');
-            if (parent) {
-                parent.style.display = 'none';
-            } else {
-                img.style.display = 'none';
-            }
+            const wrapper = img.closest('.image-wrapper');
+            if (wrapper) wrapper.style.display = 'none';
         }
 
-        // ==========================================================================
-        // 2. 오디오 제어기 및 실시간 연동 로직
-        // ==========================================================================
         function formatTime(seconds) {
             if (isNaN(seconds)) return "00:00";
             const mins = Math.floor(seconds / 60);
@@ -286,70 +263,47 @@
             return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
         }
 
-        // 재생 및 일시정지
         playBtn.addEventListener('click', () => {
             if (audio.paused) {
-                audio.play()
-                    .then(() => {
-                        playBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
-                    })
-                    .catch(err => {
-                        console.warn("오디오 파일 로드 실패 또는 차단:", err);
-                    });
+                audio.play().then(() => {
+                    playBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+                }).catch(err => console.warn("오디오 로드 실패:", err));
             } else {
                 audio.pause();
                 playBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
             }
         });
 
-        // 10초 뒤로
         document.getElementById('audio-back').addEventListener('click', () => {
             audio.currentTime = Math.max(0, audio.currentTime - 10);
         });
 
-        // 10초 앞으로
         document.getElementById('audio-forward').addEventListener('click', () => {
             audio.currentTime = Math.min(audio.duration || 0, audio.currentTime + 10);
         });
 
-        // 오디오 메타데이터 로드 시 전체 시간 싱크 맞춤
         audio.addEventListener('loadedmetadata', () => {
             timeTotal.textContent = formatTime(audio.duration);
         });
 
-        // 오디오 실시간 타임 업데이트 및 프로그레스 바 갱신
         audio.addEventListener('timeupdate', () => {
             const current = audio.currentTime;
             const total = audio.duration || 0;
-            
             timeCurrent.textContent = formatTime(current);
-            if (total > 0) {
-                timeTotal.textContent = formatTime(total);
-                const ratio = (current / total) * 100;
-                progressBar.style.width = ratio + '%';
-            }
+            if (total > 0) progressBar.style.width = ((current / total) * 100) + '%';
         });
 
-        // 오디오 진행 바 클릭 조작 (TV 포인터 또는 터치 스크린 호환)
         progressBg.addEventListener('click', (e) => {
             const rect = progressBg.getBoundingClientRect();
             const clickX = e.clientX - rect.left;
-            const percentage = clickX / rect.width;
-            if (audio.duration) {
-                audio.currentTime = percentage * audio.duration;
-            }
+            if (audio.duration) audio.currentTime = (clickX / rect.width) * audio.duration;
         });
 
-        // 재생 완료 동작
         audio.addEventListener('ended', () => {
             playBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
             progressBar.style.width = '100%';
         });
 
-
-        // ==========================================================================
-        // 3. 후리가나 및 한글 번역 레이어 토글 제어
-        // ==========================================================================
         toggleFuriganaBtn.addEventListener('click', () => {
             isFuriganaHidden = !isFuriganaHidden;
             if (isFuriganaHidden) {
@@ -376,12 +330,7 @@
             }
         });
 
-
-        // ==========================================================================
-        // 4. 스마트 TV 전용 리모컨 방향키 네비게이션 시뮬레이터
-        // ==========================================================================
         window.addEventListener('load', () => {
-            // 조작 가능한 5가지 포커스 제어 버튼 연계 설정
             const focusNodes = [
                 document.getElementById('audio-back'),
                 document.getElementById('audio-play'),
@@ -389,51 +338,20 @@
                 toggleFuriganaBtn,
                 toggleTranslationBtn
             ];
-
-            let activeFocusIndex = 1; // 기본 포커스: 재생 버튼
-            focusNodes[activeFocusIndex].focus();
-            focusNodes[activeFocusIndex].classList.add('focused-node');
+            let activeIndex = 1;
+            focusNodes[activeIndex].focus();
+            focusNodes[activeIndex].classList.add('focused-node');
 
             document.addEventListener('keydown', (e) => {
-                focusNodes.forEach(node => node.classList.remove('focused-node'));
+                focusNodes.forEach(n => n.classList.remove('focused-node'));
+                if(e.key === 'ArrowLeft') activeIndex = (activeIndex - 1 + focusNodes.length) % focusNodes.length;
+                else if(e.key === 'ArrowRight') activeIndex = (activeIndex + 1) % focusNodes.length;
+                else if(e.key === 'ArrowUp') activeIndex = Math.max(3, activeIndex);
+                else if(e.key === 'ArrowDown') activeIndex = 1;
+                else if(e.key === 'Enter') focusNodes[activeIndex].click();
                 
-                switch (e.key) {
-                    case 'ArrowLeft':
-                        e.preventDefault();
-                        activeFocusIndex = (activeFocusIndex - 1 + focusNodes.length) % focusNodes.length;
-                        break;
-                    case 'ArrowRight':
-                        e.preventDefault();
-                        activeFocusIndex = (activeFocusIndex + 1) % focusNodes.length;
-                        break;
-                    case 'ArrowUp':
-                        e.preventDefault();
-                        if (activeFocusIndex < 3) {
-                            activeFocusIndex = 3;
-                        }
-                        break;
-                    case 'ArrowDown':
-                        e.preventDefault();
-                        if (activeFocusIndex >= 3) {
-                            activeFocusIndex = 1;
-                        }
-                        break;
-                    case 'Enter':
-                        focusNodes[activeFocusIndex].click();
-                        break;
-                }
-
-                focusNodes[activeFocusIndex].focus();
-                focusNodes[activeFocusIndex].classList.add('focused-node');
-            });
-
-            // 마우스/터치 지원 포커스 싱크 매핑
-            focusNodes.forEach((node, index) => {
-                node.addEventListener('focus', () => {
-                    focusNodes.forEach(n => n.classList.remove('focused-node'));
-                    activeFocusIndex = index;
-                    node.classList.add('focused-node');
-                });
+                focusNodes[activeIndex].focus();
+                focusNodes[activeIndex].classList.add('focused-node');
             });
         });
     </script>
