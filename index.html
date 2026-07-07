@@ -153,15 +153,15 @@
             
             <!-- 왼쪽: 다중 사진 갤러리 영역 (최대 3장 세로 누적 배치) -->
             <div class="w-full md:w-80 flex flex-col gap-3 overflow-y-auto pr-1 shrink-0">
-                <!-- 사진 1 -->
+                <!-- 사진 1 (기존의 photo.jpg 도 호환되도록 처리) -->
                 <div class="w-full h-32 rounded-lg overflow-hidden border border-[#222f4c] shrink-0 bg-[#1a243f]">
                     <img id="article-img-1" src="images/photo1.jpg" class="w-full h-full object-cover" alt="학습 대표 사진 1" onerror="handleImageError(this, 'images/photo.jpg')">
                 </div>
-                <!-- 사진 2 -->
+                <!-- 사진 2 (존재하지 않으면 자동 숨김 처리) -->
                 <div class="w-full h-32 rounded-lg overflow-hidden border border-[#222f4c] shrink-0 bg-[#1a243f]" id="img-container-2">
                     <img id="article-img-2" src="images/photo2.jpg" class="w-full h-full object-cover" alt="학습 대표 사진 2" onerror="handleImageError(this)">
                 </div>
-                <!-- 사진 3 -->
+                <!-- 사진 3 (존재하지 않으면 자동 숨김 처리) -->
                 <div class="w-full h-32 rounded-lg overflow-hidden border border-[#222f4c] shrink-0 bg-[#1a243f]" id="img-container-3">
                     <img id="article-img-3" src="images/photo3.jpg" class="w-full h-full object-cover" alt="학습 대표 사진 3" onerror="handleImageError(this)">
                 </div>
@@ -243,7 +243,7 @@
                     <!-- 문장 세트 7 -->
                     <div class="sentence-pair border-b border-[#222f4c]/20 pb-3">
                         <div class="japanese-sentence">
-                            「<ruby>蝦夷富士<rt>えぞふじ</rt></ruby>」の<ruby>愛称<rt>あいしょう</rt></ruby>で<ruby>親<rt>した</rt></ruby>しまれる<ruby>羊蹄山<rt>ようていざん</rt></ruby>は、<ruby>標高<rt>ひょうこう</rt></ruby>1,898mの<ruby>日本<rt>にほん</rt></ruby><ruby>百名山<rt>hゃくめいざん</rt></ruby>のひとつ。
+                            「<ruby>蝦夷富士<rt>えぞふじ</rt></ruby>」の<ruby>愛称<rt>あいしょう</rt></ruby>で<ruby>親<rt>した</rt></ruby>しまれる<ruby>羊蹄山<rt>ようていざん</rt></ruby>は、<ruby>標高<rt>ひょうこう</rt></ruby>1,898mの<ruby>日本<rt>にほん</rt></ruby><ruby>百名山<rt>ひゃくめいざん</rt></ruby>のひとつ。
                         </div>
                         <div class="korean-sentence mt-1.5">
                             '에조 후지'라는 애칭으로 사랑받는 요테이 산은, 해발 1,898m의 일본 백명산 중 하나입니다.
