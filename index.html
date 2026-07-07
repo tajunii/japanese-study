@@ -1,358 +1,441 @@
 <!DOCTYPE html>
-<html lang="ko"><head>
+<html lang="ja">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>문장 독해 연습</title>
+    <title>TV Japanese Study Space</title>
+    <!-- 구글 폰트: 일본어 가독성에 최적화된 Noto Sans JP 및 UI용 Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    <!-- 아이콘 라이브러리 (FontAwesome) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- 테일윈드 CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
     <style>
-        body { background-color: #0f172a; color: #f8fafc; font-family: sans-serif; }
-        .card { padding: 1.5rem; border-radius: 0.75rem; background-color: #1e293b; }
-        .translation { display: none; margin-top: 0.75rem; color: #93c5fd; font-size: 1rem; }
-        .explanation { display: none; margin-top: 1rem; border-top: 1px dashed #475569; padding-top: 1rem; color: #cbd5e1; font-size: 0.95rem; }
-        ruby rt { color: #f87171; font-size: 0.75rem; }
-        audio { height: 30px; width: 200px; }
-        
-        /* 문장 카드 애니메이션 처리 */
-        .sentence-card {
-            animation: fadeIn 0.3s ease-in-out;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
+        :root {
+            --bg-dark: #0a0f1d;          /* 베이스 배경 */
+            --bg-card: #131a2e;          /* 카드 영역 배경 */
+            --bg-active: #1e2947;        /* 활성화/포커스 영역 */
+            --text-primary: #ffffff;     /* 메인 텍스트 */
+            --text-muted: #8e9bb5;       /* 설명 및 비활성 텍스트 */
+            --accent: #00ffd2;           /* 초점 및 후리가나 포인트 컬러 */
+            --accent-warm: #ffb703;      /* 후리가나 전용 고대비 골드 옐로우 */
+            --border-color: #222f4c;     /* 경계선 */
         }
 
-        /* 편집 모드용 텍스트 에디터 스타일 */
-        .edit-textarea {
-            width: 100%;
-            height: 120px;
-            background-color: #0f172a;
-            color: #cbd5e1;
-            padding: 0.75rem;
-            margin-top: 1rem;
-            border: 1px solid #475569;
-            border-radius: 0.5rem;
-            font-family: monospace;
-            font-size: 0.95rem;
-            line-height: 1.5;
-            display: none;
-            resize: vertical;
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            font-family: 'Outfit', 'Noto Sans JP', sans-serif;
+            overflow: hidden;
         }
-        .edit-textarea:focus {
+
+        /* TV 모니터 가로 레이아웃에 가독성을 최적화한 콤팩트 폰트 스펙 */
+        .japanese-sentence {
+            font-size: 22px;               /* 28px에서 22px로 소폭 축소 */
+            line-height: 2.1;              /* 후리가나 탑재에 무리 없는 콤팩트 행간 */
+            letter-spacing: 0.05em;
+            color: #e5e9f0;
+        }
+
+        /* 한글 해설 가독성 및 눈의 편안함 고려 */
+        .korean-sentence {
+            font-size: 16px;               /* 20px에서 16px로 소폭 축소 */
+            line-height: 1.5;
+            letter-spacing: 0.03em;
+            color: #94a3b8;
+            transition: all 0.3s ease;
+        }
+
+        /* 후리가나(루비 문자) 전용 스타일링 */
+        ruby {
+            ruby-position: over;
+            margin: 0 1px;
+        }
+
+        ruby rt {
+            font-size: 0.52em;             /* 발음 크기 */
+            color: var(--accent-warm);     /* 가시성 높은 골드옐로우 컬러 */
+            font-weight: 500;
+            letter-spacing: 0px;
+            padding-bottom: 2px;
+            user-select: none;             /* 한자 텍스트 복사 시 발음은 잡히지 않도록 방지 */
+        }
+
+        /* 후리가나 숨김 상태 클래스 */
+        .hide-furigana ruby rt {
+            display: none !important;
+        }
+
+        /* 한글 번역 숨김 상태 클래스 */
+        .hide-translation .korean-sentence {
+            display: none !important;
+        }
+
+        /* TV 리모컨 포커스 하이라이트 효과 */
+        .focusable:focus, .focusable.focused-node {
+            border-color: var(--accent) !important;
+            background-color: var(--bg-active) !important;
+            box-shadow: 0 0 15px rgba(0, 255, 210, 0.3);
+            transform: scale(1.03);
             outline: none;
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+        }
+
+        /* 스크롤바 커스터마이징 */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
         }
     </style>
-<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.absolute{position:absolute}.relative{position:relative}.right-0{right:0px}.mb-1{margin-bottom:0.25rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.mb-8{margin-bottom:2rem}.mt-4{margin-top:1rem}.mt-6{margin-top:1.5rem}.mt-8{margin-top:2rem}.ml-12{margin-left:3rem}.mt-1{margin-top:0.25rem}.block{display:block}.flex{display:flex}.hidden{display:none}.h-14{height:3.5rem}.min-h-\[250px\]{min-height:250px}.min-h-screen{min-height:100vh}.w-14{width:3.5rem}.w-full{width:100%}.max-w-4xl{max-width:56rem}.flex-col{flex-direction:column}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-3{gap:0.75rem}.gap-4{gap:1rem}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.space-y-6 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-xl{border-radius:0.75rem}.border-b{border-bottom-width:1px}.border-slate-700{--tw-border-opacity:1;border-color:rgb(51 65 85 / var(--tw-border-opacity, 1))}.bg-amber-600{--tw-bg-opacity:1;background-color:rgb(217 119 6 / var(--tw-bg-opacity, 1))}.bg-blue-600{--tw-bg-opacity:1;background-color:rgb(37 99 235 / var(--tw-bg-opacity, 1))}.bg-emerald-600{--tw-bg-opacity:1;background-color:rgb(5 150 105 / var(--tw-bg-opacity, 1))}.bg-indigo-600{--tw-bg-opacity:1;background-color:rgb(79 70 229 / var(--tw-bg-opacity, 1))}.bg-slate-700{--tw-bg-opacity:1;background-color:rgb(51 65 85 / var(--tw-bg-opacity, 1))}.bg-slate-800{--tw-bg-opacity:1;background-color:rgb(30 41 59 / var(--tw-bg-opacity, 1))}.p-4{padding:1rem}.p-8{padding:2rem}.px-4{padding-left:1rem;padding-right:1rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.pb-4{padding-bottom:1rem}.text-center{text-align:center}.text-2xl{font-size:1.5rem;line-height:2rem}.text-5xl{font-size:3rem;line-height:1}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.font-bold{font-weight:700}.leading-relaxed{line-height:1.625}.text-\[\#11f1a3\]{--tw-text-opacity:1;color:rgb(17 241 163 / var(--tw-text-opacity, 1))}.text-indigo-300{--tw-text-opacity:1;color:rgb(165 180 252 / var(--tw-text-opacity, 1))}.text-sky-300{--tw-text-opacity:1;color:rgb(125 211 252 / var(--tw-text-opacity, 1))}.text-slate-300{--tw-text-opacity:1;color:rgb(203 213 225 / var(--tw-text-opacity, 1))}.text-slate-400{--tw-text-opacity:1;color:rgb(148 163 184 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-md{--tw-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-xl{--tw-shadow:0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.transition-colors{transition-property:color, background-color, border-color, fill, stroke, -webkit-text-decoration-color;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, -webkit-text-decoration-color;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.hover\:bg-amber-500:hover{--tw-bg-opacity:1;background-color:rgb(245 158 11 / var(--tw-bg-opacity, 1))}.hover\:bg-blue-500:hover{--tw-bg-opacity:1;background-color:rgb(59 130 246 / var(--tw-bg-opacity, 1))}.hover\:bg-emerald-500:hover{--tw-bg-opacity:1;background-color:rgb(16 185 129 / var(--tw-bg-opacity, 1))}.hover\:bg-indigo-500:hover{--tw-bg-opacity:1;background-color:rgb(99 102 241 / var(--tw-bg-opacity, 1))}.hover\:bg-slate-600:hover{--tw-bg-opacity:1;background-color:rgb(71 85 105 / var(--tw-bg-opacity, 1))}@media (min-width: 640px){.sm\:w-1\/2{width:50%}.sm\:flex-row{flex-direction:row}}</style><style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.absolute{position:absolute}.relative{position:relative}.right-0{right:0px}.mb-1{margin-bottom:0.25rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.mb-8{margin-bottom:2rem}.ml-12{margin-left:3rem}.mt-1{margin-top:0.25rem}.mt-4{margin-top:1rem}.mt-6{margin-top:1.5rem}.mt-8{margin-top:2rem}.block{display:block}.flex{display:flex}.hidden{display:none}.h-14{height:3.5rem}.min-h-\[250px\]{min-height:250px}.min-h-screen{min-height:100vh}.w-14{width:3.5rem}.w-full{width:100%}.max-w-4xl{max-width:56rem}.flex-col{flex-direction:column}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-3{gap:0.75rem}.gap-4{gap:1rem}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.space-y-6 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem * var(--tw-space-y-reverse))}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-xl{border-radius:0.75rem}.border-b{border-bottom-width:1px}.border-slate-700{--tw-border-opacity:1;border-color:rgb(51 65 85 / var(--tw-border-opacity, 1))}.bg-amber-600{--tw-bg-opacity:1;background-color:rgb(217 119 6 / var(--tw-bg-opacity, 1))}.bg-blue-600{--tw-bg-opacity:1;background-color:rgb(37 99 235 / var(--tw-bg-opacity, 1))}.bg-emerald-600{--tw-bg-opacity:1;background-color:rgb(5 150 105 / var(--tw-bg-opacity, 1))}.bg-indigo-600{--tw-bg-opacity:1;background-color:rgb(79 70 229 / var(--tw-bg-opacity, 1))}.bg-slate-700{--tw-bg-opacity:1;background-color:rgb(51 65 85 / var(--tw-bg-opacity, 1))}.bg-slate-800{--tw-bg-opacity:1;background-color:rgb(30 41 59 / var(--tw-bg-opacity, 1))}.p-4{padding:1rem}.p-8{padding:2rem}.px-4{padding-left:1rem;padding-right:1rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.pb-4{padding-bottom:1rem}.text-center{text-align:center}.text-2xl{font-size:1.5rem;line-height:2rem}.text-5xl{font-size:3rem;line-height:1}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.font-bold{font-weight:700}.leading-relaxed{line-height:1.625}.text-\[\#11f1a3\]{--tw-text-opacity:1;color:rgb(17 241 163 / var(--tw-text-opacity, 1))}.text-indigo-300{--tw-text-opacity:1;color:rgb(165 180 252 / var(--tw-text-opacity, 1))}.text-sky-300{--tw-text-opacity:1;color:rgb(125 211 252 / var(--tw-text-opacity, 1))}.text-slate-300{--tw-text-opacity:1;color:rgb(203 213 225 / var(--tw-text-opacity, 1))}.text-slate-400{--tw-text-opacity:1;color:rgb(148 163 184 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-md{--tw-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-xl{--tw-shadow:0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.transition-colors{transition-property:color, background-color, border-color, fill, stroke, -webkit-text-decoration-color;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, -webkit-text-decoration-color;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.hover\:bg-amber-500:hover{--tw-bg-opacity:1;background-color:rgb(245 158 11 / var(--tw-bg-opacity, 1))}.hover\:bg-blue-500:hover{--tw-bg-opacity:1;background-color:rgb(59 130 246 / var(--tw-bg-opacity, 1))}.hover\:bg-emerald-500:hover{--tw-bg-opacity:1;background-color:rgb(16 185 129 / var(--tw-bg-opacity, 1))}.hover\:bg-indigo-500:hover{--tw-bg-opacity:1;background-color:rgb(99 102 241 / var(--tw-bg-opacity, 1))}.hover\:bg-slate-600:hover{--tw-bg-opacity:1;background-color:rgb(71 85 105 / var(--tw-bg-opacity, 1))}@media (min-width: 640px){.sm\:w-1\/2{width:50%}.sm\:flex-row{flex-direction:row}}</style></head>
-<body class="p-4 flex flex-col items-center justify-center min-h-screen">
-<div class="max-w-4xl w-full">
+</head>
+<body class="w-screen h-screen flex justify-center items-center p-4">
 
-    <div class="relative flex justify-center items-center mb-8">
-        <h1 class="text-5xl font-bold text-[#11f1a3] text-center">
-            문장 독해 연습
-        </h1>
+    <div class="w-full h-full max-w-7xl flex flex-col gap-4 bg-[#131a2e] border-2 border-[#222f4c] rounded-2xl p-5 shadow-2xl relative overflow-hidden">
         
-        <div class="absolute right-0 flex gap-3">
-            <button id="copyBtn" class="bg-emerald-600 hover:bg-emerald-500 w-14 h-14 rounded-full text-2xl transition-colors shadow-lg" title="HTML 텍스트 복사 (GitHub 업로드용)">
-                💾
-            </button>
-            <button id="editBtn" class="bg-amber-600 hover:bg-amber-500 w-14 h-14 rounded-full text-2xl transition-colors shadow-lg" title="해설 편집 모드 (PC전용)">✏️</button>
-            <button id="homeBtn" class="bg-slate-700 hover:bg-slate-600 w-14 h-14 rounded-full text-2xl transition-colors shadow-lg" title="홈">
-                🏠
-            </button>
-        </div>
-    </div>
-        
-    <div class="w-full card shadow-xl">
-        <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4 border-b border-slate-700 pb-4">
-            <audio controls="" loop="" class="w-full sm:w-1/2">
-                <source src="audio/full.mp3" type="audio/mpeg">
-            </audio>
+        <!-- 상단 바: 오디오 재생 컨트롤러와 옵션 토글 버튼들 구성 (콤팩트 단일 라인) -->
+        <div class="flex flex-wrap items-center justify-between gap-4 pb-3 border-b-2 border-[#222f4c] shrink-0">
             
-            <div class="flex gap-3">
-                <button id="toggleTranslation" class="bg-blue-600 hover:bg-blue-500 text-sm px-4 py-2 rounded-lg transition-colors font-bold shadow-md">
-                    해석 보기/숨기기
+            <!-- 슬림 커스텀 오디오 컨트롤러 -->
+            <div class="flex items-center gap-4 bg-[#1a243f] border border-[#2d3d66] rounded-xl px-4 py-1.5 flex-grow max-w-2xl">
+                <!-- 미디어 조작 버튼 그룹 -->
+                <div class="flex items-center gap-2">
+                    <button id="audio-back" class="focusable w-8 h-8 rounded-full bg-[#222f4c] border border-[#2d3d66] flex items-center justify-center text-xs transition-all duration-150" tabindex="0" title="10초 뒤로">
+                        <i class="fa-solid fa-backward-step"></i>
+                    </button>
+                    <button id="audio-play" class="focusable w-9 h-9 rounded-full bg-[#00ffd2] text-[#0a0f1d] flex items-center justify-center text-sm font-bold transition-all duration-150" tabindex="0" title="재생/일시정지">
+                        <i class="fa-solid fa-play"></i>
+                    </button>
+                    <button id="audio-forward" class="focusable w-8 h-8 rounded-full bg-[#222f4c] border border-[#2d3d66] flex items-center justify-center text-xs transition-all duration-150" tabindex="0" title="10초 앞으로">
+                        <i class="fa-solid fa-forward-step"></i>
+                    </button>
+                </div>
+                
+                <!-- 슬림 진행률 바 및 타이머 -->
+                <div class="flex-grow flex items-center gap-3">
+                    <div class="flex-grow h-1.5 bg-white/10 rounded-full overflow-hidden cursor-pointer relative" id="progress-bg">
+                        <div class="h-full w-0 bg-gradient-to-r from-[#00ffd2] to-[#00b4d8] rounded-full transition-all duration-100" id="progress-fill"></div>
+                    </div>
+                    <div class="text-[11px] font-mono text-slate-400 flex gap-1 shrink-0">
+                        <span id="time-current">00:00</span>
+                        <span>/</span>
+                        <span id="time-total">00:00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 기능 조작 토글 버튼 그룹 -->
+            <div class="flex items-center gap-2">
+                <button id="btn-toggle-furigana" class="focusable flex items-center gap-2 px-3 py-1.5 bg-[#1a243f] border border-[#2d3d66] rounded-lg text-xs font-semibold text-white transition-all" tabindex="0">
+                    <i class="fa-solid fa-eye-slash text-[#00ffd2]"></i>
+                    <span>후리가나 숨기기</span>
                 </button>
-                <button id="toggleExplanation" class="bg-indigo-600 hover:bg-indigo-500 text-sm px-4 py-2 rounded-lg transition-colors font-bold shadow-md">
-                    해설 보기/숨기기
+                <button id="btn-toggle-translation" class="focusable flex items-center gap-2 px-3 py-1.5 bg-[#1a243f] border border-[#2d3d66] rounded-lg text-xs font-semibold text-white transition-all" tabindex="0">
+                    <i class="fa-solid fa-language text-[#00ffd2]"></i>
+                    <span>한글 해설 숨기기</span>
                 </button>
             </div>
+
         </div>
 
-        <div class="space-y-6" id="cardContainer">
+        <!-- 좌측 사진 영역(약 30% 폭)과 우측 텍스트 영역(나머지 폭) 분할 -->
+        <div id="content-container" class="flex-grow flex flex-col md:flex-row gap-5 overflow-hidden">
             
-            <div class="sentence-card bg-slate-800 p-8 rounded-xl shadow-md min-h-[250px] flex flex-col justify-center">
-                <p class="text-2xl leading-relaxed text-white">その<ruby>日<rt>ひ</rt></ruby>、<ruby>夫<rt>おっと</rt></ruby>が、<ruby>名古屋<rt>なごや</rt></ruby>の「<ruby>味噌煮込<rt>みそにこ</rt></ruby>みうどん」を<ruby>食<rt>た</rt></ruby>べようといいだした。</p>
-                <div class="translation text-xl mt-4">그날, 남편이 나고야의 '미소 니코미 우동(된장 조림 우동)'을 먹자고 하기 시작했다.</div>
-                <div class="explanation text-lg mt-6"><ul class="space-y-3">
-    <li class="leading-relaxed"><span class="font-bold text-sky-300">味噌煮込み</span> : 1. 된장 조림 2. 된장 전골 (우동 등).<br><span class="block ml-12 mt-1 text-slate-400">ex) 寒い日には味噌煮込みが食べたくなる。(추운 날에는 된장조림이 먹고 싶어 진다)</span></li>
-    <li class="leading-relaxed"><span class="font-bold text-sky-300">言い出す</span> : 1. 말을 꺼내다 2. 처음으로 말하다<br><span class="block ml-12 mt-1 text-slate-400">ex) 言い出す機会がなかった。(말을 꺼낼 기회가 없었다) / それを言い出したのは彼だてきた。(그것을 처음 말한 것은 그 사람이다)</span></li>
-</ul></div>
+            <!-- 왼쪽: 다중 사진 갤러리 영역 (최대 3장 세로 누적 배치) -->
+            <div class="w-full md:w-80 flex flex-col gap-3 overflow-y-auto pr-1 shrink-0">
+                <!-- 사진 1 (기존의 photo.jpg 도 호환되도록 처리) -->
+                <div class="w-full h-32 rounded-lg overflow-hidden border border-[#222f4c] shrink-0 bg-[#1a243f]">
+                    <img id="article-img-1" src="images/photo1.jpg" class="w-full h-full object-cover" alt="학습 대표 사진 1" onerror="handleImageError(this, 'images/photo.jpg')">
+                </div>
+                <!-- 사진 2 (존재하지 않으면 자동 숨김 처리) -->
+                <div class="w-full h-32 rounded-lg overflow-hidden border border-[#222f4c] shrink-0 bg-[#1a243f]" id="img-container-2">
+                    <img id="article-img-2" src="images/photo2.jpg" class="w-full h-full object-cover" alt="학습 대표 사진 2" onerror="handleImageError(this)">
+                </div>
+                <!-- 사진 3 (존재하지 않으면 자동 숨김 처리) -->
+                <div class="w-full h-32 rounded-lg overflow-hidden border border-[#222f4c] shrink-0 bg-[#1a243f]" id="img-container-3">
+                    <img id="article-img-3" src="images/photo3.jpg" class="w-full h-full object-cover" alt="학습 대표 사진 3" onerror="handleImageError(this)">
+                </div>
             </div>
 
-            <div class="sentence-card bg-slate-800 p-8 rounded-xl shadow-md min-h-[250px] flex flex-col justify-center">
-                <p class="text-2xl leading-relaxed text-white"><ruby>食欲<rt>しょくよく</rt></ruby>をそそるパッケージの<ruby>写真<rt>しゃしん</rt></ruby>ではなく、<ruby>消費期限<rt>しょうひきげん</rt></ruby>が<ruby>近<rt>ちか</rt></ruby>づいていることに<ruby>気付<rt>きづ</rt></ruby>いたからである。</p>
-                <div class="translation text-xl mt-4">식욕을 자극하는 포장 사진 때문이 아니라, 소비기한이 가까워지고 있다는 사실을 알아차렸기 때문이다.</div>
-                <div class="explanation text-lg mt-6"><ul class="space-y-3">
-    <li class="leading-relaxed"><span class="font-bold text-sky-300">そそる</span> : 1. (식욕·흥미 등을) 돋우다 2. 자아내다 (눈물 등).<br><span class="block ml-12 mt-1 text-slate-400">ex) 美味しそうな匂いが食欲をそそる。(맛있는 냄새가 식욕을 돋우다) / 彼の話は興味をそそる。(그의 이야기는 흥미를 돋운다)</span></li>
-    <li class="leading-relaxed"><span class="font-bold text-sky-300">パッケージ</span> : 1. 패키지, 포장 2. 일괄 (포괄적인 상품 묶음).<br><span class="block ml-12 mt-1 text-slate-400">ex) パッケージのデザインが可愛い。(포장 디자인이 예쁘다) / 旅行のパッケージツアーを予約した。(패키지여행을 예약했다)</span></li>
-    <li class="leading-relaxed"><span class="font-bold text-sky-300">～ではなく</span> : ~가 아니라.</li>
-    <li class="leading-relaxed"><span class="font-bold text-sky-300">近づく(ちかづく)</span> : 1. 가까워지다, 다가오다 2. 친해지다, 접근하다.<br><span class="block ml-12 mt-1 text-slate-400">ex) 台風が近づいている。(태풍이 다가오고 있다) / 試験の日が近づく。(시험일이 다가오고 있다)</span></li>
-    <li class="leading-relaxed"><span class="font-bold text-sky-300">気付く(きづく)</span> : 1. 알아차리다, 깨닫다 2. 정신을 차리다 (의식을 되찾다)<br><span class="block ml-12 mt-1 text-slate-400">ex) 間違いに気付く。(실수를 깨닫다) / 彼の変化に気付いた。(그의 변화를 눈치챘다)</span></li>
-</ul></div>
-            </div>
+            <!-- 오른쪽: 깔끔한 메인 제목 및 1:1 한일 교대 텍스트 학습 본문 -->
+            <div class="flex-grow flex flex-col gap-4 overflow-y-auto pr-2">
+                
+                <!-- 깔끔하게 후리가나와 해석을 걷어낸 한자 원문 대형 기사 타이틀 -->
+                <div class="border-b border-[#222f4c] pb-3 shrink-0">
+                    <h1 class="text-2xl font-bold leading-normal tracking-wide text-white">
+                        雨がたくさん降った　九州北部は災害に気をつけて
+                    </h1>
+                </div>
 
-            <div class="sentence-card bg-slate-800 p-8 rounded-xl shadow-md min-h-[250px] flex flex-col justify-center">
-                <p class="text-2xl leading-relaxed text-white">ならば、といろどりやバランスを<ruby>考<rt>かんが</rt></ruby>えつつ、ニンジンや<ruby>椎茸<rt>しいたけ</rt></ruby>、カマボコ、たまご、などを<ruby>冷蔵庫<rt>れいぞうこ</rt></ruby>から<ruby>取<rt>と</rt></ruby>り<ruby>出<rt>だ</rt></ruby>した。</p>
-                <div class="translation text-xl mt-4">그렇다면 하고, 색감과 영양의 균형을 생각하면서 당근, 표고버섯, 어묵(가마보코), 달걀 등을 냉장고에서 꺼냈다.</div>
-                <div class="explanation text-lg mt-6"><ul class="space-y-3">
-    <li class="leading-relaxed"><span class="font-bold text-sky-300">ならば</span> : 1. 그렇다면, 그렇다면야 2. ~라면 (가정형)</li>
-    <li class="leading-relaxed"><span class="font-bold text-sky-300">いろどり</span> : 1. 채색 2. 색의 배합 3. 구색<br><span class="block ml-12 mt-1 text-slate-400">ex) ポスターの彩りがよい(포스터의 색감이 좋다)</span></li>
-    <li class="leading-relaxed"><span class="font-bold text-sky-300">バランス</span> : 여기서는 영양 균형.</li>
-    <li class="leading-relaxed"><span class="font-bold text-sky-300">～つつ</span> : 1. ~하면서. 2. 하면서도<br><span class="block ml-12 mt-1 text-slate-400">ex) 思いつつ歩く(생각하면서 걷다) / 失礼とは知りつつもお願いするのです(실례인 줄 알면서도 부탁드리는 것입니다)</span></li>
-    <li class="leading-relaxed"><span class="font-bold text-sky-300">取り出す</span> : 1. 꺼내다. 2. 골라내다.<br><span class="block ml-12 mt-1 text-slate-400">ex) ポケットから財布を取り出す(포켓에서 지갑을 꺼내다) / スイカの種を取り出す (수박씨를 발라 내다)</span></li>
-</ul></div>
-            </div>
+                <!-- 원문 문장 밑에 한글 해설이 한 줄씩 들어오는 1:1 교대 매핑 공간 (1분 분량 수용) -->
+                <div class="space-y-5 pb-6">
+                    
+                    <!-- 문장 세트 1 -->
+                    <div class="sentence-pair border-b border-[#222f4c]/20 pb-3">
+                        <div class="japanese-sentence">
+                            6<ruby>日<rt>むいか</rt></ruby>は、<ruby>熊本県<rt>くまもとけん</rt></ruby>や<ruby>長崎県<rt>ながさきけん</rt></ruby>など<ruby>九州<rt>きゅうしゅう</rt></ruby>の<ruby>北部<rt>ほくぶ</rt></ruby>でとてもたくさんの<ruby>雨<rt>あめ</rt></ruby>が<ruby>降<rt>ふ</rt></ruby>りました。
+                        </div>
+                        <div class="korean-sentence mt-1.5">
+                            6일은 구마모토현이나 나가사키현 등 규슈 북부에 아주 많은 비가 내렸습니다.
+                        </div>
+                    </div>
 
-            <div class="sentence-card bg-slate-800 p-8 rounded-xl shadow-md min-h-[250px] flex flex-col justify-center">
-                <p class="text-2xl leading-relaxed text-white">それらを<ruby>見<rt>み</rt></ruby>て、<ruby>夫<rt>おっと</rt></ruby>は<ruby>牛肉<rt>ぎゅうにく</rt></ruby>とネギを<ruby>忘<rt>わす</rt></ruby>れるな、という。</p>
-                <div class="translation text-xl mt-4">그것들을 본 남편이 소고기와 파를 빼먹지 말라고 한다.</div>
-                <div class="explanation text-lg mt-6"><ul class="space-y-3">
-    <li class="leading-relaxed"><span class="font-bold text-sky-300">忘れるな</span> : 잊지 마라. (강한 명령형)</li>
-    <li class="leading-relaxed"><span class="font-bold text-sky-300">～という</span> : "~라고 말한다."</li>
-</ul></div>
-            </div>
+                    <!-- 문장 세트 2 -->
+                    <div class="sentence-pair border-b border-[#222f4c]/20 pb-3">
+                        <div class="japanese-sentence">
+                            <ruby>雨<rt>あめ</rt></ruby>の<ruby>多<rt>おお</rt></ruby>いときは<ruby>過<rt>す</rt></ruby>ぎました。
+                        </div>
+                        <div class="korean-sentence mt-1.5">
+                            비가 많이 오는 시기는 지났습니다.
+                        </div>
+                    </div>
 
-            <div class="sentence-card bg-slate-800 p-8 rounded-xl shadow-md min-h-[250px] flex flex-col justify-center">
-                <p class="text-2xl leading-relaxed text-white">あわてて<ruby>冷凍<rt>れいとう</rt></ruby>していた<ruby>赤身<rt>あかみ</rt></ruby>の<ruby>牛肉<rt>ぎゅうにく</rt></ruby>を<ruby>電子<rt>でんし</rt></ruby>レンジに<ruby>入<rt>い</rt></ruby>れ、<ruby>解凍<rt>かいとう</rt></ruby>スイッチを<ruby>押<rt>お</rt></ruby>す。</p>
-                <div class="translation text-xl mt-4">서둘러 냉동해 두었던 살코기 소고기를 전자레인지에 넣고 해동 버튼을 눌렀다.</div>
-                <div class="explanation text-lg mt-6"><ul class="space-y-3">
-    <li class="leading-relaxed"><span class="font-bold text-sky-300">慌(あわ)てる</span> : 1. 당황하다, 허둥대다. 2. 서둘러 ~하다; 몹시 서두르다.<br><span class="block ml-12 mt-1 text-slate-400">ex) 慌てずにゆっくりやれ!(당황하지 말고 천천히 해) / 慌てて帰って行った(서둘러 돌아갔다)</span></li>
-    <li class="leading-relaxed"><span class="font-bold text-sky-300">赤身</span> : 1. 살코기 2. 붉은 생선의 살 3. 재목의 중심에 있는 붉은 부분;심재</li>
-</ul></div>
-            </div>
+                    <!-- 문장 세트 3 -->
+                    <div class="sentence-pair border-b border-[#222f4c]/20 pb-3">
+                        <div class="japanese-sentence">
+                            しかし、<ruby>気象庁<rt>きしょうちょう</rt></ruby>は「<ruby>山<rt>やま</rt></ruby>が<ruby>崩<rt>くず</rt></ruby>れることがあるかもしれません。<ruby>気<rt>き</rt></ruby>をつけてください」と<ruby>言<rt>い</rt></ruby>っています。
+                        </div>
+                        <div class="korean-sentence mt-1.5">
+                            하지만 기상청은 "산사태가 발생할 수도 있습니다. 조심해 주십시오"라고 말하고 있습니다.
+                        </div>
+                    </div>
 
-            <div class="sentence-card bg-slate-800 p-8 rounded-xl shadow-md min-h-[250px] flex flex-col justify-center">
-                <p class="text-2xl leading-relaxed text-white">そこまで<ruby>準備<rt>じゅんび</rt></ruby>をしたところで、<ruby>屋外<rt>おくがい</rt></ruby>に<ruby>保存<rt>ほぞん</rt></ruby>しているネギを<ruby>取<rt>と</rt></ruby>りに<ruby>出<rt>で</rt></ruby>た。</p>
-                <div class="translation text-xl mt-4">거기까지 준비를 마친 뒤, 밖에 보관해 둔 파를 가지러 나갔다.</div>
-                <div class="explanation text-lg mt-6"><ul class="space-y-3">
-    <li class="leading-relaxed"><span class="font-bold text-sky-300">～したところで</span> : ~한 시점에서, ~까지 하고 나서.</li>
-</ul></div>
-            </div>
+                    <!-- 문장 세트 4 -->
+                    <div class="sentence-pair border-b border-[#222f4c]/20 pb-3">
+                        <div class="japanese-sentence">
+                            そして、<ruby>大<rt>おお</rt></ruby>きくてとても<ruby>強<rt>つよ</rt></ruby>い<ruby>台風<rt>たいふう</rt></ruby>9<ruby>号<rt>ごう</rt></ruby>が、<ruby>日本<rt>にほん</rt></ruby>の<ruby>南<rt>みなみ</rt></ruby>の<ruby>海<rt>うみ</rt></ruby>を<ruby>西<rt>にし</rt></ruby>に<ruby>進<rt>すす</rt></ruby>んでいます。
+                        </div>
+                        <div class="korean-sentence mt-1.5">
+                            그리고 크고 매우 강한 태풍 9호가, 일본 남쪽 바다를 서쪽으로 나아가고 있습니다.
+                        </div>
+                    </div>
 
-            <div class="sentence-card bg-slate-800 p-8 rounded-xl shadow-md min-h-[250px] flex flex-col justify-center">
-                <p class="text-2xl leading-relaxed text-white"><ruby>段取<rt>だんどり</rt></ruby>の<ruby>悪<rt>わる</rt></ruby>さに<ruby>我<rt>われ</rt></ruby>ながらあきれつつ、<ruby>農家<rt>のうか</rt></ruby>さんからいただいた<ruby>自慢<rt>じまん</rt></ruby>のネギの<ruby>束<rt>たば</rt></ruby>の<ruby>中<rt>なか</rt></ruby>から<ruby>何本<rt>なんぼん</rt></ruby>か<ruby>選<rt>えら</rt></ruby>んだ。</p>
-                <div class="translation text-xl mt-4">일의 순서를 제대로 짜지 못한 자신이 스스로도 한심하다고 생각하면서, 농가에서 받은 자랑거리인 파 한 단 가운데 몇 대를 골랐다.</div>
-                <div class="explanation text-lg mt-6"><ul class="space-y-3">
-    <li class="leading-relaxed"><span class="font-bold text-sky-300">段取り</span> : 1.	일을 진행시키는 순서·방도 2. 줄거리의 전개나 구성<br><span class="block ml-12 mt-1 text-slate-400">ex) 段取りの悪さ(준비나 순서가 서툰 것) / 段取りがつく(일의 준비가 다 되다)</span></li>
-    <li class="leading-relaxed"><span class="font-bold text-sky-300">我ながら</span> : '나 스스로 생각해도'. 자연스럽게는 '나도 내 자신이 어이가 없지만', '스스로도' 정도의 뉘앙스.<br><span class="block ml-12 mt-1 text-slate-400">ex) 我ながら恥ずかしい(나로서도 부끄럽다)</span></li>
-    <li class="leading-relaxed"><span class="font-bold text-sky-300">呆(あき)れる</span> : 1. (너무나 의외여서) 놀라다; 어이[어처구니]없다; 기막히다; 질리다.</li>
-    <li class="leading-relaxed"><span class="font-bold text-sky-300">- あきれつつ</span> : 질리다, 어이없어하다의 ～つつ형. "어이없어하면서도", "한심하게 여기면서도".<br><span class="block ml-12 mt-1 text-slate-400">ex) 呆れて物も言えない(어처구니가 없어 말도 안나온다)</span></li>
-    <li class="leading-relaxed"><span class="font-bold text-sky-300">いただく</span> : 1. 이다 2. 받들다 3. ‘もらう’의 공손한 말씨<br><span class="block ml-12 mt-1 text-slate-400">ex) 雪を頂く山山(꼭대기에 눈이 덮인 산들) / 会長に頂く(회장으로 받들다) / お土産を頂く(선물을 받다)</span></li>
-    <li class="leading-relaxed"><span class="font-bold text-sky-300">自慢(じまん)</span> : 자랑<br><span class="block ml-12 mt-1 text-slate-400">ex) 自慢話を一くさりやる(자랑을 한바탕 늘어 놓다)</span></li>
-    <li class="leading-relaxed"><span class="font-bold text-sky-300">- 自慢のネギ</span> : 직역하면 "자랑의 파". 여기서는 '아끼는 파', '자랑거리인 파'라는 의미입니다. 글쓴이가 농가에서 직접 받은 좋은 파라 애착이 있는 것입니다.</li>
-    <li class="leading-relaxed"><span class="font-bold text-sky-300">束(たば)</span> : 다발, 묶음<br><span class="block ml-12 mt-1 text-slate-400">ex) 花束(꽃다발) / ネギ一束(파 한 단)</span><br><span class="block ml-12 mt-1 text-slate-400">～か 불확정 표현(정도, 쯤, 대충). 何本か選んだ(대충 몇 뿌리 골랐다 라는 뉘앙스)</span><br><span class="block ml-12 mt-1 text-slate-400">ex) いくつかある(몇 개 있다) / 何人か来た(몇 명이 왔다) / どこか行く(어딘가 간다)</span></li>
-</ul></div>
+                    <!-- 문장 세트 5 -->
+                    <div class="sentence-pair pb-3">
+                        <div class="japanese-sentence">
+                            <ruby>台風<rt>たいふう</rt></ruby>は10<ruby>日<rt>とおか</rt></ruby><ruby>金曜日<rt>きんようび</rt></ruby>ごろに<ruby>沖縄<rt>おきなわ</rt></ruby>の<ruby>近<rt>ちか</rt></ruby>くに<ruby>来<rt>く</rt></ruby>るかもしれません。<ruby>台風<rt>たいふう</rt></ruby>の<ruby>新<rt>あたら</rt></ruby>しい<ruby>情報<rt>じょうほう</rt></ruby>を<ruby>確認<rt>かくにん</rt></ruby>してください。
+                        </div>
+                        <div class="korean-sentence mt-1.5">
+                            태풍은 10일 금요일경에 오키나와 근처로 올지도 모릅니다. 태풍의 새로운 정보를 확인해 주십시오.
+                        </div>
+                    </div>
+
+                </div>
+
             </div>
 
         </div>
-        
-        <div id="navigation" class="flex justify-between items-center mt-8 px-4" style="display: flex;">
-            <button id="prevBtn" class="bg-slate-700 hover:bg-slate-600 px-6 py-3 rounded-lg text-lg font-bold transition-colors">
-                ◀ 이전
-            </button>
-            <div id="pageIndicator" class="text-xl font-bold text-slate-400">7 / 7</div>
-            <button id="nextBtn" class="bg-slate-700 hover:bg-slate-600 px-6 py-3 rounded-lg text-lg font-bold transition-colors">
-                다음 ▶
-            </button>
-        </div>
+
     </div>
-</div>
 
-<script>
-    // ==========================================
-    // 📺 슬라이드(페이지 이동) 로직
-    // ==========================================
-    const cards = document.querySelectorAll('.sentence-card');
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
-    const pageIndicator = document.getElementById('pageIndicator');
-    const navigationDiv = document.getElementById('navigation');
-    
-    let currentIndex = 0;
-    let isEditMode = false;
+    <!-- 실제 브라우저 TV 음성 매핑용 오디오 태그 (깃허브 서브디렉토리 audio/audio.mp3 바인딩) -->
+    <audio id="main-audio" src="audio/audio.mp3" style="display: none;"></audio>
 
-    function showCard(index) {
-        if (isEditMode) return;
-        cards.forEach((card, i) => {
-            card.style.display = i === index ? 'flex' : 'none';
-        });
-        pageIndicator.textContent = `${index + 1} / ${cards.length}`;
-    }
+    <script>
+        // 글로벌 상태 변수
+        let isFuriganaHidden = false;
+        let isTranslationHidden = false;
 
-    prevBtn.addEventListener('click', () => { if (currentIndex > 0) { currentIndex--; showCard(currentIndex); } });
-    nextBtn.addEventListener('click', () => { if (currentIndex < cards.length - 1) { currentIndex++; showCard(currentIndex); } });
+        const audio = document.getElementById('main-audio');
+        const playBtn = document.getElementById('audio-play');
+        const progressBar = document.getElementById('progress-fill');
+        const progressBg = document.getElementById('progress-bg');
+        const timeCurrent = document.getElementById('time-current');
+        const timeTotal = document.getElementById('time-total');
+        
+        const toggleFuriganaBtn = document.getElementById('btn-toggle-furigana');
+        const toggleTranslationBtn = document.getElementById('btn-toggle-translation');
+        const contentContainer = document.getElementById('content-container');
 
-    document.addEventListener('keydown', (e) => {
-        if (isEditMode) return;
-        if (e.key === 'ArrowLeft' && currentIndex > 0) { currentIndex--; showCard(currentIndex); }
-        else if (e.key === 'ArrowRight' && currentIndex < cards.length - 1) { currentIndex++; showCard(currentIndex); }
-    });
+        // ==========================================================================
+        // 1. 다중 사진 로드 예외 처리기 (사진 파일 부재 시 깔끔히 감춤)
+        // ==========================================================================
+        function handleImageError(img, fallbackSrc) {
+            // 이미지 1번에 한해 기존의 photo.jpg 대체 검색 허용
+            if (img.id === 'article-img-1' && fallbackSrc && !img.dataset.attemptedFallback) {
+                img.dataset.attemptedFallback = "true";
+                img.src = fallbackSrc;
+                return;
+            }
+            // 그 외 및 2, 3번 이미지는 없으면 상위 부모 컨테이너 자체를 완전 제거/감춤
+            const parent = img.closest('.w-full.h-32');
+            if (parent) {
+                parent.style.display = 'none';
+            } else {
+                img.style.display = 'none';
+            }
+        }
 
-    showCard(currentIndex);
+        // ==========================================================================
+        // 2. 오디오 제어기 및 실시간 연동 로직
+        // ==========================================================================
+        function formatTime(seconds) {
+            if (isNaN(seconds)) return "00:00";
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
 
-    // ==========================================
-    // 👁️ 토글 로직
-    // ==========================================
-    const toggleTranslationBtn = document.getElementById('toggleTranslation');
-    const translations = document.querySelectorAll('.translation');
-    let isTranslationVisible = false;
-
-    toggleTranslationBtn.addEventListener('click', () => {
-        isTranslationVisible = !isTranslationVisible;
-        translations.forEach(t => t.style.display = isTranslationVisible ? 'block' : 'none');
-    });
-
-    const toggleExplanationBtn = document.getElementById('toggleExplanation');
-    const explanations = document.querySelectorAll('.explanation');
-    let isExplanationVisible = false;
-
-    toggleExplanationBtn.addEventListener('click', () => {
-        isExplanationVisible = !isExplanationVisible;
-        explanations.forEach(e => {
-            if (!e.nextElementSibling || !e.nextElementSibling.classList.contains('edit-textarea') || e.nextElementSibling.style.display === 'none') {
-                e.style.display = isExplanationVisible ? 'block' : 'none';
+        // 재생 및 일시정지
+        playBtn.addEventListener('click', () => {
+            if (audio.paused) {
+                audio.play()
+                    .then(() => {
+                        playBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+                    })
+                    .catch(err => {
+                        console.warn("오디오 파일 로드 실패 또는 차단:", err);
+                    });
+            } else {
+                audio.pause();
+                playBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
             }
         });
-    });
 
-    // ==========================================
-    // ✏️ PC 편집용 텍스트 변환 스크립트 (Smart Parsing 적용)
-    // ==========================================
-    const editBtn = document.getElementById('editBtn');
-    const copyBtn = document.getElementById('copyBtn');
-
-    editBtn.addEventListener('click', () => {
-        isEditMode = !isEditMode;
-
-        if (isEditMode) {
-            editBtn.textContent = '✔️';
-            editBtn.classList.replace('bg-amber-600', 'bg-blue-600');
-            // 편집 모드 진입 시: 복사 버튼 숨김 유지 (완료 전엔 복사 안 함)
-            copyBtn.classList.add('hidden');
-            navigationDiv.style.display = 'none';
-            
-            cards.forEach(card => card.style.display = 'flex');
-
-            explanations.forEach((div) => {
-                div.style.display = 'none';
-                
-                let textarea = div.nextElementSibling;
-                if (!textarea || !textarea.classList.contains('edit-textarea')) {
-                    textarea = document.createElement('textarea');
-                    textarea.classList.add('edit-textarea');
-                    textarea.placeholder = "단어 : 뜻\nex) 예문 (엔터 치고 쓰면 자동으로 들여쓰기 됨)";
-                    div.parentNode.insertBefore(textarea, div.nextSibling);
-                }
-                textarea.style.display = 'block';
-
-                let rawHtml = div.innerHTML.trim();
-                
-                // 💡 HTML -> 순수 텍스트 역변환 (스마트 줄바꿈 유지)
-                if (rawHtml.includes('<ul') && !rawHtml.includes('<div') && !rawHtml.includes('<p')) {
-                    // 1. <br> 태그를 실제 엔터(\n)로 변환
-                    let processedHtml = rawHtml.replace(/<br\s*[\/]?>/gi, '\n');
-                    
-                    // 2. 임시 엘리먼트를 만들어 남은 태그 싹 제거
-                    const tempDiv = document.createElement('div');
-                    tempDiv.innerHTML = processedHtml;
-                    let textContent = tempDiv.textContent;
-                    
-                    // 3. 앞뒤 공백 제거 후 에디터에 삽입
-                    let textList = textContent.split('\n').map(line => line.trim()).filter(line => line !== '');
-                    textarea.value = textList.join('\n');
-                } else {
-                    textarea.value = rawHtml;
-                }
-            });
-        } else {
-            editBtn.textContent = '✏️';
-            editBtn.classList.replace('bg-blue-600', 'bg-amber-600');
-            // 💡 편집 완료 시: 복사 버튼 드디어 노출!
-            copyBtn.classList.remove('hidden');
-            navigationDiv.style.display = 'flex';
-
-            const textareas = document.querySelectorAll('.edit-textarea');
-            textareas.forEach((textarea) => {
-                const div = textarea.previousElementSibling;
-                let rawText = textarea.value.trim();
-
-                // 💡 텍스트 -> HTML 스마트 변환
-                if (rawText && !rawText.includes('<ul') && !rawText.includes('<div') && !rawText.includes('<p')) {
-                    const lines = rawText.split('\n');
-                    let formattedHtml = '<ul class="space-y-3">\n';
-                    let currentLi = '';
-
-                    lines.forEach(line => {
-                        if (line.trim() === '') return;
-                        
-                        let match = line.match(/^(.*?)([:=])(.*)$/); 
-                        if (match) {
-                            if (currentLi !== '') {
-                                formattedHtml += `    <li class="leading-relaxed">${currentLi}</li>\n`;
-                            }
-                            const keyword = match[1].trim();
-                            const meaning = match[3].trim();
-                            currentLi = `<span class="font-bold text-sky-300">${keyword}</span> : ${meaning}`;
-                        } else {
-                            // 🚀 핵심 포인트: ':'이나 '='가 없는 줄은 '예문'으로 간주!
-                            currentLi += `<br><span class="block ml-12 mt-1 text-slate-400">${line.trim()}</span>`;
-                        }
-                    });
-                    
-                    if (currentLi !== '') {
-                        formattedHtml += `    <li class="leading-relaxed">${currentLi}</li>\n`;
-                    }
-                    
-                    formattedHtml += '</ul>';
-                    rawText = formattedHtml;
-                }
-
-                div.innerHTML = rawText;
-                textarea.style.display = 'none';
-                div.style.display = isExplanationVisible ? 'block' : 'none';
-            });
-            
-            showCard(currentIndex);
-        }
-    });
-
-    // ==========================================
-    // 💾 HTML 복사 로직 (최종 결과물 내보내기)
-    // ==========================================
-    copyBtn.addEventListener('click', () => {
-        if (isEditMode) {
-            alert('먼저 ✔️(완료) 버튼을 눌러 편집 모드를 종료해주세요!');
-            return;
-        }
-
-        const cloneDoc = document.documentElement.cloneNode(true);
-        cloneDoc.querySelectorAll('.edit-textarea').forEach(el => el.remove());
-        cloneDoc.querySelectorAll('.sentence-card, .translation, .explanation').forEach(el => {
-            el.removeAttribute('style'); 
+        // 10초 뒤로
+        document.getElementById('audio-back').addEventListener('click', () => {
+            audio.currentTime = Math.max(0, audio.currentTime - 10);
         });
 
-        const finalHtml = "<!DOCTYPE html>\n" + cloneDoc.outerHTML;
+        // 10초 앞으로
+        document.getElementById('audio-forward').addEventListener('click', () => {
+            audio.currentTime = Math.min(audio.duration || 0, audio.currentTime + 10);
+        });
 
-        navigator.clipboard.writeText(finalHtml).then(() => {
-            alert('🎉 완성된 코드가 클립보드에 복사되었습니다!\nPC 메모장이나 VS Code를 열어 전체 붙여넣기(Ctrl+V) 한 뒤 저장하세요.');
-        }).catch(err => alert('복사 실패: ' + err));
-    });
+        // 오디오 메타데이터 로드 시 전체 시간 싱크 맞춤
+        audio.addEventListener('loadedmetadata', () => {
+            timeTotal.textContent = formatTime(audio.duration);
+        });
 
-    // 홈 버튼 로직
-    document.getElementById("homeBtn").addEventListener("click", () => {
-        location.href = "https://tajunii.github.io/study-home/";
-    });
-</script>
+        // 오디오 실시간 타임 업데이트 및 프로그레스 바 갱신
+        audio.addEventListener('timeupdate', () => {
+            const current = audio.currentTime;
+            const total = audio.duration || 0;
+            
+            timeCurrent.textContent = formatTime(current);
+            if (total > 0) {
+                timeTotal.textContent = formatTime(total);
+                const ratio = (current / total) * 100;
+                progressBar.style.width = ratio + '%';
+            }
+        });
 
-</body></html>
+        // 오디오 진행 바 클릭 조작 (TV 포인터 또는 터치 스크린 호환)
+        progressBg.addEventListener('click', (e) => {
+            const rect = progressBg.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const percentage = clickX / rect.width;
+            if (audio.duration) {
+                audio.currentTime = percentage * audio.duration;
+            }
+        });
+
+        // 재생 완료 동작
+        audio.addEventListener('ended', () => {
+            playBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
+            progressBar.style.width = '100%';
+        });
+
+
+        // ==========================================================================
+        // 3. 후리가나 및 한글 번역 레이어 토글 제어
+        // ==========================================================================
+        toggleFuriganaBtn.addEventListener('click', () => {
+            isFuriganaHidden = !isFuriganaHidden;
+            if (isFuriganaHidden) {
+                contentContainer.classList.add('hide-furigana');
+                toggleFuriganaBtn.querySelector('span').textContent = "후리가나 보이기";
+                toggleFuriganaBtn.querySelector('i').className = "fa-solid fa-eye text-slate-400";
+            } else {
+                contentContainer.classList.remove('hide-furigana');
+                toggleFuriganaBtn.querySelector('span').textContent = "후리가나 숨기기";
+                toggleFuriganaBtn.querySelector('i').className = "fa-solid fa-eye-slash text-[#00ffd2]";
+            }
+        });
+
+        toggleTranslationBtn.addEventListener('click', () => {
+            isTranslationHidden = !isTranslationHidden;
+            if (isTranslationHidden) {
+                contentContainer.classList.add('hide-translation');
+                toggleTranslationBtn.querySelector('span').textContent = "한글 해설 보이기";
+                toggleTranslationBtn.querySelector('i').className = "fa-solid fa-language text-slate-400";
+            } else {
+                contentContainer.classList.remove('hide-translation');
+                toggleTranslationBtn.querySelector('span').textContent = "한글 해설 숨기기";
+                toggleTranslationBtn.querySelector('i').className = "fa-solid fa-language text-[#00ffd2]";
+            }
+        });
+
+
+        // ==========================================================================
+        // 4. 스마트 TV 전용 리모컨 방향키 네비게이션 시뮬레이터
+        // ==========================================================================
+        window.addEventListener('load', () => {
+            // 조작 가능한 5가지 포커스 제어 버튼 연계 설정
+            const focusNodes = [
+                document.getElementById('audio-back'),
+                document.getElementById('audio-play'),
+                document.getElementById('audio-forward'),
+                toggleFuriganaBtn,
+                toggleTranslationBtn
+            ];
+
+            let activeFocusIndex = 1; // 기본 포커스: 재생 버튼
+            focusNodes[activeFocusIndex].focus();
+            focusNodes[activeFocusIndex].classList.add('focused-node');
+
+            document.addEventListener('keydown', (e) => {
+                focusNodes.forEach(node => node.classList.remove('focused-node'));
+                
+                switch (e.key) {
+                    case 'ArrowLeft':
+                        e.preventDefault();
+                        activeFocusIndex = (activeFocusIndex - 1 + focusNodes.length) % focusNodes.length;
+                        break;
+                    case 'ArrowRight':
+                        e.preventDefault();
+                        activeFocusIndex = (activeFocusIndex + 1) % focusNodes.length;
+                        break;
+                    case 'ArrowUp':
+                        e.preventDefault();
+                        if (activeFocusIndex < 3) {
+                            activeFocusIndex = 3;
+                        }
+                        break;
+                    case 'ArrowDown':
+                        e.preventDefault();
+                        if (activeFocusIndex >= 3) {
+                            activeFocusIndex = 1;
+                        }
+                        break;
+                    case 'Enter':
+                        focusNodes[activeFocusIndex].click();
+                        break;
+                }
+
+                focusNodes[activeFocusIndex].focus();
+                focusNodes[activeFocusIndex].classList.add('focused-node');
+            });
+
+            // 마우스/터치 지원 포커스 싱크 매핑
+            focusNodes.forEach((node, index) => {
+                node.addEventListener('focus', () => {
+                    focusNodes.forEach(n => n.classList.remove('focused-node'));
+                    activeFocusIndex = index;
+                    node.classList.add('focused-node');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
