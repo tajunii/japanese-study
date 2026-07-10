@@ -1,377 +1,189 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TV Japanese Study Space</title>
-    <!-- 구글 폰트: 일본어 가독성에 최적화된 Noto Sans JP 및 UI용 Outfit -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
-    <!-- 아이콘 라이브러리 (FontAwesome) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <!-- 테일윈드 CSS -->
+    <title>쉐도잉 연습</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    
     <style>
-        :root {
-            --bg-dark: #0a0f1d;          /* 베이스 배경 */
-            --bg-card: #131a2e;          /* 카드 영역 배경 */
-            --bg-active: #1e2947;        /* 활성화/포커스 영역 */
-            --text-primary: #ffffff;     /* 메인 텍스트 */
-            --text-muted: #8e9bb5;       /* 설명 및 비활성 텍스트 */
-            --accent: #00ffd2;           /* 초점 및 후리가나 포인트 컬러 */
-            --accent-warm: #ffb703;      /* 후리가나 전용 고대비 골드 옐로우 */
-            --border-color: #222f4c;     /* 경계선 */
-        }
-
-        body {
-            background-color: var(--bg-dark);
-            color: var(--text-primary);
-            font-family: 'Outfit', 'Noto Sans JP', sans-serif;
-            overflow: hidden;
-        }
-
-        /* TV 모니터 가로 레이아웃에 가독성을 최적화한 콤팩트 폰트 스펙 */
-        .japanese-sentence {
-            font-size: 22px;               
-            line-height: 2.1;              
-            letter-spacing: 0.05em;
-            color: #e5e9f0;
-        }
-
-        /* 한글 해설 (들여쓰기 없이 원문 바로 밑에 정렬) */
-        .korean-sentence {
-            font-size: 16px;               
-            line-height: 1.5;
-            letter-spacing: 0.03em;
-            color: #94a3b8;
-            transition: all 0.3s ease;
-        }
-
-        /* 후리가나(루비 문자) 전용 스타일링 */
-        ruby {
-            ruby-position: over;
-            margin: 0 1px;
-        }
-
-        ruby rt {
-            font-size: 0.52em;             
-            color: var(--accent-warm);     
-            font-weight: 500;
-            letter-spacing: 0px;
-            padding-bottom: 2px;
-            user-select: none;             
-        }
-
-        /* 후리가나 숨김 상태 클래스 */
-        .hide-furigana ruby rt {
-            display: none !important;
-        }
-
-        /* 한글 번역 숨김 상태 클래스 */
-        .hide-translation .korean-sentence {
-            display: none !important;
-        }
-
-        /* TV 리모컨 포커스 하이라이트 효과 */
-        .focusable:focus, .focusable.focused-node {
-            border-color: var(--accent) !important;
-            background-color: var(--bg-active) !important;
-            box-shadow: 0 0 15px rgba(0, 255, 210, 0.3);
-            transform: scale(1.03);
-            outline: none;
-        }
-
-        /* 스크롤바 커스터마이징 */
-        ::-webkit-scrollbar {
-            width: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: var(--border-color);
-            border-radius: 3px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--text-muted);
-        }
+        body { background-color: #0f172a; color: #f8fafc; font-family: sans-serif; }
+        .card { padding: 1.5rem; border-radius: 0.75rem; background-color: #1e293b; }
+        .sentence-container { margin-bottom: 1.5rem; }
+        .sentence-box { display: flex; align-items: center; gap: 10px; padding: 0.5rem; background-color: #334155; border-radius: 0.5rem; }
+        .translation { display: none; margin-top: 0.5rem; padding: 0.5rem 1rem; color: #cbd5e1; font-size: 0.95rem; }
+        ruby rt { color: #f87171; font-size: 0.75rem; }
+        audio { height: 30px; width: 200px; }
     </style>
 </head>
-<body class="w-screen h-screen flex justify-center items-center p-4">
+<body class="p-4">
+<div class="max-w-4xl mx-auto">
 
-    <div class="w-full h-full max-w-[1400px] flex flex-col gap-4 bg-[#131a2e] border-2 border-[#222f4c] rounded-2xl p-5 shadow-2xl relative overflow-hidden">
+    <div class="flex justify-between items-center mb-8">
+
+        <div></div>
+
+        <h1 class="text-4xl font-bold">
+            쉐도잉 연습
+        </h1>
+
+        <button
+            id="homeBtn"
+            class="bg-slate-700 hover:bg-slate-600 w-14 h-14 rounded-full text-2xl transition-colors"
+            title="홈">
+
+            🏠
+
+        </button>
+
+    </div>
         
-        <div class="flex flex-wrap items-center justify-between gap-4 pb-3 border-b-2 border-[#222f4c] shrink-0">
-            
-            <!-- 슬림 커스텀 오디오 컨트롤러 -->
-            <div class="flex items-center gap-4 bg-[#1a243f] border border-[#2d3d66] rounded-xl px-4 py-1.5 flex-grow max-w-2xl">
-                <div class="flex items-center gap-2">
-                    <button id="audio-back" class="focusable w-8 h-8 rounded-full bg-[#222f4c] border border-[#2d3d66] flex items-center justify-center text-xs transition-all duration-150" tabindex="0" title="10초 뒤로">
-                        <i class="fa-solid fa-backward-step"></i>
-                    </button>
-                    <button id="audio-play" class="focusable w-9 h-9 rounded-full bg-[#00ffd2] text-[#0a0f1d] flex items-center justify-center text-sm font-bold transition-all duration-150" tabindex="0" title="재생/일시정지">
-                        <i class="fa-solid fa-play"></i>
-                    </button>
-                    <button id="audio-forward" class="focusable w-8 h-8 rounded-full bg-[#222f4c] border border-[#2d3d66] flex items-center justify-center text-xs transition-all duration-150" tabindex="0" title="10초 앞으로">
-                        <i class="fa-solid fa-forward-step"></i>
-                    </button>
-                </div>
-                
-                <div class="flex-grow flex items-center gap-3">
-                    <div class="flex-grow h-1.5 bg-white/10 rounded-full overflow-hidden cursor-pointer relative" id="progress-bg">
-                        <div class="h-full w-0 bg-gradient-to-r from-[#00ffd2] to-[#00b4d8] rounded-full transition-all duration-100" id="progress-fill"></div>
-                    </div>
-                    <div class="text-[11px] font-mono text-slate-400 flex gap-1 shrink-0">
-                        <span id="time-current">00:00</span>
-                        <span>/</span>
-                        <span id="time-total">00:00</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 기능 조작 토글 버튼 그룹 -->
-            <div class="flex items-center gap-2">
-                <button id="btn-toggle-furigana" class="focusable flex items-center gap-2 px-3 py-1.5 bg-[#1a243f] border border-[#2d3d66] rounded-lg text-xs font-semibold text-white transition-all" tabindex="0">
-                    <i class="fa-solid fa-eye-slash text-[#00ffd2]"></i>
-                    <span>후리가나 숨기기</span>
-                </button>
-                <button id="btn-toggle-translation" class="focusable flex items-center gap-2 px-3 py-1.5 bg-[#1a243f] border border-[#2d3d66] rounded-lg text-xs font-semibold text-white transition-all" tabindex="0">
-                    <i class="fa-solid fa-language text-[#00ffd2]"></i>
-                    <span>한글 해설 숨기기</span>
+        <div class="card space-y-4">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-lg font-semibold text-slate-300">전체 듣기</h2>
+                <button id="toggleAll" class="bg-blue-600 hover:bg-blue-500 text-sm px-4 py-2 rounded-lg transition-colors font-bold">
+                    해석 전체 보기/숨기기
                 </button>
             </div>
-        </div>
 
-        <div id="content-container" class="flex-grow flex flex-col md:flex-row gap-6 overflow-hidden">
+            <div class="mb-4">
+                <label class="text-sm text-slate-400">재생 속도 조절: </label>
+                <select id="playbackRate" class="bg-slate-700 text-white px-2 py-1 rounded">
+                    <option value="075">0.75x</option>
+                    <option value="1" selected>1.0x</option>
+                </select>
+            </div>
             
-            <!-- 왼쪽: 사진 갤러리 영역 (비율 16:9 완벽 고정) -->
-            <!-- w-[30%] 정도로 넓혀서 사진이 찌그러지지 않고 시원하게 보이게 설정 -->
-            <div id="image-sidebar" class="w-full md:w-[32%] flex flex-col gap-4 shrink-0 overflow-y-auto pr-1">
-                
-                <!-- 사진 1 (16:9 비율) -->
-                <div class="image-wrapper w-full aspect-video rounded-xl overflow-hidden border border-[#222f4c] bg-[#1a243f] shrink-0 shadow-lg">
-                    <img id="article-img-1" src="images/photo1.jpg" class="w-full h-full object-cover" alt="학습 사진 1" onerror="handleImageError(this, 'images/photo.jpg')">
-                </div>
-                
-                <!-- 사진 2 (16:9 비율) -->
-                <div class="image-wrapper w-full aspect-video rounded-xl overflow-hidden border border-[#222f4c] bg-[#1a243f] shrink-0 shadow-lg">
-                    <img id="article-img-2" src="images/photo2.jpg" class="w-full h-full object-cover" alt="학습 사진 2" onerror="handleImageError(this)">
-                </div>
-                
-                <!-- 사진 3 (16:9 비율) -->
-                <div class="image-wrapper w-full aspect-video rounded-xl overflow-hidden border border-[#222f4c] bg-[#1a243f] shrink-0 shadow-lg">
-                    <img id="article-img-3" src="images/photo3.jpg" class="w-full h-full object-cover" alt="학습 사진 3" onerror="handleImageError(this)">
-                </div>
+            <audio controls loop class="w-1/2 mb-4">
+                <source src="audio/full.mp3" type="audio/mpeg">
+            </audio>
+
+            <!-- 전체 스크リップ트 -->
+            <div class="text-lg text-white bg-slate-800 p-4 rounded-lg mb-4 leading-relaxed">
+                <p>
+                    元日<span class="furigana text-sm text-sky-200">(がんじつ)</span>とは年の始めを祝う日です。<br>
+                    カレンダーでは1月1日のみが祝日ですが、実際には1日から3日までを三が日<span class="furigana text-sm text-sky-200">(さんがにち)</span>と呼び、会社や店によっては休業<span class="furigana text-sm text-sky-200">(きゅうぎょう)</span>するところもあります。<br>
+                    毎年この時期独特<span class="furigana text-sm text-sky-200">(じきどくとく)</span>の行事や慣習があります。<br>
+                    新たな年になって最初に会った時は「あけましておめでとうございます」と挨拶<span class="furigana text-sm text-sky-200">(あいさつ)</span>します。<br>
+                    元日<span class="furigana text-sm text-sky-200">(がんじつ)</span>の朝のことを特別に何と呼ぶでしょうか。<br>
+                    正解はこのビデオの最後に紹介します。自宅や海辺<span class="furigana text-sm text-sky-200">(うみべ)</span>、山頂<span class="furigana text-sm text-sky-200">(さんちょう)</span>などで初日の出<span class="furigana text-sm text-sky-200">(hatsuhinode) -> (はつひので)</span>を拝<span class="furigana text-sm text-sky-200">(おが)</span>みます。<br>
+                    元日<span class="furigana text-sm text-sky-200">(がんじつ)</span>の朝食にはお雑煮<span class="furigana text-sm text-sky-200">(ぞうに)</span>やおせち料理を食べます。<br>
+                    雑煮<span class="furigana text-sm text-sky-200">(ぞうに)</span>は餅<span class="furigana text-sm text-sky-200">(もち)</span>が入った汁もので、地方や家庭によって味付けが違います。
+                </p>
             </div>
 
-            <div class="flex-grow flex flex-col gap-4 overflow-y-auto pr-2">
-                
-                <!-- 제목란: 후리가나 없이 깔끔한 텍스트 -->
-                <div class="border-b border-[#222f4c] pb-3 shrink-0">
-                    <h1 class="text-2xl font-bold leading-normal tracking-wide text-white">
-                        平均気温18.9度！涼やかな夏を過ごせるニセコ
-                    </h1>
+            <hr class="border-slate-600">
+
+            <h2 class="text-lg font-semibold text-slate-300 mb-4">문장별 연습</h2>
+            
+            <!-- 문장 1 -->
+            <div class="sentence-container">
+                <div class="sentence-box">
+                    <audio controls loop><source src="audio/1.mp3" type="audio/mpeg"></audio>
+                    <p><ruby>元日<rt>がんじつ</rt></ruby>とは<ruby>年<rt>とし</rt></ruby>の<ruby>始<rt>はじめ</rt></ruby>めを<ruby>祝<rt>いわ</rt></ruby>う<ruby>日<rt>ひ</rt></ruby>です。</p>
                 </div>
-
-                <!-- 1:1 교대 매핑 기사 본문 영역 -->
-                <div class="space-y-6 pb-6">
-                    
-                    <div class="sentence-pair border-b border-[#222f4c]/20 pb-4">
-                        <div class="japanese-sentence">
-                            <ruby>北海道<rt>ほっかいどう</rt></ruby>を<ruby>代表<rt>だいひょう</rt></ruby>するリゾート<ruby>地<rt>ち</rt></ruby>として<ruby>知<rt>し</rt></ruby>られるニセコ。<ruby>冬<rt>ふゆ</rt></ruby>のパウダースノーのイメージが<ruby>強<rt>つよ</rt></ruby>いエリアですが、<ruby>実<rt>じつ</rt></ruby>は<ruby>緑<rt>みどり</rt></ruby>あふれる<ruby>夏<rt>なつ</rt></ruby>も<ruby>魅力<rt>みりょく</rt></ruby>が<ruby>満載<rt>まんさい</rt></ruby>です。
-                        </div>
-                        <div class="korean-sentence mt-1.5">
-                            홋카이도를 대표하는 리조트지로 알려진 니세코. 겨울의 파우더 스노우 이미지가 강한 지역이지만, 사실 녹음이 우거진 여름도 매력이 가득합니다.
-                        </div>
-                    </div>
-
-                    <div class="sentence-pair border-b border-[#222f4c]/20 pb-4">
-                        <div class="japanese-sentence">
-                            <ruby>倶知安<rt>くっちゃん</rt></ruby><ruby>町<rt>ちょう</rt></ruby>・ニセコ<ruby>町<rt>ちょう</rt></ruby>・<ruby>蘭越<rt>らんこし</rt></ruby><ruby>町<rt>ちょう</rt></ruby>からなるニセコエリアの<ruby>夏<rt>なつ</rt></ruby>の<ruby>平均<rt>へいきん</rt></ruby><ruby>気温<rt>きおん</rt></ruby>は18.9<ruby>度<rt>ど</rt></ruby>。
-                        </div>
-                        <div class="korean-sentence mt-1.5">
-                            굿찬초, 니세코초, 란코시초로 이루어진 니세코 지역의 여름 평균 기온은 18.9도입니다.
-                        </div>
-                    </div>
-
-                    <div class="sentence-pair border-b border-[#222f4c]/20 pb-4">
-                        <div class="japanese-sentence">
-                            7<ruby>月<rt>がつ</rt></ruby>の<ruby>日中<rt>にっちゅう</rt></ruby><ruby>最高<rt>さいこう</rt></ruby><ruby>気温<rt>きおん</rt></ruby>は24.4<ruby>度<rt>ど</rt></ruby>、<ruby>最<rt>もっと</rt></ruby>も<ruby>暑<rt>あつ</rt></ruby>い8<ruby>月<rt>がつ</rt></ruby>でも<ruby>最高<rt>さいこう</rt></ruby><ruby>気温<rt>きおん</rt></ruby>は25.4<ruby>度<rt>ど</rt></ruby>ほどと、<ruby>都市部<rt>としぶ</rt></ruby>の<ruby>猛暑<rt>もうしょ</rt></ruby>とは<ruby>違<rt>ちが</rt></ruby>った<ruby>快適<rt>かいてき</rt></ruby>な<ruby>環境<rt>かんきょう</rt></ruby>で<ruby>過<rt>す</rt></ruby>ごせます。
-                        </div>
-                        <div class="korean-sentence mt-1.5">
-                            7월의 낮 최고 기온은 24.4도, 가장 더운 8월에도 최고 기온은 25.4도 정도로, 도시의 혹서와는 다른 쾌적한 환경에서 보낼 수 있습니다.
-                        </div>
-                    </div>
-
-                    <div class="sentence-pair border-b border-[#222f4c]/20 pb-4">
-                        <div class="japanese-sentence">
-                            さらに、<ruby>北海道<rt>ほっかいどう</rt></ruby>には<ruby>梅雨<rt>つゆ</rt></ruby>がなく、7<ruby>月<rt>がつ</rt></ruby>には<ruby>日<rt>ひ</rt></ruby>の<ruby>出<rt>で</rt></ruby>が<ruby>午前<rt>ごぜん</rt></ruby>4<ruby>時台<rt>じだい</rt></ruby>、<ruby>日没<rt>にちぼつ</rt></ruby>は19<ruby>時<rt>じ</rt></ruby><ruby>過<rt>す</rt></ruby>ぎと<ruby>日照<rt>にっしょう</rt></ruby><ruby>時間<rt>じかん</rt></ruby>が<ruby>長<rt>なが</rt></ruby>いのも<ruby>特徴<rt>とくちょう</rt></ruby>。
-                        </div>
-                        <div class="korean-sentence mt-1.5">
-                            게다가 홋카이도에는 장마가 없고, 7월에는 해돋이가 오전 4시 대, 일몰은 19시가 넘어 일조 시간이 긴 것도 특징입니다.
-                        </div>
-                    </div>
-
-                    <div class="sentence-pair border-b border-[#222f4c]/20 pb-4">
-                        <div class="japanese-sentence">
-                            <ruby>澄<rt>す</rt></ruby>んだ<ruby>空気<rt>くうき</rt></ruby>と<ruby>爽<rt>さわ</rt></ruby>やかな<ruby>気候<rt>きこう</rt></ruby>の<ruby>中<rt>なか</rt></ruby>、ゆったりとした<ruby>夏<rt>なつ</rt></ruby><ruby>時間<rt>じかん</rt></ruby>を<ruby>満喫<rt>まんきつ</rt></ruby>できます。
-                        </div>
-                        <div class="korean-sentence mt-1.5">
-                            맑은 공기와 상쾌한 기후 속에서 느긋한 여름 시간을 만끽할 수 있습니다.
-                        </div>
-                    </div>
-
-                    <div class="sentence-pair border-b border-[#222f4c]/20 pb-4">
-                        <div class="japanese-sentence">
-                            「<ruby>蝦夷富士<rt>えぞふじ</rt></ruby>」の<ruby>愛称<rt>あいしょう</rt></ruby>で<ruby>親<rt>した</rt></ruby>しまれる<ruby>羊蹄山<rt>ようていざん</rt></ruby>は、<ruby>標高<rt>ひょうこう</rt></ruby>1,898mの<ruby>日本<rt>にほん</rt></ruby><ruby>百名山<rt>ひゃくめいざん</rt></ruby>のひとつ。
-                        </div>
-                        <div class="korean-sentence mt-1.5">
-                            '에조후지'라는 애칭으로 친숙한 요테이산은 해발 1,898m의 일본 백명산 중 하나입니다.
-                        </div>
-                    </div>
-
-                    <div class="sentence-pair pb-4">
-                        <div class="japanese-sentence">
-                            <ruby>夏<rt>なつ</rt></ruby>には<ruby>標高<rt>ひょうこう</rt></ruby>1,700m<ruby>以上<rt>いじょう</rt></ruby>の<ruby>高山<rt>こうざん</rt></ruby><ruby>帯<rt>たい</rt></ruby>で80〜100<ruby>種類<rt>しゅるい</rt></ruby>もの<ruby>高山<rt>こうざん</rt></ruby><ruby>植物<rt>しょくぶつ</rt></ruby>が<ruby>花<rt>はな</rt></ruby>を<ruby>咲<rt>さ</rt></ruby>かせ、<ruby>短<rt>みじか</rt></ruby>い<ruby>季節<rt>きせつ</rt></ruby>だけの<ruby>美<rt>うつく</rt></ruby>しい<ruby>風景<rt>ふうけい</rt></ruby>を<ruby>楽<rt>たの</rt></ruby>しめます。
-                        </div>
-                        <div class="korean-sentence mt-1.5">
-                            여름에는 해발 1,700m 이상의 고산대에서 80~100종류나 되는 고산식물이 꽃을 피워, 짧은 계절만의 아름다운 풍경을 즐길 수 있습니다.
-                        </div>
-                    </div>
-
+                <div class="translation">元日(간지쓰)란 한 해의 시작을 축하하는 날입니다.</div>
+            </div>
+            <!-- 문장 2 -->
+            <div class="sentence-container">
+                <div class="sentence-box">
+                    <audio controls loop><source src="audio/2.mp3" type="audio/mpeg"></audio>
+                    <p>カレンダーでは1<ruby>月<rt>がつ</rt></ruby>1<ruby>日<rt>にち</rt></ruby>のみが<ruby>祝日<rt>しゅくじつ</rt></ruby>ですが、<ruby>実際<rt>じっさい</rt></ruby>には1<ruby>日<rt>ついたち</rt></ruby>から3<ruby>日<rt>みっか</rt></ruby>までを<ruby>三<rt>さん</rt></ruby>が<ruby>日<rt>にち</rt></ruby>と<ruby>呼<rt>よ</rt></ruby>び、<ruby>会社<rt>かいしゃ</rt></ruby>や<ruby>店<rt>みせ</rt></ruby>によっては<ruby>休業<rt>きゅうぎょう</rt></ruby>するところもあります。</p>
                 </div>
+                <div class="translation">달력에서는 1월 1일만 공휴일이지만, 실제로는 1일부터 3일까지를 '산가니치(三が日)'라고 부르며, 회사나 가게에 따라서는 휴업하는 곳도 있습니다.</div>
+            </div>
+            <!-- 문장 3 -->
+            <div class="sentence-container">
+                <div class="sentence-box">
+                    <audio controls loop><source src="audio/3.mp3" type="audio/mpeg"></audio>
+                    <p><ruby>毎年<rt>まいとし</rt></ruby>この<ruby>時期独特<rt>じきどくとく</rt></ruby>の<ruby>行事<rt>ぎょうじ</rt></ruby>や<ruby>慣習<rt>かんしゅう</rt></ruby>があります。</p>
+                </div>
+                <div class="translation">매년 이 시기 독특한 행사나 관습이 있습니다.</div>
+            </div>
+            <!-- 문장 4 -->
+            <div class="sentence-container">
+                <div class="sentence-box">
+                    <audio controls loop><source src="audio/4.mp3" type="audio/mpeg"></audio>
+                    <p><ruby>新<rt>あら</rt></ruby>たな<ruby>年<rt>とし</rt></ruby>になって<ruby>最初<rt>さいしょ</rt></ruby>に<ruby>会<rt>あ</rt></ruby>った<ruby>時<rt>とき</rt></ruby>は「あけましておめでとうございます」と<ruby>挨拶<rt>あいさつ</rt></ruby>します。</p>
+                </div>
+                <div class="translation">새해가 되어 처음 만났을 때는 "새해 복 많이 받으세요(아케마시테 오메데토 고자이마스)"라고 인사합니다.</div>
+            </div>
+            <!-- 문장 5 -->
+            <div class="sentence-container">
+                <div class="sentence-box">
+                    <audio controls loop><source src="audio/5.mp3" type="audio/mpeg"></audio>
+                    <p><ruby>元日<rt>がんじつ</rt></ruby>の<ruby>朝<rt>あさ</rt></ruby>のことを<ruby>特別<rt>とくべつ</rt></ruby>に<ruby>何<rt>なに</rt></ruby>と<ruby>呼<rt>よ</rt></ruby>ぶでしょうか。</p>
+                </div>
+                <div class="translation">元日(간지쓰)의 아침을 특별히 무엇이라 부를까요?</div>
+            </div>
+            <!-- 문장 6 -->
+            <div class="sentence-container">
+                <div class="sentence-box">
+                    <audio controls loop><source src="audio/6.mp3" type="audio/mpeg"></audio>
+                    <p><ruby>正解<rt>せいかい</rt></ruby>はこのビデオの<ruby>最後<rt>さいご</rt></ruby>に<ruby>紹介<rt>しょうかい</rt></ruby>します。<ruby>自宅<rt>じたく</rt></ruby>や<ruby>海辺<rt>うみべ</rt></ruby>、<ruby>山頂<rt>さんちょう</rt></ruby>などで<ruby>初日の出<rt>はつひので</rt></ruby>を<ruby>拝<rt>おが</rt></ruby>みます。</p>
+                </div>
+                <div class="translation">정답은 이 비디오의 마지막에 소개합니다. 집이나 해변, 산꼭대기 등에서 첫 일출(하츠히노데)을 맞이합니다.</div>
+            </div>
+            <!-- 문장 7 -->
+            <div class="sentence-container">
+                <div class="sentence-box">
+                    <audio controls loop><source src="audio/7.mp3" type="audio/mpeg"></audio>
+                    <p><ruby>元日<rt>がんじつ</rt></ruby>の<ruby>朝食<rt>ちょうしょく</rt></ruby>にはお<ruby>雑煮<rt>ぞうに</rt></ruby>やおせち<ruby>料理<rt>りょうり</rt></ruby>を<ruby>食<rt>た</rt></ruby>べます。</p>
+                </div>
+                <div class="translation">元日(간지쓰)의 아침 식사로는 오조니나 오세치 요리를 먹습니다.</div>
+            </div>
+            <!-- 문장 8 -->
+            <div class="sentence-container">
+                <div class="sentence-box">
+                    <audio controls loop><source src="audio/8.mp3" type="audio/mpeg"></audio>
+                    <p><ruby>雑煮<rt>ぞうに</rt></ruby>は<ruby>餅<rt>もち</rt></ruby>が<ruby>入<rt>はい</rt></ruby>った<ruby>汁<rt>しる</rt></ruby>もので、<ruby>地方<rt>ちほう</rt></ruby>や<ruby>家庭<rt>かてい</rt></ruby>によって<ruby>味付<rt>あじつ</rt></ruby>けが<ruby>違<rt>ちが</rt></ruby>います。</p>
+                </div>
+                <div class="translation">조니는 떡이 들어간 국물 요리로, 지방이나 가정에 따라 맛내기가 다릅니다.</div>
             </div>
         </div>
     </div>
 
-    <audio id="main-audio" src="audio/audio.mp3" style="display: none;"></audio>
-
     <script>
-        let isFuriganaHidden = false;
-        let isTranslationHidden = false;
+        const toggleBtn = document.getElementById('toggleAll');
+        const translations = document.querySelectorAll('.translation');
+        let isVisible = false;
 
-        const audio = document.getElementById('main-audio');
-        const playBtn = document.getElementById('audio-play');
-        const progressBar = document.getElementById('progress-fill');
-        const progressBg = document.getElementById('progress-bg');
-        const timeCurrent = document.getElementById('time-current');
-        const timeTotal = document.getElementById('time-total');
-        
-        const toggleFuriganaBtn = document.getElementById('btn-toggle-furigana');
-        const toggleTranslationBtn = document.getElementById('btn-toggle-translation');
-        const contentContainer = document.getElementById('content-container');
-
-        // 사진 파일 없을 시 박스 자체를 투명화 (16:9 공간 차지 안하도록 완전 제거)
-        function handleImageError(img, fallbackSrc) {
-            if (img.id === 'article-img-1' && fallbackSrc && !img.dataset.attemptedFallback) {
-                img.dataset.attemptedFallback = "true";
-                img.src = fallbackSrc;
-                return;
-            }
-            const wrapper = img.closest('.image-wrapper');
-            if (wrapper) wrapper.style.display = 'none';
-        }
-
-        function formatTime(seconds) {
-            if (isNaN(seconds)) return "00:00";
-            const mins = Math.floor(seconds / 60);
-            const secs = Math.floor(seconds % 60);
-            return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-        }
-
-        playBtn.addEventListener('click', () => {
-            if (audio.paused) {
-                audio.play().then(() => {
-                    playBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
-                }).catch(err => console.warn("오디오 로드 실패:", err));
-            } else {
-                audio.pause();
-                playBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
-            }
-        });
-
-        document.getElementById('audio-back').addEventListener('click', () => {
-            audio.currentTime = Math.max(0, audio.currentTime - 10);
-        });
-
-        document.getElementById('audio-forward').addEventListener('click', () => {
-            audio.currentTime = Math.min(audio.duration || 0, audio.currentTime + 10);
-        });
-
-        audio.addEventListener('loadedmetadata', () => {
-            timeTotal.textContent = formatTime(audio.duration);
-        });
-
-        audio.addEventListener('timeupdate', () => {
-            const current = audio.currentTime;
-            const total = audio.duration || 0;
-            timeCurrent.textContent = formatTime(current);
-            if (total > 0) progressBar.style.width = ((current / total) * 100) + '%';
-        });
-
-        progressBg.addEventListener('click', (e) => {
-            const rect = progressBg.getBoundingClientRect();
-            const clickX = e.clientX - rect.left;
-            if (audio.duration) audio.currentTime = (clickX / rect.width) * audio.duration;
-        });
-
-        audio.addEventListener('ended', () => {
-            playBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
-            progressBar.style.width = '100%';
-        });
-
-        toggleFuriganaBtn.addEventListener('click', () => {
-            isFuriganaHidden = !isFuriganaHidden;
-            if (isFuriganaHidden) {
-                contentContainer.classList.add('hide-furigana');
-                toggleFuriganaBtn.querySelector('span').textContent = "후리가나 보이기";
-                toggleFuriganaBtn.querySelector('i').className = "fa-solid fa-eye text-slate-400";
-            } else {
-                contentContainer.classList.remove('hide-furigana');
-                toggleFuriganaBtn.querySelector('span').textContent = "후리가나 숨기기";
-                toggleFuriganaBtn.querySelector('i').className = "fa-solid fa-eye-slash text-[#00ffd2]";
-            }
-        });
-
-        toggleTranslationBtn.addEventListener('click', () => {
-            isTranslationHidden = !isTranslationHidden;
-            if (isTranslationHidden) {
-                contentContainer.classList.add('hide-translation');
-                toggleTranslationBtn.querySelector('span').textContent = "한글 해설 보이기";
-                toggleTranslationBtn.querySelector('i').className = "fa-solid fa-language text-slate-400";
-            } else {
-                contentContainer.classList.remove('hide-translation');
-                toggleTranslationBtn.querySelector('span').textContent = "한글 해설 숨기기";
-                toggleTranslationBtn.querySelector('i').className = "fa-solid fa-language text-[#00ffd2]";
-            }
-        });
-
-        window.addEventListener('load', () => {
-            const focusNodes = [
-                document.getElementById('audio-back'),
-                document.getElementById('audio-play'),
-                document.getElementById('audio-forward'),
-                toggleFuriganaBtn,
-                toggleTranslationBtn
-            ];
-            let activeIndex = 1;
-            focusNodes[activeIndex].focus();
-            focusNodes[activeIndex].classList.add('focused-node');
-
-            document.addEventListener('keydown', (e) => {
-                focusNodes.forEach(n => n.classList.remove('focused-node'));
-                if(e.key === 'ArrowLeft') activeIndex = (activeIndex - 1 + focusNodes.length) % focusNodes.length;
-                else if(e.key === 'ArrowRight') activeIndex = (activeIndex + 1) % focusNodes.length;
-                else if(e.key === 'ArrowUp') activeIndex = Math.max(3, activeIndex);
-                else if(e.key === 'ArrowDown') activeIndex = 1;
-                else if(e.key === 'Enter') focusNodes[activeIndex].click();
-                
-                focusNodes[activeIndex].focus();
-                focusNodes[activeIndex].classList.add('focused-node');
+        toggleBtn.addEventListener('click', () => {
+            isVisible = !isVisible;
+            translations.forEach(t => {
+                t.style.display = isVisible ? 'block' : 'none';
             });
         });
+
+        const playbackRate = document.getElementById('playbackRate');
+
+        playbackRate.addEventListener('change', () => {
+            const speed = playbackRate.value;
+            document.querySelectorAll('audio').forEach(audio => {
+                const source = audio.querySelector('source');
+                if (!source) return;
+
+                if (!source.dataset.originalSrc) {
+                    source.dataset.originalSrc = source.getAttribute('src');
+                }
+
+                const originalSrc = source.dataset.originalSrc;
+
+                if (speed === "1") {
+                    source.src = originalSrc;
+                } else {
+                    source.src = originalSrc.replace(".mp3", "_75.mp3");
+                }
+
+                audio.load();
+            });
+        });
+
+        const homeBtn = document.getElementById("homeBtn");
+        if (homeBtn) {
+            homeBtn.addEventListener("click", () => {
+                location.href = "https://tajunii.github.io/study-home/";
+            });
+        }
     </script>
 </body>
 </html>
