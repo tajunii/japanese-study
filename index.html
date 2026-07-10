@@ -7,22 +7,23 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { background-color: #0f172a; color: #f8fafc; font-family: sans-serif; }
-        .card { padding: 1.5rem; border-radius: 0.75rem; background-color: #1e293b; }
-        .sentence-container { margin-bottom: 1.5rem; }
-        .sentence-box { display: flex; align-items: center; gap: 10px; padding: 0.5rem; background-color: #334155; border-radius: 0.5rem; }
-        .translation { display: none; margin-top: 0.5rem; padding: 0.5rem 1rem; color: #cbd5e1; font-size: 0.95rem; }
-        ruby rt { color: #f87171; font-size: 0.75rem; }
-        audio { height: 30px; width: 200px; }
+        .card { padding: 2.5rem; border-radius: 0.75rem; background-color: #1e293b; }
+        .sentence-container { margin-bottom: 2.5rem; }
+        .sentence-box { display: flex; align-items: center; gap: 20px; padding: 1rem 1.5rem; background-color: #334155; border-radius: 0.5rem; }
+        .sentence-box p { font-size: 1.45rem; line-height: 2.5; }
+        .translation { display: none; margin-top: 1rem; padding: 0.5rem 1rem; color: #cbd5e1; font-size: 1.25rem; }
+        ruby rt { color: #ffb703; font-size: 0.95rem; font-weight: normal; }
+        audio { height: 36px; width: 240px; }
     </style>
 </head>
-<body class="p-4">
-<div class="max-w-4xl mx-auto">
+<body class="p-6">
+<div class="max-w-[95%] mx-auto"> <!-- 좌우 여백을 최소화하여 화면을 최대한 크게 활용 -->
 
     <div class="flex justify-between items-center mb-8">
 
         <div></div>
 
-        <h1 class="text-4xl font-bold">
+        <h1 class="text-5xl font-bold">
             쉐도잉 연습
         </h1>
 
@@ -37,56 +38,56 @@
 
     </div>
         
-        <div class="card space-y-4">
+        <div class="card space-y-6">
             <div class="flex justify-between items-center mb-4">
-                <h2 class="text-lg font-semibold text-slate-300">전체 듣기</h2>
-                <button id="toggleAll" class="bg-blue-600 hover:bg-blue-500 text-sm px-4 py-2 rounded-lg transition-colors font-bold">
+                <h2 class="text-2xl font-semibold text-slate-300">전체 듣기</h2>
+                <button id="toggleAll" class="bg-blue-600 hover:bg-blue-500 text-lg px-6 py-3 rounded-lg transition-colors font-bold">
                     해석 전체 보기/숨기기
                 </button>
             </div>
 
-            <div class="mb-4">
-                <label class="text-sm text-slate-400">재생 속도 조절: </label>
+            <div class="mb-4 text-lg">
+                <label class="text-slate-400">재생 속도 조절: </label>
                 <select id="playbackRate" class="bg-slate-700 text-white px-2 py-1 rounded">
                     <option value="075">0.75x</option>
                     <option value="1" selected>1.0x</option>
                 </select>
             </div>
             
-            <audio controls loop class="w-1/2 mb-4">
+            <audio controls loop class="w-1/3 mb-4">
                 <source src="audio/full.mp3" type="audio/mpeg">
             </audio>
 
-            <!-- 전체 스크リップ트 -->
-            <div class="text-lg text-white bg-slate-800 p-4 rounded-lg mb-4 leading-relaxed">
+            <!-- 전체 스크립트 (글자 크기 및 가시성 극대화) -->
+            <div class="text-2xl text-white bg-slate-800 p-8 rounded-lg mb-6" style="line-height: 2.8;">
                 <p>
-                    元日<span class="furigana text-sm text-sky-200">(がんじつ)</span>とは年の始めを祝う日です。<br>
-                    カレンダーでは1月1日のみが祝日ですが、実際には1日から3日までを三が日<span class="furigana text-sm text-sky-200">(さんがにち)</span>と呼び、会社や店によっては休業<span class="furigana text-sm text-sky-200">(きゅうぎょう)</span>するところもあります。<br>
-                    毎年この時期独特<span class="furigana text-sm text-sky-200">(じきどくとく)</span>の行事や慣習があります。<br>
-                    新たな年になって最初に会った時は「あけましておめでとうございます」と挨拶<span class="furigana text-sm text-sky-200">(あいさつ)</span>します。<br>
-                    元日<span class="furigana text-sm text-sky-200">(がんじつ)</span>の朝のことを特別に何と呼ぶでしょうか。<br>
-                    正解はこのビデオの最後に紹介します。自宅や海辺<span class="furigana text-sm text-sky-200">(うみべ)</span>、山頂<span class="furigana text-sm text-sky-200">(さんちょう)</span>などで初日の出<span class="furigana text-sm text-sky-200">(hatsuhinode) -> (はつひので)</span>を拝<span class="furigana text-sm text-sky-200">(おが)</span>みます。<br>
-                    元日<span class="furigana text-sm text-sky-200">(がんじつ)</span>の朝食にはお雑煮<span class="furigana text-sm text-sky-200">(ぞうに)</span>やおせち料理を食べます。<br>
-                    雑煮<span class="furigana text-sm text-sky-200">(ぞうに)</span>は餅<span class="furigana text-sm text-sky-200">(もち)</span>が入った汁もので、地方や家庭によって味付けが違います。
+                    <ruby>元日<rt>がんじつ</rt></ruby>とは<ruby>年<rt>とし</rt></ruby>の<ruby>始<rt>はじめ</rt></ruby>めを<ruby>祝<rt>いわ</rt></ruby>う<ruby>日<rt>ひ</rt></ruby>です。<br>
+                    カレンダーでは1<ruby>月<rt>がつ</rt></ruby>1<ruby>日<rt>にち</rt></ruby>のみが<ruby>祝日<rt>しゅくじつ</rt></ruby>ですが、<ruby>実際<rt>じっさい</rt></ruby>には1<ruby>日<rt>ついたち</rt></ruby>から3<ruby>日<rt>みっか</rt></ruby>までを<ruby>三<rt>さん</rt></ruby>が<ruby>日<rt>にち</rt></ruby>と<ruby>呼<rt>よ</rt></ruby>び、<ruby>会社<rt>かいしゃ</rt></ruby>や<ruby>店<rt>みせ</rt></ruby>によっては<ruby>休業<rt>きゅうぎょう</rt></ruby>するところもあります。<br>
+                    <ruby>毎年<rt>まいとし</rt></ruby>この<ruby>時期独特<rt>じきどくとく</rt></ruby>の<ruby>行事<rt>ぎょうじ</rt></ruby>や<ruby>慣習<rt>かんしゅう</rt></ruby>があります。<br>
+                    <ruby>新<rt>あら</rt></ruby>たな<ruby>年<rt>とし</rt></ruby>になって<ruby>最初<rt>さいしょ</rt></ruby>に<ruby>会<rt>あ</rt></ruby>った<ruby>時<rt>とき</rt></ruby>は「あけましておめでとうございます」と<ruby>挨拶<rt>あいさつ</rt></ruby>します。<br>
+                    <ruby>元日<rt>がんじつ</rt></ruby>の<ruby>朝<rt>あさ</rt></ruby>のことを<ruby>特別<rt>とくべつ</rt></ruby>に<ruby>何<rt>なに</rt></ruby>と<ruby>呼<rt>よ</rt></ruby>ぶでしょうか。<br>
+                    <ruby>正解<rt>せいかい</rt></ruby>はこのビデオの<ruby>最後<rt>さいご</rt></ruby>に<ruby>紹介<rt>しょうかい</rt></ruby>します。<ruby>自宅<rt>じたく</rt></ruby>や<ruby>海辺<rt>うみべ</rt></ruby>、<ruby>山頂<rt>さんちょう</rt></ruby>などで<ruby>初日の出<rt>はつひので</rt></ruby>を<ruby>拝<rt>おが</rt></ruby>みます。<br>
+                    <ruby>元日<rt>がんじつ</rt></ruby>の<ruby>朝食<rt>ちょうしょく</rt></ruby>にはお<ruby>雑煮<rt>ぞうに</rt></ruby>やおせち<ruby>料理<rt>りょうり</rt></ruby>を<ruby>食<rt>た</rt></ruby>べます。<br>
+                    <ruby>雑煮<rt>ぞうに</rt></ruby>は<ruby>餅<rt>もち</rt></ruby>が<ruby>入<rt>はい</rt></ruby>った<ruby>汁<rt>しる</rt></ruby>もので、<ruby>地方<rt>ちほう</rt></ruby>や<ruby>家庭<rt>かてい</rt></ruby>によって<ruby>味付<rt>あじつ</rt></ruby>けが<ruby>違<rt>ちが</rt></ruby>います。
                 </p>
             </div>
 
             <hr class="border-slate-600">
 
-            <h2 class="text-lg font-semibold text-slate-300 mb-4">문장별 연습</h2>
+            <h2 class="text-2xl font-semibold text-slate-300 mb-4">문장별 연습</h2>
             
             <!-- 문장 1 -->
             <div class="sentence-container">
                 <div class="sentence-box">
-                    <audio controls loop><source src="audio/01.mp3" type="audio/mpeg"></audio>
+                    <audio controls loop><source src="audio/1.mp3" type="audio/mpeg"></audio>
                     <p><ruby>元日<rt>がんじつ</rt></ruby>とは<ruby>年<rt>とし</rt></ruby>の<ruby>始<rt>はじめ</rt></ruby>めを<ruby>祝<rt>いわ</rt></ruby>う<ruby>日<rt>ひ</rt></ruby>です。</p>
                 </div>
-                <div class="translation">元日(간지쓰)란 한 해의 시작을 축하하는 날입니다.</div>
+                <div class="translation">간지쓰(元日)란 한 해의 시작을 축하하는 날입니다.</div>
             </div>
             <!-- 문장 2 -->
             <div class="sentence-container">
                 <div class="sentence-box">
-                    <audio controls loop><source src="audio/02.mp3" type="audio/mpeg"></audio>
+                    <audio controls loop><source src="audio/2.mp3" type="audio/mpeg"></audio>
                     <p>カレンダーでは1<ruby>月<rt>がつ</rt></ruby>1<ruby>日<rt>にち</rt></ruby>のみが<ruby>祝日<rt>しゅくじつ</rt></ruby>ですが、<ruby>実際<rt>じっさい</rt></ruby>には1<ruby>日<rt>ついたち</rt></ruby>から3<ruby>日<rt>みっか</rt></ruby>までを<ruby>三<rt>さん</rt></ruby>が<ruby>日<rt>にち</rt></ruby>と<ruby>呼<rt>よ</rt></ruby>び、<ruby>会社<rt>かいしゃ</rt></ruby>や<ruby>店<rt>みせ</rt></ruby>によっては<ruby>休業<rt>きゅうぎょう</rt></ruby>するところもあります。</p>
                 </div>
                 <div class="translation">달력에서는 1월 1일만 공휴일이지만, 실제로는 1일부터 3일까지를 '산가니치(三が日)'라고 부르며, 회사나 가게에 따라서는 휴업하는 곳도 있습니다.</div>
@@ -94,7 +95,7 @@
             <!-- 문장 3 -->
             <div class="sentence-container">
                 <div class="sentence-box">
-                    <audio controls loop><source src="audio/03.mp3" type="audio/mpeg"></audio>
+                    <audio controls loop><source src="audio/3.mp3" type="audio/mpeg"></audio>
                     <p><ruby>毎年<rt>まいとし</rt></ruby>この<ruby>時期独特<rt>じきどくとく</rt></ruby>の<ruby>行事<rt>ぎょうじ</rt></ruby>や<ruby>慣習<rt>かんしゅう</rt></ruby>があります。</p>
                 </div>
                 <div class="translation">매년 이 시기 독특한 행사나 관습이 있습니다.</div>
@@ -102,7 +103,7 @@
             <!-- 문장 4 -->
             <div class="sentence-container">
                 <div class="sentence-box">
-                    <audio controls loop><source src="audio/04.mp3" type="audio/mpeg"></audio>
+                    <audio controls loop><source src="audio/4.mp3" type="audio/mpeg"></audio>
                     <p><ruby>新<rt>あら</rt></ruby>たな<ruby>年<rt>とし</rt></ruby>になって<ruby>最初<rt>さいしょ</rt></ruby>に<ruby>会<rt>あ</rt></ruby>った<ruby>時<rt>とき</rt></ruby>は「あけましておめでとうございます」と<ruby>挨拶<rt>あいさつ</rt></ruby>します。</p>
                 </div>
                 <div class="translation">새해가 되어 처음 만났을 때는 "새해 복 많이 받으세요(아케마시테 오메데토 고자이마스)"라고 인사합니다.</div>
@@ -110,15 +111,15 @@
             <!-- 문장 5 -->
             <div class="sentence-container">
                 <div class="sentence-box">
-                    <audio controls loop><source src="audio/05.mp3" type="audio/mpeg"></audio>
+                    <audio controls loop><source src="audio/5.mp3" type="audio/mpeg"></audio>
                     <p><ruby>元日<rt>がんじつ</rt></ruby>の<ruby>朝<rt>あさ</rt></ruby>のことを<ruby>特別<rt>とくべつ</rt></ruby>に<ruby>何<rt>なに</rt></ruby>と<ruby>呼<rt>よ</rt></ruby>ぶでしょうか。</p>
                 </div>
-                <div class="translation">元日(간지쓰)의 아침을 특별히 무엇이라 부를까요?</div>
+                <div class="translation">간지쓰(元日)의 아침을 특별히 무엇이라 부를까요?</div>
             </div>
             <!-- 문장 6 -->
             <div class="sentence-container">
                 <div class="sentence-box">
-                    <audio controls loop><source src="audio/06.mp3" type="audio/mpeg"></audio>
+                    <audio controls loop><source src="audio/6.mp3" type="audio/mpeg"></audio>
                     <p><ruby>正解<rt>せいかい</rt></ruby>はこのビデオの<ruby>最後<rt>さいご</rt></ruby>に<ruby>紹介<rt>しょうかい</rt></ruby>します。<ruby>自宅<rt>じたく</rt></ruby>や<ruby>海辺<rt>うみべ</rt></ruby>、<ruby>山頂<rt>さんちょう</rt></ruby>などで<ruby>初日の出<rt>はつひので</rt></ruby>を<ruby>拝<rt>おが</rt></ruby>みます。</p>
                 </div>
                 <div class="translation">정답은 이 비디오의 마지막에 소개합니다. 집이나 해변, 산꼭대기 등에서 첫 일출(하츠히노데)을 맞이합니다.</div>
@@ -126,15 +127,15 @@
             <!-- 문장 7 -->
             <div class="sentence-container">
                 <div class="sentence-box">
-                    <audio controls loop><source src="audio/07.mp3" type="audio/mpeg"></audio>
+                    <audio controls loop><source src="audio/7.mp3" type="audio/mpeg"></audio>
                     <p><ruby>元日<rt>がんじつ</rt></ruby>の<ruby>朝食<rt>ちょうしょく</rt></ruby>にはお<ruby>雑煮<rt>ぞうに</rt></ruby>やおせち<ruby>料理<rt>りょうり</rt></ruby>を<ruby>食<rt>た</rt></ruby>べます。</p>
                 </div>
-                <div class="translation">元日(간지쓰)의 아침 식사로는 오조니나 오세치 요리를 먹습니다.</div>
+                <div class="translation">간지쓰(元日)의 아침 식사로는 오조니나 오세치 요리를 먹습니다.</div>
             </div>
             <!-- 문장 8 -->
             <div class="sentence-container">
                 <div class="sentence-box">
-                    <audio controls loop><source src="audio/08.mp3" type="audio/mpeg"></audio>
+                    <audio controls loop><source src="audio/8.mp3" type="audio/mpeg"></audio>
                     <p><ruby>雑煮<rt>ぞうに</rt></ruby>は<ruby>餅<rt>もち</rt></ruby>が<ruby>入<rt>はい</rt></ruby>った<ruby>汁<rt>しる</rt></ruby>もので、<ruby>地方<rt>ちほう</rt></ruby>や<ruby>家庭<rt>かてい</rt></ruby>によって<ruby>味付<rt>あじつ</rt></ruby>けが<ruby>違<rt>ちが</rt></ruby>います。</p>
                 </div>
                 <div class="translation">조니는 떡이 들어간 국물 요리로, 지방이나 가정에 따라 맛내기가 다릅니다.</div>
