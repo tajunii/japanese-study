@@ -7,201 +7,257 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { background-color: #0f172a; color: #f8fafc; font-family: sans-serif; }
-        .card { padding: 2.5rem; border-radius: 0.75rem; background-color: #1e293b; }
-        .sentence-container { margin-bottom: 2.5rem; }
-        .sentence-box { display: flex; align-items: center; gap: 20px; padding: 1rem 0.5rem; background-color: #334155; border-radius: 0.5rem; }
-        .sentence-box p { font-size: 1.45rem; line-height: 2.5; }
-        .translation { display: none; margin-top: 1rem; padding: 0.5rem 1rem; color: #cbd5e1; font-size: 1.25rem; }
-        ruby rt { color: #ffb703; font-size: 0.95rem; font-weight: normal; }
+        .card { padding: 2rem; border-radius: 0.75rem; background-color: #1e293b; }
+        
+        /* TV 화면 공간 절약을 위해 기존 2.5rem에서 1.5rem으로 여백 축소 */
+        .sentence-container { margin-bottom: 1.5rem; } 
+        
+        .sentence-box { display: flex; align-items: center; gap: 20px; padding: 0.75rem 0.5rem; background-color: #334155; border-radius: 0.5rem; }
+        
+        /* 기본 줄 간격 (후리가나가 있을 때) - 2.5/2.8에서 대폭 축소하여 원문 아래 빈 공간 제거 */
+        .sentence-box p { font-size: 1.45rem; line-height: 1.8; transition: line-height 0.2s ease; }
+        .full-text p { line-height: 2.0; transition: line-height 0.2s ease; }
+        
+        .translation { display: none; margin-top: 0.75rem; padding: 0.5rem 1rem; color: #cbd5e1; font-size: 1.25rem; }
+        /* 후리가나 크기를 살짝 줄여서 좁아진 줄 간격에서도 겹치지 않게 안정감 확보 */
+        ruby rt { color: #ffb703; font-size: 0.9rem; font-weight: normal; }
         audio { height: 36px; width: 240px; }
+
+        /* 후리가나 숨김 상태일 때의 스타일 */
+        .hide-furigana rt { 
+            display: none; 
+        }
+        /* 후리가나가 없으면 줄 간격을 대폭 줄여서 화면 공간 확보 */
+        .hide-furigana .full-text p { 
+            line-height: 1.6 !important; 
+        }
+        .hide-furigana .sentence-box p { 
+            line-height: 1.5 !important; 
+        }
     </style>
 </head>
-<body class="p-6">
-<div class="max-w-[95%] mx-auto"> 
+<body class="p-4 sm:p-6">
+<div class="max-w-[98%] mx-auto"> 
 
-    <div class="flex justify-between items-center mb-8">
-
+    <div class="flex justify-between items-center mb-6">
         <div></div>
-
-        <h1 class="text-5xl font-bold">
+        <h1 class="text-4xl md:text-5xl font-bold">
             쉐도잉 연습
         </h1>
-
         <button
             id="homeBtn"
-            class="bg-slate-700 hover:bg-slate-600 w-14 h-14 rounded-full text-2xl transition-colors"
+            class="bg-slate-700 hover:bg-slate-600 w-14 h-14 rounded-full text-2xl transition-colors shadow-lg"
             title="홈">
-
             🏠
-
         </button>
-
     </div>
         
-        <div class="card space-y-6 !px-2">
-            <div class="flex justify-between items-center mb-4">
-                <h2 class="text-2xl font-semibold text-slate-300">전체 듣기</h2>
-                <button id="toggleAll" class="bg-blue-600 hover:bg-blue-500 text-lg px-6 py-3 rounded-lg transition-colors font-bold">
-                    해석 전체 보기/숨기기
+    <div class="card space-y-4 !px-2 md:!px-6">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-2 gap-4">
+            <h2 class="text-2xl font-semibold text-slate-300">전체 듣기</h2>
+            <!-- 컨트롤 버튼 영역 (후리가나 토글 버튼 추가) -->
+            <div class="flex gap-2 flex-wrap">
+                <button id="toggleFurigana" class="bg-teal-600 hover:bg-teal-500 text-[1.1rem] px-4 py-2 rounded-lg transition-colors font-bold shadow-md">
+                    후리가나 숨기기
+                </button>
+                <button id="toggleAll" class="bg-blue-600 hover:bg-blue-500 text-[1.1rem] px-4 py-2 rounded-lg transition-colors font-bold shadow-md">
+                    해석 전체 보기
                 </button>
             </div>
+        </div>
 
-            <div class="mb-4 text-lg">
+        <div class="flex items-center gap-4 text-lg">
+            <div>
                 <label class="text-slate-400">재생 속도 조절: </label>
-                <select id="playbackRate" class="bg-slate-700 text-white px-2 py-1 rounded">
+                <select id="playbackRate" class="bg-slate-700 text-white px-2 py-1 rounded outline-none border border-slate-600">
                     <option value="075">0.75x</option>
                     <option value="1" selected>1.0x</option>
                 </select>
             </div>
-            
-            <audio controls loop class="w-1/3 mb-4">
-                <source src="audio/full.mp3" type="audio/mpeg">
-            </audio>
-
-            <div class="text-2xl text-white bg-slate-800 py-4 px-2 rounded-lg mb-2" style="line-height: 2.8;">
-                <p class="tracking-tight">
-                    <ruby>子<rt>こ</rt></ruby>どもたちは<ruby>両親<rt>りょうしん</rt></ruby>や<ruby>祖父母<rt>そふぼ</rt></ruby>、<ruby>親戚<rt>しんせき</rt></ruby>や<ruby>両親<rt>りょうしん</rt></ruby>の<ruby>知人<rt>ちじん</rt></ruby>などからお<ruby>年玉<rt>としだま</rt></ruby>をもらいます。<br>
-                    これは、<ruby>正月<rt>しょうがつ</rt></ruby>だけの<ruby>特別<rt>とくべつ</rt></ruby>なお<ruby>小遣<rt>こづか</rt></ruby>いで、<ruby>子<rt>こ</rt></ruby>どもたちはとても<ruby>楽<rt>たの</rt></ruby>しみにしています。<br>
-                    お<ruby>年玉<rt>としだま</rt></ruby>は<ruby>紙製<rt>かみせい</rt></ruby>のお<ruby>年玉袋<rt>としだまぶくろ</rt></ruby>に<ruby>入<rt>い</rt></ruby>れて<ruby>渡<rt>わた</rt></ruby>されます。<ruby>金額<rt>きんがく</rt></ruby>の<ruby>相場<rt>そうば</rt></ruby>は、<ruby>小学生<rt>しょうがくせい</rt></ruby>では3000<ruby>円<rt>えん</rt></ruby>から5,000<ruby>円<rt>えん</rt></ruby>くらい。<br>
-                    <ruby>中学生<rt>ちゅうがくせい</rt></ruby>では5,000<ruby>円程度<rt>えんていど</rt></ruby>、<ruby>高校生<rt>こうこうせい</rt></ruby>や<ruby>大学生<rt>だいがくせい</rt></ruby>になると10,000<ruby>円前後<rt>えんぜんご</rt></ruby>です。<br>
-                    <ruby>一般的<rt>いっぱんてき</rt></ruby>に、<ruby>初詣<rt>はつもうで</rt></ruby>は<ruby>正月<rt>しょうがつ</rt></ruby>の<ruby>日中<rt>にっちゅう</rt></ruby>にお<ruby>参<rt>まい</rt></ruby>りをしますが、<ruby>大晦日<rt>おおみそか</rt></ruby>の<ruby>深夜<rt>しんや</rt></ruby>0<ruby>時<rt>じ</rt></ruby>、<br>
-                    <ruby>前<rt>まえ</rt></ruby>の<ruby>年<rt>とし</rt></ruby>から<ruby>新<rt>あたら</rt></ruby>しい<ruby>年<rt>とし</rt></ruby>に<ruby>切<rt>き</rt></ruby>り<ruby>替<rt>か</rt></ruby>わる<ruby>時間帯<rt>じかんたい</rt></ruby>に<ruby>神社<rt>じんじゃ</rt></ruby>にお<ruby>参<rt>まい</rt></ruby>りする<ruby>人<rt>ひと</rt></ruby>もいます。これを「<ruby>二年参<rt>にねんまい</rt></ruby>り」と<ruby>呼<rt>よ</rt></ruby>びます。<br>
-                    さて、ここでクイズの<ruby>答<rt>こた</rt></ruby>えです。<ruby>正解<rt>せいかい</rt></ruby>は「<ruby>元旦<rt>がんたん</rt></ruby>」です。「<ruby>旦<rt>たん</rt></ruby>」の<ruby>字<rt>じ</rt></ruby>は<ruby>太陽<rt>たいよう</rt></ruby>を<ruby>表<rt>あらわ</rt></ruby>す「<ruby>日<rt>ひ</rt></ruby>」という<ruby>漢字<rt>かんじ</rt></ruby>の<ruby>下<rt>した</rt></ruby>に、<ruby>左<rt>ひだり</rt></ruby>から<ruby>右<rt>みぎ</rt></ruby>に<ruby>向<rt>む</rt></ruby>かって<ruby>横棒<rt>よこぼう</rt></ruby>を<ruby>一本<rt>いっぽん</rt></ruby>、<ruby>書<rt>か</rt></ruby>きますね。<br>
-                    これは、<ruby>地平線<rt>ちへいせん</rt></ruby>から<ruby>昇<rt>のぼ</rt></ruby>りつつある<ruby>太陽<rt>たいよう</rt></ruby>を<ruby>表<rt>あらわ</rt></ruby>しているのです。だから、「<ruby>元旦<rt>がんたん</rt></ruby>」ということばは1月<ruby>1日<rt>ついたち</rt></ruby>の<ruby>朝<rt>あさ</rt></ruby>を<ruby>意味<rt>いみ</rt></ruby>していることになります。<br>
-                    いかがでしたか？はじめて<ruby>知<rt>し</rt></ruby>ったことはありましたか。<ruby>皆<rt>みな</rt></ruby>さんの<ruby>国<rt>くに</rt></ruby>では、どのようにお<ruby>正月<rt>しょうがつ</rt></ruby>をお<ruby>祝<rt>いわ</rt></ruby>いしますか。
-                </p>
-            </div>
-
-            <hr class="border-slate-600">
-
-            <h2 class="text-2xl font-semibold text-slate-300 mb-4">문장별 연습</h2>
-            
-            <!-- 문장 1 -->
-            <div class="sentence-container">
-                <div class="sentence-box">
-                    <audio controls loop><source src="audio/01.mp3" type="audio/mpeg"></audio>
-                    <p><ruby>子<rt>こ</rt></ruby>どもたちは<ruby>両親<rt>りょうしん</rt></ruby>や<ruby>祖父母<rt>そふぼ</rt></ruby>、<ruby>親戚<rt>しんせき</rt></ruby>や<ruby>両親<rt>りょうしん</rt></ruby>の<ruby>知人<rt>ちじん</rt></ruby>などからお<ruby>年玉<rt>としだま</rt></ruby>をもらいます。</p>
-                </div>
-                <div class="translation">아이들은 부모나 조부모, 친척이나 부모의 지인 등으로부터 세뱃돈을 받습니다.</div>
-            </div>
-
-            <!-- 문장 2 -->
-            <div class="sentence-container">
-                <div class="sentence-box">
-                    <audio controls loop><source src="audio/02.mp3" type="audio/mpeg"></audio>
-                    <p>これは、<ruby>正月<rt>しょうがつ</rt></ruby>だけの<ruby>特別<rt>とくべつ</rt></ruby>なお<ruby>小遣<rt>こづか</rt></ruby>いで、<ruby>子<rt>こ</rt></ruby>どもたちはとても<ruby>楽<rt>たの</rt></ruby>しみにしています。</p>
-                </div>
-                <div class="translation">이것은 설날만의 특별한 용돈으로, 아이들은 매우 기대하고 있습니다.</div>
-            </div>
-
-            <!-- 문장 3 -->
-            <div class="sentence-container">
-                <div class="sentence-box">
-                    <audio controls loop><source src="audio/03.mp3" type="audio/mpeg"></audio>
-                    <p>お<ruby>年玉<rt>としだま</rt></ruby>は<ruby>紙製<rt>かみせい</rt></ruby>のお<ruby>年玉袋<rt>としだまぶくろ</rt></ruby>に<ruby>入<rt>い</rt></ruby>れて<ruby>渡<rt>わた</rt></ruby>されます。<ruby>金額<rt>きんがく</rt></ruby>の<ruby>相場<rt>そうば</rt></ruby>は、<ruby>小学生<rt>しょうがくせい</rt></ruby>では3,000<ruby>円<rt>えん</rt></ruby>から5,000<ruby>円<rt>えん</rt></ruby>くらい。</p>
-                </div>
-                <div class="translation">세뱃돈은 종이로 된 세뱃돈 봉투에 넣어 전달됩니다. 금액의 시세는 초등학생은 3,000엔에서 5,000엔 정도.</div>
-            </div>
-
-            <!-- 문장 4 -->
-            <div class="sentence-container">
-                <div class="sentence-box">
-                    <audio controls loop><source src="audio/04.mp3" type="audio/mpeg"></audio>
-                    <p><ruby>中学生<rt>ちゅうがくせい</rt></ruby>では5,000<ruby>円程度<rt>えんていど</rt></ruby>、<ruby>高校生<rt>こうこうせい</rt></ruby>や<ruby>大学生<rt>だいがくせい</rt></ruby>になると10,000<ruby>円前後<rt>えんぜんご</rt></ruby>です。</p>
-                </div>
-                <div class="translation">중학생은 5,000엔 정도, 고등학생이나 대학생이 되면 10,000엔 전후입니다.</div>
-            </div>
-
-            <!-- 문장 5 -->
-            <div class="sentence-container">
-                <div class="sentence-box">
-                    <audio controls loop><source src="audio/05.mp3" type="audio/mpeg"></audio>
-                    <p><ruby>一般的<rt>いっぱんてき</rt></ruby>に、<ruby>初詣<rt>はつもうで</rt></ruby>は<ruby>正月<rt>しょうがつ</rt></ruby>の<ruby>日中<rt>にっちゅう</rt></ruby>にお<ruby>参<rt>まい</rt></ruby>りをしますが、<ruby>大晦日<rt>おおみそか</rt></ruby>の<ruby>深夜<rt>しんや</rt></ruby>0<ruby>時<rt>じ</rt></ruby>、</p>
-                </div>
-                <div class="translation">일반적으로 하츠모데(첫 참배)는 설날 낮에 참배를 합니다만, 새해 전날 밤 12시,</div>
-            </div>
-
-            <!-- 문장 6 -->
-            <div class="sentence-container">
-                <div class="sentence-box">
-                    <audio controls loop><source src="audio/06.mp3" type="audio/mpeg"></audio>
-                    <p><ruby>前<rt>まえ</rt></ruby>の<ruby>年<rt>とし</rt></ruby>から<ruby>新<rt>あたら</rt></ruby>しい<ruby>年<rt>とし</rt></ruby>に<ruby>切<rt>き</rt></ruby>り<ruby>替<rt>か</rt></ruby>わる<ruby>時間帯<rt>じかんたい</rt></ruby>に<ruby>神社<rt>じんじゃ</rt></ruby>にお<ruby>参<rt>まい</rt></ruby>りする<ruby>人<rt>ひと</rt></ruby>もいます。これを「<ruby>二年参<rt>にねんまい</rt></ruby>り」と<ruby>呼<rt>よ</rt></ruby>びます。</p>
-                </div>
-                <div class="translation">지난해에서 새해로 바뀌는 시간대에 신사를 참배하는 사람도 있습니다. 이것을 '니넨마이리'라고 부릅니다.</div>
-            </div>
-
-            <!-- 문장 7 -->
-            <div class="sentence-container">
-                <div class="sentence-box">
-                    <audio controls loop><source src="audio/07.mp3" type="audio/mpeg"></audio>
-                    <p>さて、ここでクイズの<ruby>答<rt>こた</rt></ruby>えです。<ruby>正解<rt>せいかい</rt></ruby>は「<ruby>元旦<rt>がんたん</rt></ruby>」です。「<ruby>旦<rt>たん</rt></ruby>」の<ruby>字<rt>じ</rt></ruby>は<ruby>太陽<rt>たいよう</rt></ruby>を<ruby>表<rt>あらわ</rt></ruby>す「<ruby>日<rt>ひ</rt></ruby>」という<ruby>漢字<rt>かんじ</rt></ruby>の<ruby>下<rt>した</rt></ruby>に、<ruby>左<rt>ひだり</rt></ruby>から<ruby>右<rt>みぎ</rt></ruby>に<ruby>向<rt>む</rt></ruby>かって<ruby>横棒<rt>よこぼう</rt></ruby>を<ruby>一本<rt>いっぽん</rt></ruby>、<ruby>書<rt>か</rt></ruby>きますね。</p>
-                </div>
-                <div class="translation">자, 여기서 퀴즈의 정답입니다. 정답은 '원단(간탄)'입니다. '旦' 자는 태양을 나타내는 '日'이라는 한자 아래에, 왼쪽에서 오른쪽으로 가로획을 한 줄 쓰지요.</div>
-            </div>
-
-            <!-- 문장 8 -->
-            <div class="sentence-container">
-                <div class="sentence-box">
-                    <audio controls loop><source src="audio/08.mp3" type="audio/mpeg"></audio>
-                    <p>これは、<ruby>地平線<rt>ちへいせん</rt></ruby>から<ruby>昇<rt>のぼ</rt></ruby>りつつある<ruby>太陽<rt>たいよう</rt></ruby>を<ruby>表<rt>あらわ</rt></ruby>しているのです。だから、「<ruby>元旦<rt>がんたん</rt></ruby>」ということばは1月<ruby>1日<rt>ついたち</rt></ruby>の<ruby>朝<rt>あさ</rt></ruby>を<ruby>意味<rt>いみ</rt></ruby>していることになります。</p>
-                </div>
-                <div class="translation">이것은 지평선에서 떠오르고 있는 태양을 나타내고 있는 것입니다. 따라서 '원단'이라는 말은 1월 1일 아침을 의미하게 되는 것입니다.</div>
-            </div>
-
-            <!-- 문장 9 -->
-            <div class="sentence-container">
-                <div class="sentence-box">
-                    <audio controls loop><source src="audio/09.mp3" type="audio/mpeg"></audio>
-                    <p>いかがでしたか？はじめて<ruby>知<rt>し</rt></ruby>ったことはありましたか。<ruby>皆<rt>みな</rt></ruby>さんの<ruby>国<rt>くに</rt></ruby>では、どのようにお<ruby>正月<rt>しょうがつ</rt></ruby>をお<ruby>祝<rt>いわ</rt></ruby>いしますか。</p>
-                </div>
-                <div class="translation">어떠셨나요? 처음 알게 된 사실이 있었나요? 여러분의 나라에서는 어떻게 설날을 축하하나요?</div>
-            </div>
-
         </div>
+        
+        <audio controls loop class="w-full md:w-1/3 mb-4 shadow-md rounded-full">
+            <source src="audio/full.mp3" type="audio/mpeg">
+        </audio>
+
+        <!-- 본문 텍스트 (full-text 클래스 추가하여 CSS 제어) -->
+        <div class="full-text text-xl md:text-2xl text-white bg-slate-800 py-4 px-4 rounded-lg mb-4 shadow-inner">
+            <p class="tracking-tight">
+                <ruby>子<rt>こ</rt></ruby>どもたちは<ruby>両親<rt>りょうしん</rt></ruby>や<ruby>祖父母<rt>そふぼ</rt></ruby>、<ruby>親戚<rt>しんせき</rt></ruby>や<ruby>両親<rt>りょうしん</rt></ruby>の<ruby>知人<rt>ちじん</rt></ruby>などからお<ruby>年玉<rt>としだま</rt></ruby>をもらいます。<br>
+                これは、<ruby>正月<rt>しょうがつ</rt></ruby>だけの<ruby>特別<rt>とくべつ</rt></ruby>なお<ruby>小遣<rt>こづか</rt></ruby>いで、<ruby>子<rt>こ</rt></ruby>どもたちはとても<ruby>楽<rt>たの</rt></ruby>しみにしています。<br>
+                お<ruby>年玉<rt>としだま</rt></ruby>は<ruby>紙製<rt>かみせい</rt></ruby>のお<ruby>年玉袋<rt>としだまぶくろ</rt></ruby>に<ruby>入<rt>い</rt></ruby>れて<ruby>渡<rt>わた</rt></ruby>されます。<ruby>金額<rt>きんがく</rt></ruby>の<ruby>相場<rt>そうば</rt></ruby>は、<ruby>小学生<rt>しょうがくせい</rt></ruby>では3000<ruby>円<rt>えん</rt></ruby>から5,000<ruby>円<rt>えん</rt></ruby>くらい。<br>
+                <ruby>中学生<rt>ちゅうがくせい</rt></ruby>では5,000<ruby>円程度<rt>えんていど</rt></ruby>、<ruby>高校生<rt>こうこうせい</rt></ruby>や<ruby>大学生<rt>だいがくせい</rt></ruby>になると10,000<ruby>円前後<rt>えんぜんご</rt></ruby>です。<br>
+                <ruby>一般的<rt>いっぱんてき</rt></ruby>に、<ruby>初詣<rt>はつもうで</rt></ruby>は<ruby>正月<rt>しょうがつ</rt></ruby>の<ruby>日中<rt>にっちゅう</rt></ruby>にお<ruby>参<rt>まい</rt></ruby>りをしますが、<ruby>大晦日<rt>おおみそか</rt></ruby>の<ruby>深夜<rt>しんや</rt></ruby>0<ruby>時<rt>じ</rt></ruby>、<br>
+                <ruby>前<rt>まえ</rt></ruby>の<ruby>年<rt>とし</rt></ruby>から<ruby>新<rt>あたら</rt></ruby>しい<ruby>年<rt>とし</rt></ruby>に<ruby>切<rt>き</rt></ruby>り<ruby>替<rt>か</rt></ruby>わる<ruby>時間帯<rt>じかんたい</rt></ruby>に<ruby>神社<rt>じんじゃ</rt></ruby>にお<ruby>参<rt>まい</rt></ruby>りする<ruby>人<rt>ひと</rt></ruby>もいます。これを「<ruby>二年参<rt>にねんまい</rt></ruby>り」と<ruby>呼<rt>よ</rt></ruby>びます。<br>
+                さて、ここでクイズの<ruby>答<rt>こた</rt></ruby>えです。<ruby>正解<rt>せいかい</rt></ruby>は「<ruby>元旦<rt>がんたん</rt></ruby>」です。「<ruby>旦<rt>たん</rt></ruby>」の<ruby>字<rt>じ</rt></ruby>は<ruby>太陽<rt>たいよう</rt></ruby>を<ruby>表<rt>あらわ</rt></ruby>す「<ruby>日<rt>ひ</rt></ruby>」という<ruby>漢字<rt>かんじ</rt></ruby>の<ruby>下<rt>した</rt></ruby>に、<ruby>左<rt>ひだり</rt></ruby>から<ruby>右<rt>みぎ</rt></ruby>に<ruby>向<rt>む</rt></ruby>かって<ruby>横棒<rt>よこぼう</rt></ruby>を<ruby>一本<rt>いっぽん</rt></ruby>、<ruby>書<rt>か</rt></ruby>きますね。<br>
+                これは、<ruby>地平線<rt>ちへいせん</rt></ruby>から<ruby>昇<rt>のぼ</rt></ruby>りつつある<ruby>太陽<rt>たいよう</rt></ruby>を<ruby>表<rt>あらわ</rt></ruby>しているのです。だから、「<ruby>元旦<rt>がんたん</rt></ruby>」ということばは1月<ruby>1日<rt>ついたち</rt></ruby>の<ruby>朝<rt>あさ</rt></ruby>を<ruby>意味<rt>いみ</rt></ruby>していることになります。<br>
+                いかがでしたか？はじめて<ruby>知<rt>し</rt></ruby>ったことはありましたか。<ruby>皆<rt>みな</rt></ruby>さんの<ruby>国<rt>くに</rt></ruby>では、どのようにお<ruby>正月<rt>しょうがつ</rt></ruby>をお<ruby>祝<rt>いわ</rt></ruby>いしますか。
+            </p>
+        </div>
+
+        <hr class="border-slate-600 my-4">
+
+        <h2 class="text-2xl font-semibold text-slate-300 mb-4">문장별 연습</h2>
+        
+        <!-- 문장 1 -->
+        <div class="sentence-container">
+            <div class="sentence-box">
+                <audio controls loop><source src="audio/01.mp3" type="audio/mpeg"></audio>
+                <p><ruby>子<rt>こ</rt></ruby>どもたちは<ruby>両親<rt>りょうしん</rt></ruby>や<ruby>祖父母<rt>そふぼ</rt></ruby>、<ruby>親戚<rt>しんせき</rt></ruby>や<ruby>両親<rt>りょうしん</rt></ruby>の<ruby>知人<rt>ちじん</rt></ruby>などからお<ruby>年玉<rt>としだま</rt></ruby>をもらいます。</p>
+            </div>
+            <div class="translation">아이들은 부모나 조부모, 친척이나 부모의 지인 등으로부터 세뱃돈을 받습니다.</div>
+        </div>
+
+        <!-- 문장 2 -->
+        <div class="sentence-container">
+            <div class="sentence-box">
+                <audio controls loop><source src="audio/02.mp3" type="audio/mpeg"></audio>
+                <p>これは、<ruby>正月<rt>しょうがつ</rt></ruby>だけの<ruby>特別<rt>とくべつ</rt></ruby>なお<ruby>小遣<rt>こづか</rt></ruby>いで、<ruby>子<rt>こ</rt></ruby>どもたちはとても<ruby>楽<rt>たの</rt></ruby>しみにしています。</p>
+            </div>
+            <div class="translation">이것은 설날만의 특별한 용돈으로, 아이들은 매우 기대하고 있습니다.</div>
+        </div>
+
+        <!-- 문장 3 -->
+        <div class="sentence-container">
+            <div class="sentence-box">
+                <audio controls loop><source src="audio/03.mp3" type="audio/mpeg"></audio>
+                <p>お<ruby>年玉<rt>としだま</rt></ruby>は<ruby>紙製<rt>かみせい</rt></ruby>のお<ruby>年玉袋<rt>としだまぶくろ</rt></ruby>に<ruby>入<rt>い</rt></ruby>れて<ruby>渡<rt>わた</rt></ruby>されます。<ruby>金額<rt>きんがく</rt></ruby>の<ruby>相場<rt>そうば</rt></ruby>は、<ruby>小学生<rt>しょうがくせい</rt></ruby>では3,000<ruby>円<rt>えん</rt></ruby>から5,000<ruby>円<rt>えん</rt></ruby>くらい。</p>
+            </div>
+            <div class="translation">세뱃돈은 종이로 된 세뱃돈 봉투에 넣어 전달됩니다. 금액의 시세는 초등학생은 3,000엔에서 5,000엔 정도.</div>
+        </div>
+
+        <!-- 문장 4 -->
+        <div class="sentence-container">
+            <div class="sentence-box">
+                <audio controls loop><source src="audio/04.mp3" type="audio/mpeg"></audio>
+                <p><ruby>中学生<rt>ちゅうがくせい</rt></ruby>では5,000<ruby>円程度<rt>えんていど</rt></ruby>、<ruby>高校生<rt>こうこうせい</rt></ruby>や<ruby>大学生<rt>だいがくせい</rt></ruby>になると10,000<ruby>円前後<rt>えんぜんご</rt></ruby>です。</p>
+            </div>
+            <div class="translation">중학생은 5,000엔 정도, 고등학생이나 대학생이 되면 10,000엔 전후입니다.</div>
+        </div>
+
+        <!-- 문장 5 -->
+        <div class="sentence-container">
+            <div class="sentence-box">
+                <audio controls loop><source src="audio/05.mp3" type="audio/mpeg"></audio>
+                <p><ruby>一般的<rt>いっぱんてき</rt></ruby>に、<ruby>初詣<rt>はつもうで</rt></ruby>は<ruby>正月<rt>しょうがつ</rt></ruby>の<ruby>日中<rt>にっちゅう</rt></ruby>にお<ruby>参<rt>まい</rt></ruby>りをしますが、<ruby>大晦日<rt>おおみそか</rt></ruby>の<ruby>深夜<rt>しんや</rt></ruby>0<ruby>時<rt>じ</rt></ruby>、</p>
+            </div>
+            <div class="translation">일반적으로 하츠모데(첫 참배)는 설날 낮에 참배를 합니다만, 새해 전날 밤 12시,</div>
+        </div>
+
+        <!-- 문장 6 -->
+        <div class="sentence-container">
+            <div class="sentence-box">
+                <audio controls loop><source src="audio/06.mp3" type="audio/mpeg"></audio>
+                <p><ruby>前<rt>まえ</rt></ruby>の<ruby>年<rt>とし</rt></ruby>から<ruby>新<rt>あたら</rt></ruby>しい<ruby>年<rt>とし</rt></ruby>に<ruby>切<rt>き</rt></ruby>り<ruby>替<rt>か</rt></ruby>わる<ruby>時間帯<rt>じかんたい</rt></ruby>に<ruby>神社<rt>じんじゃ</rt></ruby>にお<ruby>参<rt>まい</rt></ruby>りする<ruby>人<rt>ひと</rt></ruby>もいます。これを「<ruby>二年参<rt>にねんまい</rt></ruby>り」と<ruby>呼<rt>よ</rt></ruby>びます。</p>
+            </div>
+            <div class="translation">지난해에서 새해로 바뀌는 시간대에 신사를 참배하는 사람도 있습니다. 이것을 '니넨마이리'라고 부릅니다.</div>
+        </div>
+
+        <!-- 문장 7 -->
+        <div class="sentence-container">
+            <div class="sentence-box">
+                <audio controls loop><source src="audio/07.mp3" type="audio/mpeg"></audio>
+                <p>さて、ここでクイズの<ruby>答<rt>こた</rt></ruby>えです。<ruby>正解<rt>せいかい</rt></ruby>は「<ruby>元旦<rt>がんたん</rt></ruby>」です。「<ruby>旦<rt>たん</rt></ruby>」の<ruby>字<rt>じ</rt></ruby>は<ruby>太陽<rt>たいよう</rt></ruby>を<ruby>表<rt>あらわ</rt></ruby>す「<ruby>日<rt>ひ</rt></ruby>」という<ruby>漢字<rt>かんじ</rt></ruby>の<ruby>下<rt>した</rt></ruby>に、<ruby>左<rt>ひだり</rt></ruby>から<ruby>右<rt>みぎ</rt></ruby>に<ruby>向<rt>む</rt></ruby>かって<ruby>横棒<rt>よこぼう</rt></ruby>を<ruby>一本<rt>いっぽん</rt></ruby>、<ruby>書<rt>か</rt></ruby>きますね。</p>
+            </div>
+            <div class="translation">자, 여기서 퀴즈의 정답입니다. 정답은 '원단(간탄)'입니다. '旦' 자는 태양을 나타내는 '日'이라는 한자 아래에, 왼쪽에서 오른쪽으로 가로획을 한 줄 쓰지요.</div>
+        </div>
+
+        <!-- 문장 8 -->
+        <div class="sentence-container">
+            <div class="sentence-box">
+                <audio controls loop><source src="audio/08.mp3" type="audio/mpeg"></audio>
+                <p>これは、<ruby>地平線<rt>ちへいせん</rt></ruby>から<ruby>昇<rt>のぼ</rt></ruby>りつつある<ruby>太陽<rt>たいよう</rt></ruby>を<ruby>表<rt>あらわ</rt></ruby>しているのです。だから、「<ruby>元旦<rt>がんたん</rt></ruby>」ということばは1月<ruby>1日<rt>ついたち</rt></ruby>の<ruby>朝<rt>あさ</rt></ruby>を<ruby>意味<rt>いみ</rt></ruby>していることになります。</p>
+            </div>
+            <div class="translation">이것은 지평선에서 떠오르고 있는 태양을 나타내고 있는 것입니다. 따라서 '원단'이라는 말은 1월 1일 아침을 의미하게 되는 것입니다.</div>
+        </div>
+
+        <!-- 문장 9 -->
+        <div class="sentence-container">
+            <div class="sentence-box">
+                <audio controls loop><source src="audio/09.mp3" type="audio/mpeg"></audio>
+                <p>いかがでしたか？はじめて<ruby>知<rt>し</rt></ruby>ったことはありましたか。<ruby>皆<rt>みな</rt></ruby>さんの<ruby>国<rt>くに</rt></ruby>では、どのようにお<ruby>正月<rt>しょうがつ</rt></ruby>をお<ruby>祝<rt>いわ</rt></ruby>いしますか。</p>
+            </div>
+            <div class="translation">어떠셨나요? 처음 알게 된 사실이 있었나요? 여러분의 나라에서는 어떻게 설날을 축하하나요?</div>
+        </div>
+
     </div>
+</div>
 
-    <script>
-        const toggleBtn = document.getElementById('toggleAll');
-        const translations = document.querySelectorAll('.translation');
-        let isVisible = false;
+<script>
+    // 해석 토글 로직
+    const toggleBtn = document.getElementById('toggleAll');
+    const translations = document.querySelectorAll('.translation');
+    let isVisible = false;
 
-        toggleBtn.addEventListener('click', () => {
-            isVisible = !isVisible;
-            translations.forEach(t => {
-                t.style.display = isVisible ? 'block' : 'none';
-            });
+    toggleBtn.addEventListener('click', () => {
+        isVisible = !isVisible;
+        translations.forEach(t => {
+            t.style.display = isVisible ? 'block' : 'none';
         });
-
-        const playbackRate = document.getElementById('playbackRate');
-
-        playbackRate.addEventListener('change', () => {
-            const speed = playbackRate.value;
-            document.querySelectorAll('audio').forEach(audio => {
-                const source = audio.querySelector('source');
-                if (!source) return;
-
-                if (!source.dataset.originalSrc) {
-                    source.dataset.originalSrc = source.getAttribute('src');
-                }
-
-                const originalSrc = source.dataset.originalSrc;
-
-                if (speed === "1") {
-                    source.src = originalSrc;
-                } else {
-                    source.src = originalSrc.replace(".mp3", "-2.mp3");
-                }
-
-                audio.load();
-            });
-        });
-
-        const homeBtn = document.getElementById("homeBtn");
-        if (homeBtn) {
-            homeBtn.addEventListener("click", () => {
-                location.href = "https://tajunii.github.io/study-home/";
-            });
+        toggleBtn.innerText = isVisible ? '해석 전체 숨기기' : '해석 전체 보기';
+        // 상태에 따라 버튼 색상 변경 (선택사항)
+        if(isVisible) {
+            toggleBtn.classList.replace('bg-blue-600', 'bg-slate-600');
+            toggleBtn.classList.replace('hover:bg-blue-500', 'hover:bg-slate-500');
+        } else {
+            toggleBtn.classList.replace('bg-slate-600', 'bg-blue-600');
+            toggleBtn.classList.replace('hover:bg-slate-500', 'hover:bg-blue-500');
         }
-    </script>
+    });
+
+    // 후리가나 토글 로직 (새로 추가됨)
+    const toggleFuriganaBtn = document.getElementById('toggleFurigana');
+    let isFuriganaVisible = true;
+
+    toggleFuriganaBtn.addEventListener('click', () => {
+        isFuriganaVisible = !isFuriganaVisible;
+        
+        // body 태그에 hide-furigana 클래스를 토글하여 CSS로 한 번에 제어
+        if (isFuriganaVisible) {
+            document.body.classList.remove('hide-furigana');
+            toggleFuriganaBtn.innerText = '후리가나 숨기기';
+            toggleFuriganaBtn.classList.replace('bg-slate-600', 'bg-teal-600');
+            toggleFuriganaBtn.classList.replace('hover:bg-slate-500', 'hover:bg-teal-500');
+        } else {
+            document.body.classList.add('hide-furigana');
+            toggleFuriganaBtn.innerText = '후리가나 보기';
+            // 버튼 비활성화 느낌을 위해 색상 변경
+            toggleFuriganaBtn.classList.replace('bg-teal-600', 'bg-slate-600');
+            toggleFuriganaBtn.classList.replace('hover:bg-teal-500', 'hover:bg-slate-500');
+        }
+    });
+
+    // 재생 속도 조절 로직
+    const playbackRate = document.getElementById('playbackRate');
+    playbackRate.addEventListener('change', () => {
+        const speed = playbackRate.value;
+        document.querySelectorAll('audio').forEach(audio => {
+            const source = audio.querySelector('source');
+            if (!source) return;
+
+            if (!source.dataset.originalSrc) {
+                source.dataset.originalSrc = source.getAttribute('src');
+            }
+
+            const originalSrc = source.dataset.originalSrc;
+
+            if (speed === "1") {
+                source.src = originalSrc;
+            } else {
+                source.src = originalSrc.replace(".mp3", "-2.mp3");
+            }
+
+            audio.load();
+        });
+    });
+
+    // 홈 버튼 로직
+    const homeBtn = document.getElementById("homeBtn");
+    if (homeBtn) {
+        homeBtn.addEventListener("click", () => {
+            location.href = "https://tajunii.github.io/study-home/";
+        });
+    }
+</script>
 </body>
 </html>
