@@ -6,6 +6,16 @@
     <title>쉐도잉 연습</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        /* ========================================================
+           [추가된 부분] TV 화면용 고대비/두꺼운 스크롤바 커스터마이징 
+           ======================================================== */
+        ::-webkit-scrollbar { width: 24px; height: 24px; }
+        ::-webkit-scrollbar-track { background-color: #0f172a; border-radius: 12px; } /* body 배경색과 조화 */
+        ::-webkit-scrollbar-thumb { background-color: #ffb703; border-radius: 12px; border: 4px solid #0f172a; } /* 기존 후리가나 강조색 활용 */
+        ::-webkit-scrollbar-thumb:hover { background-color: #ffeb3b; }
+        html { scrollbar-color: #ffb703 #0f172a; scrollbar-width: auto; }
+        /* ======================================================== */
+
         body { background-color: #0f172a; color: #f8fafc; font-family: sans-serif; }
         .card { padding: 2rem; border-radius: 0.75rem; background-color: #1e293b; }
         
@@ -205,7 +215,7 @@
         }
     });
 
-    // 후리가나 토글 로직 (새로 추가됨)
+    // 후리가나 토글 로직
     const toggleFuriganaBtn = document.getElementById('toggleFurigana');
     let isFuriganaVisible = true;
 
@@ -258,6 +268,35 @@
             location.href = "https://tajunii.github.io/study-home/";
         });
     }
+
+    // ========================================================
+    // [추가된 부분] TV 리모컨 방향키 자동 스크롤 로직 
+    // ========================================================
+    const SCROLL_DISTANCE = 180; // TV 환경에 맞춰 한 번에 적당히 내려가도록 조정 (원하시면 숫자 변경 가능)
+
+    document.addEventListener('keydown', (event) => {
+        const key = event.key;
+        const keyCode = event.keyCode;
+
+        // 위/아래 방향키 감지 (구형 스마트TV 호환용 keyCode 포함)
+        const isUp = key === 'ArrowUp' || keyCode === 38;
+        const isDown = key === 'ArrowDown' || keyCode === 40;
+
+        if (isDown) {
+            event.preventDefault(); // 기본 스크롤 동작 방지 (뚝뚝 끊기는 현상 방지)
+            window.scrollBy({
+                top: SCROLL_DISTANCE,
+                behavior: 'smooth'
+            });
+        } else if (isUp) {
+            event.preventDefault();
+            window.scrollBy({
+                top: -SCROLL_DISTANCE,
+                behavior: 'smooth'
+            });
+        }
+    });
+    // ========================================================
 </script>
 </body>
 </html>
