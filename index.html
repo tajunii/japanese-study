@@ -297,6 +297,51 @@
         }
     });
     // ========================================================
+
+    // ========================================================
+    // [추가된 부분] 리모컨 확인(Enter/OK) 버튼으로 오디오 제어
+    // ========================================================
+    document.addEventListener('keydown', (event) => {
+        const key = event.key;
+        const keyCode = event.keyCode;
+
+        // 리모컨의 중앙 확인(Enter) 버튼이나 재생/일시정지 미디어 버튼 감지
+        if (key === 'Enter' || keyCode === 13 || key === 'MediaPlayPause') {
+            event.preventDefault(); // 기본 클릭 동작 방지
+            
+            const audios = document.querySelectorAll('audio');
+            let closestAudio = null;
+            let minDistance = Infinity;
+            
+            // 현재 TV 화면의 정확히 중앙 Y 좌표값
+            const centerY = window.innerHeight / 2; 
+
+            // 화면에 있는 모든 오디오 중, 화면 중앙에 가장 가까운 오디오를 찾음
+            audios.forEach(audio => {
+                const rect = audio.getBoundingClientRect();
+                const audioCenterY = rect.top + (rect.height / 2);
+                const distance = Math.abs(audioCenterY - centerY);
+                
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    closestAudio = audio;
+                }
+            });
+
+            // 가장 가까운 오디오를 찾아 재생 또는 일시정지
+            if (closestAudio) {
+                if (closestAudio.paused) {
+                    // (선택사항) 다른 오디오가 재생 중이라면 먼저 모두 정지시킴
+                    audios.forEach(a => { if (a !== closestAudio) a.pause(); });
+                    
+                    closestAudio.play();
+                } else {
+                    closestAudio.pause();
+                }
+            }
+        }
+    });
+    // ========================================================
 </script>
 </body>
 </html>
