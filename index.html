@@ -21,8 +21,8 @@
         .sentence-container { margin-bottom: 1.5rem; } 
         
         /* 
-           [수정된 부분] 포커스 효과를 위해 테두리(border)와 전환(transition) 속성 추가 
-           기본 상태에서는 투명색 테두리를 주어 나중에 노란색이 생겨도 화면이 흔들리지 않음
+           포커스 효과를 위해 테두리(border)와 전환(transition) 속성 추가 
+           기본 상태에서는 투명색 테두리를 주어 노란색 선택 시 화면이 흔들리지 않음
         */
         .sentence-box { 
             display: flex; align-items: center; gap: 20px; padding: 0.75rem 0.5rem; 
@@ -31,10 +31,7 @@
             transition: all 0.2s ease; 
         }
         
-        /* 
-           [추가된 부분] 리모컨으로 현재 선택(Focus)된 문장의 강조 스타일 
-        */
-        /* [초경량 최적화 버전] 그림자와 확대 효과를 제거하고 색상만 변경하여 TV 부하 제로화 */
+        /* [초경량 최적화 버전] 리모컨으로 현재 선택(Focus)된 문장의 강조 스타일 */
         .sentence-container.focused .sentence-box {
             border-color: #ffb703; /* 노란색 테두리 */
             background-color: #3f5068; /* 배경색을 밝게 변경하여 확실히 구분됨 */
@@ -97,15 +94,13 @@
 
         <div class="full-text text-xl md:text-2xl text-white bg-slate-800 py-4 px-4 rounded-lg mb-4 shadow-inner">
             <p class="tracking-tight">
-                <ruby>子<rt>こ</rt></ruby>どもたちは<ruby>両親<rt>りょうしん</rt></ruby>や<ruby>祖父母<rt>そふぼ</rt></ruby>、<ruby>親戚<rt>しんせき</rt></ruby>や<ruby>両親<rt>りょうしん</rt></ruby>の<ruby>知人<rt>ちじん</rt></ruby>などからお<ruby>年玉<rt>としだま</rt></ruby>をもらいます。<br>
-                これは、<ruby>正月<rt>しょうがつ</rt></ruby>だけの<ruby>特別<rt>とくべつ</rt></ruby>なお<ruby>小遣<rt>こづか</rt></ruby>いで、<ruby>子<rt>こ</rt></ruby>どもたちはとても<ruby>楽<rt>たの</rt></ruby>しみにしています。<br>
-                お<ruby>年玉<rt>としだま</rt></ruby>は<ruby>紙製<rt>かみせい</rt></ruby>のお<ruby>年玉袋<rt>としだまぶくろ</rt></ruby>に<ruby>入<rt>い</rt></ruby>れて<ruby>渡<rt>わた</rt></ruby>されます。<ruby>金額<rt>きんがく</rt></ruby>の<ruby>相場<rt>そうば</rt></ruby>は、<ruby>小学生<rt>しょうがくせい</rt></ruby>では3000<ruby>円<rt>えん</rt></ruby>から5,000<ruby>円<rt>えん</rt></ruby>くらい。<br>
-                <ruby>中学生<rt>ちゅうがくせい</rt></ruby>では5,000<ruby>円程度<rt>えんていど</rt></ruby>、<ruby>高校生<rt>こうこうせい</rt></ruby>や<ruby>大学生<rt>だいがくせい</rt></ruby>になると10,000<ruby>円前後<rt>えんぜんご</rt></ruby>です。<br>
-                <ruby>一般的<rt>いっぱんてき</rt></ruby>に、<ruby>初詣<rt>はつもうで</rt></ruby>は<ruby>正月<rt>しょうがつ</rt></ruby>の<ruby>日中<rt>にっちゅう</rt></ruby>にお<ruby>参<rt>まい</rt></ruby>りをしますが、<ruby>大晦日<rt>おおみそか</rt></ruby>の<ruby>深夜<rt>しんや</rt></ruby>0<ruby>時<rt>じ</rt></ruby>、<br>
-                <ruby>前<rt>まえ</rt></ruby>の<ruby>年<rt>とし</rt></ruby>から<ruby>新<rt>あたら</rt></ruby>しい<ruby>年<rt>とし</rt></ruby>に<ruby>切<rt>き</rt></ruby>り<ruby>替<rt>か</rt></ruby>わる<ruby>時間帯<rt>じかんたい</rt></ruby>に<ruby>神社<rt>じんじゃ</rt></ruby>にお<ruby>参<rt>まい</rt></ruby>りする<ruby>人<rt>ひと</rt></ruby>もいます。これを「<ruby>二年参<rt>にねんまい</rt></ruby>り」と<ruby>呼<rt>よ</rt></ruby>びます。<br>
-                さて、ここでクイズの<ruby>答<rt>こた</rt></ruby>えです。<ruby>正解<rt>せいかい</rt></ruby>は「<ruby>元旦<rt>がんたん</rt></ruby>」です。「<ruby>旦<rt>たん</rt></ruby>」の<ruby>字<rt>じ</rt></ruby>は<ruby>太陽<rt>たいよう</rt></ruby>を<ruby>表<rt>あらわ</rt></ruby>す「<ruby>日<rt>ひ</rt></ruby>」という<ruby>漢字<rt>かんじ</rt></ruby>の<ruby>下<rt>した</rt></ruby>に、<ruby>左<rt>ひだり</rt></ruby>から<ruby>右<rt>みぎ</rt></ruby>に<ruby>向<rt>む</rt></ruby>かって<ruby>横棒<rt>よこぼう</rt></ruby>を<ruby>一本<rt>いっぽん</rt></ruby>、<ruby>書<rt>か</rt></ruby>きますね。<br>
-                これは、<ruby>地平線<rt>ちへいせん</rt></ruby>から<ruby>昇<rt>のぼ</rt></ruby>りつつある<ruby>太陽<rt>たいよう</rt></ruby>を<ruby>表<rt>あらわ</rt></ruby>しているのです。だから、「<ruby>元旦<rt>がんたん</rt></ruby>」ということばは1月<ruby>1日<rt>ついたち</rt></ruby>の<ruby>朝<rt>あさ</rt></ruby>を<ruby>意味<rt>いみ</rt></ruby>していることになります。<br>
-                いかがでしたか？はじめて<ruby>知<rt>し</rt></ruby>ったことはありましたか。<ruby>皆<rt>みな</rt></ruby>さんの<ruby>国<rt>くに</rt></ruby>では、どのようにお<ruby>正月<rt>しょうがつ</rt></ruby>をお<ruby>祝<rt>いわ</rt></ruby>いしますか。
+                1<ruby>月<rt>がつ</rt></ruby>の<ruby>第<rt>だい</rt></ruby>2<ruby>月曜日<rt>げつようび</rt></ruby>は「<ruby>成人<rt>せいじん</rt></ruby>の<ruby>日<rt>ひ</rt></ruby>」です。<ruby>日本<rt>にほん</rt></ruby>では<ruby>法律的<rt>ほうりつてき</rt></ruby>に、<ruby>二十歳<rt>はたち</rt></ruby>になると「<ruby>大人<rt>おとな</rt></ruby>」とみなされます。<br>
+                この<ruby>祝日<rt>しゅくじつ</rt></ruby>は、<ruby>二十歳<rt>はたち</rt></ruby>になった<ruby>若者<rt>わかもの</rt></ruby>をお<ruby>祝<rt>いわ</rt></ruby>いし、<ruby>励<rt>はげ</rt></ruby>ます<ruby>日<rt>ひ</rt></ruby>です。<br>
+                <ruby>現在<rt>げんざい</rt></ruby>の<ruby>成人<rt>せいじん</rt></ruby>のお<ruby>祝<rt>いわ</rt></ruby>いは、<ruby>終戦後<rt>しゅうせんご</rt></ruby>まもなく<ruby>行<rt>おこな</rt></ruby>われた「<ruby>青年祭<rt>せいねんさい</rt></ruby>」がルーツと<ruby>言<rt>い</rt></ruby>われています。<br>
+                これは、<ruby>戦後<rt>せんご</rt></ruby>の<ruby>社会<rt>しゃかい</rt></ruby>で<ruby>若者達<rt>わかものたち</rt></ruby>に<ruby>明<rt>あか</rt></ruby>るい<ruby>希望<rt>きぼう</rt></ruby>を<ruby>持<rt>も</rt></ruby>たせ、<ruby>励<rt>はげ</rt></ruby>ますために<ruby>埼玉県<rt>さいたまけん</rt></ruby>で<ruby>行<rt>おこな</rt></ruby>われました。<br>
+                <ruby>成人<rt>せいじん</rt></ruby>の<ruby>日<rt>ひ</rt></ruby>は<ruby>現在<rt>げんざい</rt></ruby>、1<ruby>月<rt>がつ</rt></ruby>の<ruby>第<rt>だい</rt></ruby>2<ruby>月曜日<rt>げつようび</rt></ruby>ですが、1999<ruby>年<rt>ねん</rt></ruby>まではいつだったでしょうか。<ruby>正解<rt>せいかい</rt></ruby>はこのビデオの<ruby>最後<rt>さいご</rt></ruby>に<ruby>紹介<rt>しょうかい</rt></ruby>します。<br>
+                この<ruby>祝日<rt>しゅくじつ</rt></ruby>には、<ruby>各自治体<rt>かくじちたい</rt></ruby>で「<ruby>成人式<rt>せいじんしき</rt></ruby>」が<ruby>行<rt>おこな</rt></ruby>われます。<br>
+                <ruby>二十歳<rt>はたち</rt></ruby>となる<ruby>若者<rt>わかもの</rt></ruby>たちは、<ruby>市民<rt>しみん</rt></ruby>ホールなどに<ruby>集<rt>あつ</rt></ruby>まり、<ruby>市長<rt>しちょう</rt></ruby>や<ruby>町長<rt>ちょうちょう</rt></ruby>などから<ruby>祝辞<rt>しゅくじ</rt></ruby>を<ruby>受<rt>う</rt></ruby>けたり、<ruby>記念品<rt>きねんひん</rt></ruby>を<ruby>授与<rt>じゅよ</rt></ruby>されたりします。
             </p>
         </div>
 
@@ -113,76 +108,67 @@
 
         <h2 class="text-2xl font-semibold text-slate-300 mb-4">문장별 연습</h2>
         
+        <!-- 문장 1 -->
         <div class="sentence-container">
             <div class="sentence-box">
                 <audio controls loop><source src="audio/01.mp3" type="audio/mpeg"></audio>
-                <p><ruby>子<rt>こ</rt></ruby>どもたちは<ruby>両親<rt>りょうしん</rt></ruby>や<ruby>祖父母<rt>そふぼ</rt></ruby>、<ruby>親戚<rt>しんせき</rt></ruby>や<ruby>両親<rt>りょうしん</rt></ruby>の<ruby>知人<rt>ちじん</rt></ruby>などからお<ruby>年玉<rt>としだま</rt></ruby>をもらいます。</p>
+                <p>1<ruby>月<rt>がつ</rt></ruby>の<ruby>第<rt>だい</rt></ruby>2<ruby>月曜日<rt>げつようび</rt></ruby>は「<ruby>成人<rt>せいじん</rt></ruby>の<ruby>日<rt>ひ</rt></ruby>」です。<ruby>日本<rt>にほん</rt></ruby>では<ruby>法律的<rt>ほうりつてき</rt></ruby>に、<ruby>二十歳<rt>はたち</rt></ruby>になると「<ruby>大人<rt>おとな</rt></ruby>」とみなされます。</p>
             </div>
-            <div class="translation">아이들은 부모나 조부모, 친척이나 부모의 지인 등으로부터 세뱃돈을 받습니다.</div>
+            <div class="translation">1월 둘째 주 월요일은 '성인의 날'입니다. 일본에서는 법적으로 스무 살이 되면 '성인(어른)'으로 간주됩니다.</div>
         </div>
 
+        <!-- 문장 2 -->
         <div class="sentence-container">
             <div class="sentence-box">
                 <audio controls loop><source src="audio/02.mp3" type="audio/mpeg"></audio>
-                <p>これは、<ruby>正月<rt>しょうがつ</rt></ruby>だけの<ruby>特別<rt>とくべつ</rt></ruby>なお<ruby>小遣<rt>こづか</rt></ruby>いで、<ruby>子<rt>こ</rt></ruby>どもたちはとても<ruby>楽<rt>たの</rt></ruby>しみにしています。</p>
+                <p>この<ruby>祝日<rt>しゅくじつ</rt></ruby>は、<ruby>二十歳<rt>はたち</rt></ruby>になった<ruby>若者<rt>わかもの</rt></ruby>をお<ruby>祝<rt>いわ</rt></ruby>いし、<ruby>励<rt>はげ</rt></ruby>ます<ruby>日<rt>ひ</rt></ruby>です。</p>
             </div>
-            <div class="translation">이것은 설날만의 특별한 용돈으로, 아이들은 매우 기대하고 있습니다.</div>
+            <div class="translation">이 공휴일은 스무 살이 된 젊은이들을 축하하고 격려하는 날입니다.</div>
         </div>
 
+        <!-- 문장 3 -->
         <div class="sentence-container">
             <div class="sentence-box">
                 <audio controls loop><source src="audio/03.mp3" type="audio/mpeg"></audio>
-                <p>お<ruby>年玉<rt>としだま</rt></ruby>は<ruby>紙製<rt>かみせい</rt></ruby>のお<ruby>年玉袋<rt>としだまぶくろ</rt></ruby>に<ruby>入<rt>い</rt></ruby>れて<ruby>渡<rt>わた</rt></ruby>されます。<ruby>金額<rt>きんがく</rt></ruby>の<ruby>相場<rt>そうば</rt></ruby>は、<ruby>小学生<rt>しょうがくせい</rt></ruby>では3,000<ruby>円<rt>えん</rt></ruby>から5,000<ruby>円<rt>えん</rt></ruby>くらい。</p>
+                <p><ruby>現在<rt>げんざい</rt></ruby>の<ruby>成人<rt>せいじん</rt></ruby>のお<ruby>祝<rt>いわ</rt></ruby>いは、<ruby>終戦後<rt>しゅうせんご</rt></ruby>まもなく<ruby>行<rt>おこな</rt></ruby>われた「<ruby>青年祭<rt>せいねんさい</rt></ruby>」がルーツと<ruby>言<rt>い</rt></ruby>われています。</p>
             </div>
-            <div class="translation">세뱃돈은 종이로 된 세뱃돈 봉투에 넣어 전달됩니다. 금액의 시세는 초등학생은 3,000엔에서 5,000엔 정도.</div>
+            <div class="translation">현재의 성인 축하는 종전 직후에 열린 '청년제'가 시초(루츠)라고 합니다.</div>
         </div>
 
+        <!-- 문장 4 -->
         <div class="sentence-container">
             <div class="sentence-box">
                 <audio controls loop><source src="audio/04.mp3" type="audio/mpeg"></audio>
-                <p><ruby>中学生<rt>ちゅうがくせい</rt></ruby>では5,000<ruby>円程度<rt>えんていど</rt></ruby>、<ruby>高校生<rt>こうこうせい</rt></ruby>や<ruby>大学生<rt>だいがくせい</rt></ruby>になると10,000<ruby>円前後<rt>えんぜんご</rt></ruby>です。</p>
+                <p>これは、<ruby>戦後<rt>せんご</rt></ruby>の<ruby>社会<rt>しゃかい</rt></ruby>で<ruby>若者達<rt>わかものたち</rt></ruby>に<ruby>明<rt>あか</rt></ruby>るい<ruby>希望<rt>きぼう</rt></ruby>を<ruby>持<rt>も</rt></ruby>たせ、<ruby>励<rt>はげ</rt></ruby>ますために<ruby>埼玉県<rt>さいたまけん</rt></ruby>で<ruby>行<rt>おこな</rt></ruby>われました。</p>
             </div>
-            <div class="translation">중학생은 5,000엔 정도, 고등학생이나 대학생이 되면 10,000엔 전후입니다.</div>
+            <div class="translation">이것은 전후 사회에서 젊은이들에게 밝은 희망을 갖게 하고 격려하기 위해 사이타마현에서 열렸습니다.</div>
         </div>
 
+        <!-- 문장 5 -->
         <div class="sentence-container">
             <div class="sentence-box">
                 <audio controls loop><source src="audio/05.mp3" type="audio/mpeg"></audio>
-                <p><ruby>一般的<rt>いっぱんてき</rt></ruby>に、<ruby>初詣<rt>はつもうで</rt></ruby>は<ruby>正月<rt>しょうがつ</rt></ruby>の<ruby>日中<rt>にっちゅう</rt></ruby>にお<ruby>参<rt>まい</rt></ruby>りをしますが、<ruby>大晦日<rt>おおみそか</rt></ruby>の<ruby>深夜<rt>しんや</rt></ruby>0<ruby>時<rt>じ</rt></ruby>、</p>
+                <p><ruby>成人<rt>せいじん</rt></ruby>の<ruby>日<rt>ひ</rt></ruby>は<ruby>現在<rt>げんざい</rt></ruby>、1<ruby>月<rt>がつ</rt></ruby>の<ruby>第<rt>だい</rt></ruby>2<ruby>月曜日<rt>げつようび</rt></ruby>ですが、1999<ruby>年<rt>ねん</rt></ruby>まではいつだったでしょうか。<ruby>正解<rt>せいかい</rt></ruby>はこのビデオの<ruby>最後<rt>さいご</rt></ruby>に<ruby>紹介<rt>しょうかい</rt></ruby>します。</p>
             </div>
-            <div class="translation">일반적으로 하츠모데(첫 참배)는 설날 낮에 참배를 합니다만, 새해 전날 밤 12시,</div>
+            <div class="translation">성인의 날은 현재 1월 둘째 주 월요일입니다만, 1999년까지는 언제였을까요? 정답은 이 비디오의 마지막에 소개합니다.</div>
         </div>
 
+        <!-- 문장 6 -->
         <div class="sentence-container">
             <div class="sentence-box">
                 <audio controls loop><source src="audio/06.mp3" type="audio/mpeg"></audio>
-                <p><ruby>前<rt>まえ</rt></ruby>の<ruby>年<rt>とし</rt></ruby>から<ruby>新<rt>あたら</rt></ruby>しい<ruby>年<rt>とし</rt></ruby>に<ruby>切<rt>き</rt></ruby>り<ruby>替<rt>か</rt></ruby>わる<ruby>時間帯<rt>じかんたい</rt></ruby>に<ruby>神社<rt>じんじゃ</rt></ruby>にお<ruby>参<rt>まい</rt></ruby>りする<ruby>人<rt>ひと</rt></ruby>もいます。これを「<ruby>二年参<rt>にねんまい</rt></ruby>り」と<ruby>呼<rt>よ</rt></ruby>びます。</p>
+                <p>この<ruby>祝日<rt>しゅくじつ</rt></ruby>には、<ruby>各自治体<rt>かくじちたい</rt></ruby>で「<ruby>成人式<rt>せいじんしき</rt></ruby>」が<ruby>行<rt>おこな</rt></ruby>われます。</p>
             </div>
-            <div class="translation">지난해에서 새해로 바뀌는 시간대에 신사를 참배하는 사람도 있습니다. 이것을 '니넨마이리'라고 부릅니다.</div>
+            <div class="translation">이 공휴일에는 각 지자체에서 '성인식'이 열립니다.</div>
         </div>
 
+        <!-- 문장 7 -->
         <div class="sentence-container">
             <div class="sentence-box">
                 <audio controls loop><source src="audio/07.mp3" type="audio/mpeg"></audio>
-                <p>さて、ここでクイズの<ruby>答<rt>こた</rt></ruby>えです。<ruby>正解<rt>せいかい</rt></ruby>は「<ruby>元旦<rt>がんたん</rt></ruby>」です。「<ruby>旦<rt>たん</rt></ruby>」の<ruby>字<rt>じ</rt></ruby>は<ruby>太陽<rt>たいよう</rt></ruby>を<ruby>表<rt>あらわ</rt></ruby>す「<ruby>日<rt>ひ</rt></ruby>」という<ruby>漢字<rt>かんじ</rt></ruby>の<ruby>下<rt>した</rt></ruby>に、<ruby>左<rt>ひだり</rt></ruby>から<ruby>右<rt>みぎ</rt></ruby>に<ruby>向<rt>む</rt></ruby>かって<ruby>横棒<rt>よこぼう</rt></ruby>を<ruby>一本<rt>いっぽん</rt></ruby>、<ruby>書<rt>か</rt></ruby>きますね。</p>
+                <p><ruby>二十歳<rt>はたち</rt></ruby>となる<ruby>若者<rt>わかもの</rt></ruby>たちは、<ruby>市民<rt>しみん</rt></ruby>ホールなどに<ruby>集<rt>あつ</rt></ruby>まり、<ruby>市長<rt>しちょう</rt></ruby>や<ruby>町長<rt>ちょうちょう</rt></ruby>などから<ruby>祝辞<rt>しゅくじ</rt></ruby>を<ruby>受<rt>う</rt></ruby>けたり、<ruby>記念品<rt>きねんひん</rt></ruby>を<ruby>授与<rt>じゅよ</rt></ruby>されたりします。</p>
             </div>
-            <div class="translation">자, 여기서 퀴즈의 정답입니다. 정답은 '원단(간탄)'입니다. '旦' 자는 태양을 나타내는 '日'이라는 한자 아래에, 왼쪽에서 오른쪽으로 가로획을 한 줄 쓰지요.</div>
-        </div>
-
-        <div class="sentence-container">
-            <div class="sentence-box">
-                <audio controls loop><source src="audio/08.mp3" type="audio/mpeg"></audio>
-                <p>これは、<ruby>地平線<rt>ちへいせん</rt></ruby>から<ruby>昇<rt>のぼ</rt></ruby>りつつある<ruby>太陽<rt>たいよう</rt></ruby>を<ruby>表<rt>あらわ</rt></ruby>しているのです。だから、「<ruby>元旦<rt>がんたん</rt></ruby>」ということばは1月<ruby>1日<rt>ついたち</rt></ruby>の<ruby>朝<rt>あさ</rt></ruby>を<ruby>意味<rt>いみ</rt></ruby>していることになります。</p>
-            </div>
-            <div class="translation">이것은 지평선에서 떠오르고 있는 태양을 나타내고 있는 것입니다. 따라서 '원단'이라는 말은 1월 1일 아침을 의미하게 되는 것입니다.</div>
-        </div>
-
-        <div class="sentence-container">
-            <div class="sentence-box">
-                <audio controls loop><source src="audio/09.mp3" type="audio/mpeg"></audio>
-                <p>いかがでしたか？はじめて<ruby>知<rt>し</rt></ruby>ったことはありましたか。<ruby>皆<rt>みな</rt></ruby>さんの<ruby>国<rt>くに</rt></ruby>では、どのようにお<ruby>正月<rt>しょうがつ</rt></ruby>をお<ruby>祝<rt>いわ</rt></ruby>いしますか。</p>
-            </div>
-            <div class="translation">어떠셨나요? 처음 알게 된 사실이 있었나요? 여러분의 나라에서는 어떻게 설날을 축하하나요?</div>
+            <div class="translation">스무 살이 되는 젊은이들은 시민홀 등에 모여 시장이나 정장(읍·면장) 등으로부터 축사를 받거나 기념품을 수여받기도 합니다.</div>
         </div>
 
     </div>
@@ -252,7 +238,7 @@
     }
 
     // ========================================================
-    // [새로운 부분] TV 리모컨 시각적 포커스(Focus) 제어 로직 
+    // TV 리모컨 시각적 포커스(Focus) 제어 로직 
     // ========================================================
     const sentences = document.querySelectorAll('.sentence-container');
     let currentFocusIndex = -1; // 현재 포커스된 문장의 인덱스 (-1은 아무것도 선택되지 않음)
@@ -332,10 +318,6 @@
         }
         playFocusedAudio();
     });
-
-    // [선택 사항] 페이지 열자마자 1번 문장에 노란 불빛이 켜져 있게 하려면 아래 주석을 푸세요.
-    // updateFocus(0); 
-    // ========================================================
 </script>
 </body>
 </html>
