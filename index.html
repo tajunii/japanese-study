@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         /* ========================================================
-           TV 화면용 고대비/두꺼운 스크롤바 커스터마이징 
+           TV 화면용 고대비/두꺼운 스크ロール바 커스터마이징 
            ======================================================== */
         ::-webkit-scrollbar { width: 24px; height: 24px; }
         ::-webkit-scrollbar-track { background-color: #0f172a; border-radius: 12px; }
@@ -21,8 +21,8 @@
         .sentence-container { margin-bottom: 1.5rem; } 
         
         /* 
-           포커스 효과를 위해 테두리(border)와 전환(transition) 속성 추가 
-           기본 상태에서는 투명색 테두리를 주어 노란색 선택 시 화면이 흔들리지 않음
+           [수정된 부분] 포カー스 효과를 위해 테두리(border)와 전환(transition) 속性 추가 
+           기본 상태에서는 투명색 테두리를 주어 나중에 노란색이 생겨도 화면이 흔들리지 않음
         */
         .sentence-box { 
             display: flex; align-items: center; gap: 20px; padding: 0.75rem 0.5rem; 
@@ -31,7 +31,10 @@
             transition: all 0.2s ease; 
         }
         
-        /* [초경량 최적화 버전] 리모컨으로 현재 선택(Focus)된 문장의 강조 스타일 */
+        /* 
+           [추가된 부분] 리モ컨으로 현재 선택(Focus)된 문장의 강조 스타일 
+        */
+        /* [초경량 최적화 버전] 그림자와 확대 효과를 제거하고 색상만 변경하여 TV 부하 제ロ化 */
         .sentence-container.focused .sentence-box {
             border-color: #ffb703; /* 노란색 테두리 */
             background-color: #3f5068; /* 배경색을 밝게 변경하여 확실히 구분됨 */
@@ -94,13 +97,14 @@
 
         <div class="full-text text-xl md:text-2xl text-white bg-slate-800 py-4 px-4 rounded-lg mb-4 shadow-inner">
             <p class="tracking-tight">
-                1<ruby>月<rt>がつ</rt></ruby>の<ruby>第<rt>だい</rt></ruby>2<ruby>月曜日<rt>げつようび</rt></ruby>は「<ruby>成人<rt>せいじん</rt></ruby>の<ruby>日<rt>ひ</rt></ruby>」です。<ruby>日本<rt>にほん</rt></ruby>では<ruby>法律的<rt>ほうりつてき</rt></ruby>に、<ruby>二十歳<rt>はたち</rt></ruby>になると「<ruby>大人<rt>おとな</rt></ruby>」とみなされます。<br>
-                この<ruby>祝日<rt>しゅくじつ</rt></ruby>は、<ruby>二十歳<rt>はたち</rt></ruby>になった<ruby>若者<rt>わかもの</rt></ruby>をお<ruby>祝<rt>いわ</rt></ruby>いし、<ruby>励<rt>はげ</rt></ruby>ます<ruby>日<rt>ひ</rt></ruby>です。<br>
-                <ruby>現在<rt>げんざい</rt></ruby>の<ruby>成人<rt>せいじん</rt></ruby>のお<ruby>祝<rt>いわ</rt></ruby>いは、<ruby>終戦後<rt>しゅうせんご</rt></ruby>まもなく<ruby>行<rt>おこな</rt></ruby>われた「<ruby>青年祭<rt>せいねんさい</rt></ruby>」がルーツと<ruby>言<rt>い</rt></ruby>われています。<br>
-                これは、<ruby>戦後<rt>せんご</rt></ruby>の<ruby>社会<rt>しゃかい</rt></ruby>で<ruby>若者達<rt>わかものたち</rt></ruby>に<ruby>明<rt>あか</rt></ruby>るい<ruby>希望<rt>きぼう</rt></ruby>を<ruby>持<rt>も</rt></ruby>たせ、<ruby>励<rt>はげ</rt></ruby>ますために<ruby>埼玉県<rt>さいたまけん</rt></ruby>で<ruby>行<rt>おこな</rt></ruby>われました。<br>
-                <ruby>成人<rt>せいじん</rt></ruby>の<ruby>日<rt>ひ</rt></ruby>は<ruby>現在<rt>げんざい</rt></ruby>、1<ruby>月<rt>がつ</rt></ruby>の<ruby>第<rt>だい</rt></ruby>2<ruby>月曜日<rt>げつようび</rt></ruby>ですが、1999<ruby>年<rt>ねん</rt></ruby>まではいつだったでしょうか。<ruby>正解<rt>せいかい</rt></ruby>はこのビデオの<ruby>最後<rt>さいご</rt></ruby>に<ruby>紹介<rt>しょうかい</rt></ruby>します。<br>
-                この<ruby>祝日<rt>しゅくじつ</rt></ruby>には、<ruby>各自治体<rt>かくじちたい</rt></ruby>で「<ruby>成人式<rt>せいじんしき</rt></ruby>」が<ruby>行<rt>おこな</rt></ruby>われます。<br>
-                <ruby>二十歳<rt>はたち</rt></ruby>となる<ruby>若者<rt>わかもの</rt></ruby>たちは、<ruby>市民<rt>しみん</rt></ruby>ホールなどに<ruby>集<rt>あつ</rt></ruby>まり、<ruby>市長<rt>しちょう</rt></ruby>や<ruby>町長<rt>ちょうちょう</rt></ruby>などから<ruby>祝辞<rt>しゅくじ</rt></ruby>を<ruby>受<rt>う</rt></ruby>けたり、<ruby>記念品<rt>きねんひん</rt></ruby>を<ruby>授与<rt>じゅよ</rt></ruby>されたりします。
+                さらに<ruby>新成人<rt>しんせいじん</rt></ruby>の<ruby>代表<rt>だいひょう</rt></ruby>が、<ruby>大人<rt>おとな</rt></ruby>になるにあたっての<ruby>決意<rt>けつい</rt></ruby>など<ruby>挨拶<rt>あいさつ</rt></ruby>をします。<br>
+                <ruby>豪雪地帯<rt>ごうせつちたい</rt></ruby>では、ゴールデンウィークやお<ruby>盆<rt>ぼん</rt></ruby>に<ruby>行<rt>おこな</rt></ruby>われるところもあります。<br>
+                <ruby>成人式<rt>せいじんしき</rt></ruby>は<ruby>一生<rt>いっしょう</rt></ruby>に<ruby>一度<rt>いちど</rt></ruby>の<ruby>儀式<rt>ぎしき</rt></ruby>ですから、<ruby>特別<rt>とくべつ</rt></ruby>な<ruby>服装<rt>ふくそう</rt></ruby>で<ruby>臨<rt>のぞ</rt></ruby>みます。<ruby>男性<rt>だんせい</rt></ruby>はスーツ、<ruby>女性<rt>じょせい</rt></ruby>は「<ruby>振袖<rt>ふりそで</rt></ruby>」で<ruby>出席<rt>しゅっせき</rt></ruby>するのが<ruby>一般的<rt>いっぱんてき</rt></ruby>です。<br>
+                <ruby>振袖<rt>ふりそで</rt></ruby>とは、<ruby>未婚<rt>みこん</rt></ruby>の<ruby>女性<rt>じょせい</rt></ruby>が<ruby>着<rt>き</rt></ruby>る<ruby>袖<rt>そで</rt></ruby>の<ruby>長<rt>なが</rt></ruby>い<ruby>着物<rt>きもの</rt></ruby>のこと。<ruby>振袖<rt>ふりそで</rt></ruby>は<ruby>高価<rt>こうか</rt></ruby>な<ruby>上<rt>うえ</rt></ruby>に、<ruby>帯<rt>おび</rt></ruby>や<ruby>草履<rt>ぞうり</rt></ruby>など<ruby>着物<rt>きもの</rt></ruby><ruby>以外<rt>いがい</rt></ruby>の<ruby>小物<rt>こもの</rt></ruby>も<ruby>揃<rt>そろ</rt></ruby>えなければなりません。<br>
+                そのため、レンタルで<ruby>済<rt>す</rt></ruby>ます<ruby>家庭<rt>かてい</rt></ruby>もありますが、お<ruby>祝<rt>いわ</rt></ruby>い<ruby>事<rt>ごと</rt></ruby>なので<ruby>娘<rt>むすめ</rt></ruby>のために<ruby>購入<rt>こうにゅう</rt></ruby>する<ruby>親<rt>おや</rt></ruby>も<ruby>多<rt>おお</rt></ruby>いです。<br>
+                <ruby>成人<rt>せいじん</rt></ruby>の<ruby>日<rt>ひ</rt></ruby>には、「<ruby>赤飯<rt>せきはん</rt></ruby>」を<ruby>炊<rt>た</rt></ruby>いてお<ruby>祝<rt>いわ</rt></ruby>いする<ruby>家庭<rt>かてい</rt></ruby>もあります。<ruby>赤飯<rt>せきはん</rt></ruby>とは、もち<ruby>米<rt>ごめ</rt></ruby>に<ruby>小豆<rt>あずき</rt></ruby>を<ruby>混<rt>ま</rt></ruby>ぜて<ruby>炊<rt>た</rt></ruby>いたご<ruby>飯<rt>はん</rt></ruby>のこと。<br>
+                <ruby>小豆<rt>あずき</rt></ruby>の<ruby>色<rt>いろ</rt></ruby>が<ruby>米<rt>こめ</rt></ruby>が<ruby>付<rt>つ</rt></ruby>いてピンク<ruby>色<rt>いろ</rt></ruby>になることから、めでたい<ruby>色<rt>いろ</rt></ruby>である「<ruby>赤<rt>あか</rt></ruby>」を<ruby>表<rt>あらわ</rt></ruby>す<ruby>料理<rt>りょうり</rt></ruby>として、<ruby>日本<rt>にほん</rt></ruby>ではお<ruby>祝<rt>いわ</rt></ruby>い<ruby>事<rt>ごと</rt></ruby>に<ruby>欠<rt>か</rt></ruby>せないものです。<br>
+                また、<ruby>親戚<rt>しんせき</rt></ruby>や<ruby>知人<rt>ちじん</rt></ruby>から<ruby>成人<rt>せいじん</rt></ruby>をお<ruby>祝<rt>いわ</rt></ruby>いする<ruby>贈<rt>おく</rt></ruby>り<ruby>物<rt>もの</rt></ruby>やお<ruby>祝<rt>いわ</rt></ruby>い<ruby>金<rt>きん</rt></ruby>をもらう<ruby>場合<rt>ばあい</rt></ruby>もあります。
             </p>
         </div>
 
@@ -108,67 +112,68 @@
 
         <h2 class="text-2xl font-semibold text-slate-300 mb-4">문장별 연습</h2>
         
-        <!-- 문장 1 -->
         <div class="sentence-container">
             <div class="sentence-box">
                 <audio controls loop><source src="audio/01.mp3" type="audio/mpeg"></audio>
-                <p>1<ruby>月<rt>がつ</rt></ruby>の<ruby>第<rt>だい</rt></ruby>2<ruby>月曜日<rt>げつようび</rt></ruby>は「<ruby>成人<rt>せいじん</rt></ruby>の<ruby>日<rt>ひ</rt></ruby>」です。<ruby>日本<rt>にほん</rt></ruby>では<ruby>法律的<rt>ほうりつてき</rt></ruby>に、<ruby>二十歳<rt>はたち</rt></ruby>になると「<ruby>大人<rt>おとな</rt></ruby>」とみなされます。</p>
+                <p>さらに<ruby>新成人<rt>しんせいじん</rt></ruby>の<ruby>代表<rt>だいひょう</rt></ruby>が、<ruby>大人<rt>おとな</rt></ruby>になるにあたっての<ruby>決意<rt>けつい</rt></ruby>など<ruby>挨拶<rt>あいさつ</rt></ruby>をします。</p>
             </div>
-            <div class="translation">1월 둘째 주 월요일은 '성인의 날'입니다. 일본에서는 법적으로 스무 살이 되면 '성인(어른)'으로 간주됩니다.</div>
+            <div class="translation">또한 신성인의 대표가, 성인이 됨에 있어서의 결의 등의 인사를 합니다.</div>
         </div>
 
-        <!-- 문장 2 -->
         <div class="sentence-container">
             <div class="sentence-box">
                 <audio controls loop><source src="audio/02.mp3" type="audio/mpeg"></audio>
-                <p>この<ruby>祝日<rt>しゅくじつ</rt></ruby>は、<ruby>二十歳<rt>はたち</rt></ruby>になった<ruby>若者<rt>わかもの</rt></ruby>をお<ruby>祝<rt>いわ</rt></ruby>いし、<ruby>励<rt>はげ</rt></ruby>ます<ruby>日<rt>ひ</rt></ruby>です。</p>
+                <p><ruby>豪雪地帯<rt>ごうせつちたい</rt></ruby>では、ゴールデンウィークやお<ruby>盆<rt>ぼん</rt></ruby>に<ruby>行<rt>おこな</rt></ruby>われるところもあります。</p>
             </div>
-            <div class="translation">이 공휴일은 스무 살이 된 젊은이들을 축하하고 격려하는 날입니다.</div>
+            <div class="translation">폭설 지대에서는 골든위크나 오봉(추석)에 열리는 곳도 있습니다.</div>
         </div>
 
-        <!-- 문장 3 -->
         <div class="sentence-container">
             <div class="sentence-box">
                 <audio controls loop><source src="audio/03.mp3" type="audio/mpeg"></audio>
-                <p><ruby>現在<rt>げんざい</rt></ruby>の<ruby>成人<rt>せいじん</rt></ruby>のお<ruby>祝<rt>いわ</rt></ruby>いは、<ruby>終戦後<rt>しゅうせんご</rt></ruby>まもなく<ruby>行<rt>おこな</rt></ruby>われた「<ruby>青年祭<rt>せいねんさい</rt></ruby>」がルーツと<ruby>言<rt>い</rt></ruby>われています。</p>
+                <p><ruby>成人式<rt>せいじんしき</rt></ruby>は<ruby>一生<rt>いっしょう</rt></ruby>に<ruby>一度<rt>いちど</rt></ruby>の<ruby>儀式<rt>ぎしき</rt></ruby>ですから、<ruby>特別<rt>とくべつ</rt></ruby>な<ruby>服装<rt>ふくそう</rt></ruby>で<ruby>臨<rt>のぞ</rt></ruby>みます。<ruby>男性<rt>だんせい</rt></ruby>はスーツ、<ruby>女性<rt>じょせい</rt></ruby>は「<ruby>振袖<rt>ふりそで</rt></ruby>」で<ruby>出席<rt>しゅっせき</rt></ruby>するのが<ruby>一般的<rt>いっぱんてき</rt></ruby>です。</p>
             </div>
-            <div class="translation">현재의 성인 축하는 종전 직후에 열린 '청년제'가 시초(루츠)라고 합니다.</div>
+            <div class="translation">성인식은 일생에 한 번뿐인 의식이므로 특별한 복장으로 임합니다. 남성은 정장, 여성은 '후리소데'를 입고 참석하는 것이 일반적입니다.</div>
         </div>
 
-        <!-- 문장 4 -->
         <div class="sentence-container">
             <div class="sentence-box">
                 <audio controls loop><source src="audio/04.mp3" type="audio/mpeg"></audio>
-                <p>これは、<ruby>戦後<rt>せんご</rt></ruby>の<ruby>社会<rt>しゃかい</rt></ruby>で<ruby>若者達<rt>わかものたち</rt></ruby>に<ruby>明<rt>あか</rt></ruby>るい<ruby>希望<rt>きぼう</rt></ruby>を<ruby>持<rt>も</rt></ruby>たせ、<ruby>励<rt>はげ</rt></ruby>ますために<ruby>埼玉県<rt>さいたまけん</rt></ruby>で<ruby>行<rt>おこな</rt></ruby>われました。</p>
+                <p><ruby>振袖<rt>ふりそで</rt></ruby>とは、<ruby>未婚<rt>みこん</rt></ruby>の<ruby>女性<rt>じょせい</rt></ruby>が<ruby>着<rt>き</rt></ruby>る<ruby>袖<rt>そで</rt></ruby>の<ruby>長<rt>なが</rt></ruby>い<ruby>着物<rt>きもの</rt></ruby>のこと。<ruby>振袖<rt>ふりそで</rt></ruby>は<ruby>高価<rt>こうか</rt></ruby>な<ruby>上<rt>うえ</rt></ruby>に、<ruby>帯<rt>おび</rt></ruby>や<ruby>草履<rt>ぞうり</rt></ruby>など<ruby>着物<rt>きもの</rt></ruby><ruby>以外<rt>いがい</rt></ruby>の<ruby>小物<rt>こもの</rt></ruby>も<ruby>揃<rt>そろ</rt></ruby>えなければなりません。</p>
             </div>
-            <div class="translation">이것은 전후 사회에서 젊은이들에게 밝은 희망을 갖게 하고 격려하기 위해 사이타마현에서 열렸습니다.</div>
+            <div class="translation">후리소데란 미혼 여성이 입는 소매가 긴 기모노를 뜻합니다. 후리소데는 고가인 데다, 띠(오비)나 짚신(조리) 등 기모노 이외의 장신구도 갖추어야 합니다.</div>
         </div>
 
-        <!-- 문장 5 -->
         <div class="sentence-container">
             <div class="sentence-box">
                 <audio controls loop><source src="audio/05.mp3" type="audio/mpeg"></audio>
-                <p><ruby>成人<rt>せいじん</rt></ruby>の<ruby>日<rt>ひ</rt></ruby>は<ruby>現在<rt>げんざい</rt></ruby>、1<ruby>月<rt>がつ</rt></ruby>の<ruby>第<rt>だい</rt></ruby>2<ruby>月曜日<rt>げつようび</rt></ruby>ですが、1999<ruby>年<rt>ねん</rt></ruby>まではいつだったでしょうか。<ruby>正解<rt>せいかい</rt></ruby>はこのビデオの<ruby>最後<rt>さいご</rt></ruby>に<ruby>紹介<rt>しょうかい</rt></ruby>します。</p>
+                <p>そのため、レンタルで<ruby>済<rt>す</rt></ruby>ます<ruby>家庭<rt>かてい</rt></ruby>もありますが、お<ruby>祝<rt>いわ</rt></ruby>い<ruby>事<rt>ごと</rt></ruby>なので<ruby>娘<rt>むすめ</rt></ruby>のために<ruby>購入<rt>こうにゅう</rt></ruby>する<ruby>親<rt>おや</rt></ruby>も<ruby>多<rt>おお</rt></ruby>いです。</p>
             </div>
-            <div class="translation">성인의 날은 현재 1월 둘째 주 월요일입니다만, 1999년까지는 언제였을까요? 정답은 이 비디오의 마지막에 소개합니다.</div>
+            <div class="translation">그렇기 때문에 대여로 해결하는 가정도 있지만, 경사이므로 딸을 위해 구입하는 부모도 많습니다.</div>
         </div>
 
-        <!-- 문장 6 -->
         <div class="sentence-container">
             <div class="sentence-box">
                 <audio controls loop><source src="audio/06.mp3" type="audio/mpeg"></audio>
-                <p>この<ruby>祝日<rt>しゅくじつ</rt></ruby>には、<ruby>各自治体<rt>かくじちたい</rt></ruby>で「<ruby>成人式<rt>せいじんしき</rt></ruby>」が<ruby>行<rt>おこな</rt></ruby>われます。</p>
+                <p><ruby>成人<rt>せいじん</rt></ruby>の<ruby>日<rt>ひ</rt></ruby>には、「<ruby>赤飯<rt>せきはん</rt></ruby>」を<ruby>炊<rt>た</rt></ruby>いてお<ruby>祝<rt>いわ</rt></ruby>いする<ruby>家庭<rt>かてい</rt></ruby>もあります。<ruby>赤飯<rt>せきはん</rt></ruby>とは、もち<ruby>米<rt>ごめ</rt></ruby>に<ruby>小豆<rt>あずき</rt></ruby>を<ruby>混<rt>ま</rt></ruby>ぜて<ruby>炊<rt>た</rt></ruby>いたご<ruby>飯<rt>はん</rt></ruby>のこと。</p>
             </div>
-            <div class="translation">이 공휴일에는 각 지자체에서 '성인식'이 열립니다.</div>
+            <div class="translation">성인의 날에는 '세키はん(팥밥)'을 지어 축하하는 가정도 있습니다. 팥밥이란 찹쌀에 팥을 섞어 지은 밥을 말합니다.</div>
         </div>
 
-        <!-- 문장 7 -->
         <div class="sentence-container">
             <div class="sentence-box">
                 <audio controls loop><source src="audio/07.mp3" type="audio/mpeg"></audio>
-                <p><ruby>二十歳<rt>はたち</rt></ruby>となる<ruby>若者<rt>わかもの</rt></ruby>たちは、<ruby>市民<rt>しみん</rt></ruby>ホールなどに<ruby>集<rt>あつ</rt></ruby>まり、<ruby>市長<rt>しちょう</rt></ruby>や<ruby>町長<rt>ちょうちょう</rt></ruby>などから<ruby>祝辞<rt>しゅくじ</rt></ruby>を<ruby>受<rt>う</rt></ruby>けたり、<ruby>記念品<rt>きねんひん</rt></ruby>を<ruby>授与<rt>じゅよ</rt></ruby>されたりします。</p>
+                <p><ruby>小豆<rt>あずき</rt></ruby>の<ruby>色<rt>いろ</rt></ruby>が<ruby>米<rt>こめ</rt></ruby>が<ruby>付<rt>つ</rt></ruby>いてピンク<ruby>色<rt>いろ</rt></ruby>になることから、めでたい<ruby>色<rt>いろ</rt></ruby>である「<ruby>赤<rt>あか</rt></ruby>」を<ruby>表<rt>あらわ</rt></ruby>す<ruby>料理<rt>りょうり</rt></ruby>として、<ruby>日本<rt>にほん</rt></ruby>ではお<ruby>祝<rt>いわ</rt></ruby>い<ruby>事<rt>ごと</rt></ruby>に<ruby>欠<rt>か</rt></ruby>せないものです。</p>
             </div>
-            <div class="translation">스무 살이 되는 젊은이들은 시민홀 등에 모여 시장이나 정장(읍·면장) 등으로부터 축사를 받거나 기념품을 수여받기도 합니다.</div>
+            <div class="translation">팥 색깔이 쌀에 배어 분홍색이 되는 것에서 비롯하여, 경사스러운 색인 '빨간색'을 나타내는 요리로서 일본에서는 축하할 일에 빠질 수 없는 것입니다.</div>
+        </div>
+
+        <div class="sentence-container">
+            <div class="sentence-box">
+                <audio controls loop><source src="audio/08.mp3" type="audio/mpeg"></audio>
+                <p>また、<ruby>親戚<rt>しんせき</rt></ruby>や<ruby>知人<rt>ちじん</rt></ruby>から<ruby>成人<rt>せいじん</rt></ruby>をお<ruby>祝<rt>いわ</rt></ruby>いする<ruby>贈<rt>おく</rt></ruby>り<ruby>物<rt>もの</rt></ruby>やお<ruby>祝<rt>いわ</rt></ruby>い<ruby>金<rt>きん</rt></ruby>をもらう<ruby>場合<rt>ばあい</rt></ruby>もあります。</p>
+            </div>
+            <div class="translation">또한 친척이나 지인으로부터 성인을 축하하는 선물이나 축의금을 받는 경우도 있습니다.</div>
         </div>
 
     </div>
@@ -238,7 +243,7 @@
     }
 
     // ========================================================
-    // TV 리모컨 시각적 포커스(Focus) 제어 로직 
+    // [새로운 부분] TV 리モコン 시각적 포カース(Focus) 제어 로직 
     // ========================================================
     const sentences = document.querySelectorAll('.sentence-container');
     let currentFocusIndex = -1; // 현재 포커스된 문장의 인덱스 (-1은 아무것도 선택되지 않음)
@@ -263,7 +268,7 @@
 
     // 현재 포커스된 문장의 오디오를 재생/일시정지 하는 함수
     function playFocusedAudio() {
-        if (currentFocusIndex === -1) return; // 선택된 문장이 없으면 무시
+        if (currentFocusIndex === -1) return; // 선택된 문장이 없으면 무し
         
         const targetSentence = sentences[currentFocusIndex];
         const audio = targetSentence.querySelector('audio');
@@ -285,7 +290,7 @@
         }
     }
 
-    // 리모컨 키보드(방향키, 확인키) 감지
+    // 리モコン 키보드(방향키, 확인키) 감지
     document.addEventListener('keydown', (event) => {
         const key = event.key;
         const keyCode = event.keyCode;
@@ -309,7 +314,7 @@
         }
     });
 
-    // 마우스(리모컨 커서)로 허공을 클릭했을 때도 재생되도록 예외 처리
+    // 마우스(리モコン 커서)로 허공을 클릭했을 때도 재생되도록 예외 처리
     document.addEventListener('click', (event) => {
         const tagName = event.target.tagName.toLowerCase();
         // 버튼 등 다른 UI를 클릭한 거라면 무시
@@ -318,6 +323,10 @@
         }
         playFocusedAudio();
     });
+
+    // [선택 사항] 페이지 열자마자 1번 문장에 노란 불빛이 켜져 있게 하려면 아래 주석을 푸세요.
+    // updateFocus(0); 
+    // ========================================================
 </script>
 </body>
 </html>
