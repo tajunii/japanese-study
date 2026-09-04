@@ -21,7 +21,7 @@
         .sentence-container { margin-bottom: 1.5rem; } 
         
         /* 
-           [수정된 부분] 포커스 효과를 위해 테두리(border)와 전환(transition) 속성 추가 
+           [수정された部分] 포커스 효과를 위해 테두리(border)와 전환(transition) 속성 추가 
            기본 상태에서는 투명색 테두리를 주어 나중에 노란색이 생겨도 화면이 흔들리지 않음
         */
         .sentence-box { 
@@ -34,7 +34,7 @@
         /* 
            [추가된 부분] 리모컨으로 현재 선택(Focus)된 문장의 강조 스타일 
         */
-        /* [초경량 최적화 버전] 그림자와 확대 효과를 제거하고 색상만 변경하여 TV 부하 제로화 */
+        /* [초경량 최적화 버전] 그림자와拡大 효과를 제거하고 색상만 변경하여 TV 부하 제ロ化 */
         .sentence-container.focused .sentence-box {
             border-color: #ffb703; /* 노란색 테두리 */
             background-color: #3f5068; /* 배경색을 밝게 변경하여 확실히 구분됨 */
@@ -97,10 +97,11 @@
 
         <div class="full-text text-xl md:text-2xl text-white bg-slate-800 py-4 px-4 rounded-lg mb-4 shadow-inner">
             <p class="tracking-tight">
-                ここにせんべろと<ruby>書<rt>か</rt></ruby>いてあります。せんべろというのは1000<ruby>円<rt>えん</rt></ruby>でべろべろに<ruby>酔<rt>よ</rt></ruby>えるから<ruby>来<rt>き</rt></ruby>た<ruby>言葉<rt>ことば</rt></ruby>です。<br>
-                べろべろというのはお<ruby>酒<rt>さけ</rt></ruby>でかなり<ruby>酔<rt>よ</rt></ruby>っ<ruby>払<rt>ばら</rt></ruby>った<ruby>状態<rt>じょうたい</rt></ruby>です。<ruby>何<rt>なに</rt></ruby>を<ruby>言<rt>い</rt></ruby>っているか<ruby>分<rt>わ</rt></ruby>からなくなったり、ちゃんと<ruby>歩<rt>ある</rt></ruby>けないぐらいなのがべろべろです。<br>
-                なのでせんべろというのは、<ruby>安<rt>やす</rt></ruby>くべろべろになるくらい<ruby>酔<rt>よ</rt></ruby>っ<ruby>払<rt>ばら</rt></ruby>える、そういう<ruby>飲<rt>の</rt></ruby>み<ruby>屋<rt>や</rt></ruby>のことです。この<ruby>通<rt>とお</rt></ruby>りはせんべろが<ruby>集<rt>あつ</rt></ruby>まっている<ruby>通<rt>とお</rt></ruby>りです。<br>
-                ここは<ruby>立<rt>た</rt></ruby>ち<ruby>飲<rt>の</rt></ruby>みですね。でも<ruby>実<rt>じっ</rt></ruby><ruby>際<rt>さい</rt></ruby>は、よほど<ruby>弱<rt>よわ</rt></ruby>くない<ruby>限<rt>かぎ</rt></ruby>り1000<ruby>円<rt>えん</rt></ruby>ではべろべろにはなれません。
+                <ruby>神保町<rt>じんぼうちょう</rt></ruby>の<ruby>古本屋<rt>ふるほんや</rt></ruby>さんはそれぞれ<ruby>専門分野<rt>せんもんぶんや</rt></ruby>があります。<br>
+                <ruby>専門分野<rt>せんもんぶんや</rt></ruby>というのは<ruby>例<rt>たと</rt></ruby>えば<ruby>歴史<rt>れきし</rt></ruby>だったり<ruby>文学<rt>ぶんがく</rt></ruby>だったり<ruby>地図<rt>ちず</rt></ruby>だったり<ruby>美術<rt>びじゅつ</rt></ruby>だったり<ruby>色々<rt>いろいろ</rt></ruby>です。<br>
+                ここは<ruby>新<rt>あたら</rt></ruby>しい<ruby>本<rt>ほん</rt></ruby>を<ruby>売<rt>う</rt></ruby>っているお<ruby>店<rt>みせ</rt></ruby>です。『<ruby>森崎書店<rt>もりさきしょてん</rt></ruby>の<ruby>日々<rt>ひび</rt></ruby>』という<ruby>本<rt>ほん</rt></ruby>があります。<br>
+                <ruby>神保町<rt>じんぼうちょう</rt></ruby>を<ruby>舞台<rt>ぶたい</rt></ruby>にした<ruby>本<rt>ほん</rt></ruby>です。<ruby>世界<rt>せかい</rt></ruby>で26<ruby>言語<rt>げんご</rt></ruby>に<ruby>翻訳<rt>ほんやく</rt></ruby>されているそうです。<br>
+                でもあんまり<ruby>日本<rt>にほん</rt></ruby>では<ruby>有名<rt>ゆうめい</rt></ruby>ではない<ruby>本<rt>ほん</rt></ruby>です。<ruby>重<rt>おも</rt></ruby>くなくて<ruby>割<rt>わり</rt></ruby>と<ruby>気<rt>き</rt></ruby>軽に<ruby>読<rt>よ</rt></ruby>める<ruby>本<rt>ほん</rt></ruby>です。
             </p>
         </div>
 
@@ -111,33 +112,41 @@
         <div class="sentence-container">
             <div class="sentence-box">
                 <audio controls loop><source src="audio/01.mp3" type="audio/mpeg"></audio>
-                <p>ここにせんべろと<ruby>書<rt>か</rt></ruby>いてあります。せんべろというのは1000<ruby>円<rt>えん</rt></ruby>でベロベロに<ruby>酔<rt>よ</rt></ruby>えるから<ruby>来<rt>き</rt></ruby>た<ruby>言葉<rt>ことば</rt></ruby>です。</p>
+                <p><ruby>神保町<rt>じんぼうちょう</rt></ruby>の<ruby>古本屋<rt>ふるほんや</rt></ruby>さんはそれぞれ<ruby>専門分野<rt>せんもんぶんや</rt></ruby>があります。</p>
             </div>
-            <div class="translation">여기 센베로라고 적혀 있습니다. 센베로는 1000엔으로 곤드레만드레 취할 수 있다는 데서 온 말입니다.</div>
+            <div class="translation">진보초의 중고 서점은 저마다 전문 분야가 있습니다.</div>
         </div>
 
         <div class="sentence-container">
             <div class="sentence-box">
                 <audio controls loop><source src="audio/02.mp3" type="audio/mpeg"></audio>
-                <p>べろべろというのはお<ruby>酒<rt>さけ</rt></ruby>でかなり<ruby>酔<rt>よ</rt></ruby>っ<ruby>払<rt>ばら</rt></ruby>った<ruby>状態<rt>じょうたい</rt></ruby>です。<ruby>何<rt>なに</rt></ruby>を<ruby>言<rt>い</rt></ruby>っているか<ruby>分<rt>わ</rt></ruby>からなくなったり、ちゃんと<ruby>歩<rt>ある</rt></ruby>けないぐらいなのがべろべろです。</p>
+                <p><ruby>専門分野<rt>せんもんぶんや</rt></ruby>というのは<ruby>例<rt>たと</rt></ruby>えば<ruby>歴史<rt>れきし</rt></ruby>だったり<ruby>文学<rt>ぶんがく</rt></ruby>だったり<ruby>地図<rt>ちず</rt></ruby>だったり<ruby>美術<rt>びじゅつ</rt></ruby>だったり<ruby>色々<rt>いろいろ</rt></ruby>です。</p>
             </div>
-            <div class="translation">베로베로(곤드레만드레)라는 것은 술에 꽤 취한 상태입니다. 무슨 말을 하는지 모르게 되거나, 제대로 걷지 못할 정도인 것이 베로베로입니다.</div>
+            <div class="translation">전문 분야라고 하는 것은 예를 들어 역사라든지 문학이라든지 지도라든지 미술이라든지 다양합니다.</div>
         </div>
 
         <div class="sentence-container">
             <div class="sentence-box">
                 <audio controls loop><source src="audio/03.mp3" type="audio/mpeg"></audio>
-                <p>なのでせんべろというのは、<ruby>安<rt>やす</rt></ruby>くべろべろになるくらい<ruby>酔<rt>よ</rt></ruby>っ<ruby>払<rt>ばら</rt></ruby>える、そういう<ruby>飲<rt>の</rt></ruby>み<ruby>屋<rt>や</rt></ruby>のことです。この<ruby>通<rt>とお</rt></ruby>りはせんべろが<ruby>集<rt>あつ</rt></ruby>まっている<ruby>通<rt>とお</rt></ruby>りです。</p>
+                <p>ここは<ruby>新<rt>あたら</rt></ruby>しい<ruby>本<rt>ほん</rt></ruby>を<ruby>売<rt>う</rt></ruby>っているお<ruby>店<rt>みせ</rt></ruby>です。『<ruby>森崎書店<rt>もりさきしょてん</rt></ruby>の<ruby>日々<rt>ひび</rt></ruby>』という<ruby>本<rt>ほん</rt></ruby>があります。</p>
             </div>
-            <div class="translation">그래서 센베라는 것은 저렴하게 곤드레만드레 취할 수 있는 그런 선술집을 말합니다. 이 거리는 센베로가 모여 있는 거리입니다.</div>
+            <div class="translation">이곳은 새 책을 팔고 있는 가게입니다. 『모리사키 서점의 나날들』이라는 책이 있습니다.</div>
         </div>
 
         <div class="sentence-container">
             <div class="sentence-box">
                 <audio controls loop><source src="audio/04.mp3" type="audio/mpeg"></audio>
-                <p>ここは<ruby>立<rt>た</rt></ruby>ち<ruby>飲<rt>の</rt></ruby>みですね。でも<ruby>実<rt>じっ</rt></ruby><ruby>際<rt>さい</rt></ruby>は、よほど<ruby>弱<rt>よわ</rt></ruby>くない<ruby>限<rt>かぎ</rt></ruby>り1000<ruby>円<rt>えん</rt></ruby>ではべろべろにはなれません。</p>
+                <p><ruby>神保町<rt>じんぼうちょう</rt></ruby>を<ruby>舞台<rt>ぶたい</rt></ruby>にした<ruby>本<rt>ほん</rt></ruby>です。<ruby>世界<rt>せかい</rt></ruby>で26<ruby>言語<rt>げんご</rt></ruby>に<ruby>翻訳<rt>ほんやく</rt></ruby>されているそうです。</p>
             </div>
-            <div class="translation">여기는 서서 마시는 곳(타치노미)이네요. 하지만 실제로는 웬만큼 주량이 약하지 않은 한 1000엔으로 곤드레만드레 취할 수는 없습니다.</div>
+            <div class="translation">진보초를 무대로 한 책입니다. 세계 26개 언어로 번역되어 있다고 합니다.</div>
+        </div>
+
+        <div class="sentence-container">
+            <div class="sentence-box">
+                <audio controls loop><source src="audio/05.mp3" type="audio/mpeg"></audio>
+                <p>でもあんまり<ruby>日本<rt>にほん</rt></ruby>では<ruby>有名<rt>ゆうめい</rt></ruby>ではない<ruby>本<rt>ほん</rt></ruby>です。<ruby>重<rt>おも</rt></ruby>くなくて<ruby>割<rt>わり</rt></ruby>と<ruby>気<rt>き</rt></ruby>軽に<ruby>読<rt>よ</rt></ruby>める<ruby>本<rt>ほん</rt></ruby>です。</p>
+            </div>
+            <div class="translation">그렇지만 일본에서는 그리 유명하지는 않은 책입니다. 무겁지 않고 비교적 가볍게 읽을 수 있는 책입니다.</div>
         </div>
 
     </div>
@@ -287,10 +296,6 @@
         }
         playFocusedAudio();
     });
-
-    // [선택 사항] 페이지 열자마자 1번 문장에 노란 불빛이 켜져 있게 하려면 아래 주석을 푸세요.
-    // updateFocus(0); 
-    // ========================================================
 </script>
 </body>
 </html>
