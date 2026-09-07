@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>일본어 듣기 복습 (TV 전용)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;800&family=Noto+Sans+KR:wght@400;700&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        body {
+            background-color: #080710;
+            color: white;
+            font-family: 'Outfit', 'Noto Sans KR', 'Noto Sans JP', sans-serif;
+            min-height: 100vh;
+        }
+
+        .focusable {
+            transition: all 0.2s ease;
+            border: 4px solid transparent;
+        }
+
+        .focusable:focus, .focusable.focused {
+            border-color: #fbbf24 !important;
+            transform: scale(1.04);
+            outline: none;
+            box-shadow: 0 0 25px rgba(251, 191, 36, 0.6);
+        }
+
+        #easyBtn:focus, #easyBtn.focused {
+            border-color: #60a5fa !important;
+            box-shadow: 0 0 25px rgba(96, 165, 250, 0.8);
+        }
+
+        #hardBtn:focus, #hardBtn.focused {
+            border-color: #f97316 !important;
+            box-shadow: 0 0 25px rgba(249, 115, 22, 0.8);
+        }
+
+        ruby rt {
+            color: #fbbf24;
+            font-size: 0.6em;
+            font-weight: normal;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .reveal-animation {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-between p-8">
+
+    <!-- 상단 헤더 -->
+    <header class="w-full max-w-6xl flex justify-between items-center mb-6">
+        <h1 class="text-4xl font-bold text-indigo-200">🎧 듣기 복습 카드</h1>
+        <div class="flex items-center gap-4">
+            <select id="weekSelect" class="focusable bg-slate-800 text-slate-200 text-xl px-4 py-2 rounded-xl border border-slate-600">
+                <option value="all">전체 차수 데이터</option>
+            </select>
+            <button id="homeBtn" class="focusable bg-slate-800 hover:bg-slate-700 text-3xl px-4 py-2 rounded-xl">🏠</button>
+        </div>
+    </header>
+
+    <!-- 메인 퀴즈 카드 -->
+    <main class="w-full max-w-5xl bg-slate-900 rounded-3xl p-10 text-center shadow-2xl border border-slate-800 flex flex-col items-center">
+        
+        <!-- 진행도 표시 -->
+        <div id="progress" class="bg-slate-800/60 px-6 py-2 rounded-full text-xl mb-8 flex gap-8">
+            <span class="text-green-400 font-semibold">✅ 마스터 : 0 / 0</span>
+            <span class="text-blue-400 font-semibold">🔄 누적 학습 : 0회</span>
+        </div>
+
+        <!-- 1단계: 음성 재생 영역 -->
+        <div id="listenArea" class="my-8 flex flex-col items-center gap-6">
+            <p class="text-2xl text-slate-400">소리를 잘 듣고 의미를 생각해보세요</p>
+            <button id="replayBtn" class="focusable bg-amber-400 hover:bg-amber-300 text-slate-950 font-extrabold text-3xl px-10 py-6 rounded-full shadow-lg flex items-center gap-4">
+                <span>🔊</span> <span>다시 듣기 (Enter)</span>
+            </button>
+        </div>
+
+        <!-- 2단계: 정답 보기 버튼 -->
+        <button id="answerBtn" class="focusable bg-indigo-600 hover:bg-indigo-500 text-white text-3xl font-bold px-12 py-5 rounded-full my-4">
+            정답 보기 (▼)
+        </button>
+
+        <!-- 3단계: 공개되는 정답 영역 -->
+        <div id="answerArea" class="hidden w-full my-6 reveal-animation space-y-6">
+            <div class="bg-slate-800/80 p-6 rounded-2xl border border-slate-700">
+                <p id="jpText" class="text-5xl font-bold text-white mb-6 tracking-wide leading-relaxed"></p>
+                <p id="krText" class="text-3xl text-amber-300 font-medium leading-normal"></p>
+            </div>
+        </div>
+
+        <!-- 4단계: 평가 버튼 -->
+        <div id="evaluationBtns" class="hidden justify-center gap-16 mt-6 w-full">
+            <button id="hardBtn" class="focusable bg-orange-600 hover:bg-orange-500 text-white text-2xl font-bold px-10 py-5 rounded-full">
+                ◀ 어려움 (다시)
+            </button>
+            <button id="easyBtn" class="focusable bg-blue-600 hover:bg-blue-500 text-white text-2xl font-bold px-10 py-5 rounded-full">
+                쉬움 (외움) ▶
+            </button>
+        </div>
+
+    </main>
+
+    <!-- 하단 메뉴 -->
+    <footer class="w-full max-w-5xl flex justify-end mt-6">
+        <button id="resetBtn" class="focusable text-slate-400 hover:text-white border border-slate-700 px-5 py-2 rounded-lg text-lg">
+            처음부터 다시 시작
+        </button>
+    </footer>
+
+<script>
+    // ⚠️ 계정명 및 저장소명 확인
+    const GITHUB_USERNAME = "tajunii"; 
+    const REPO_NAME = "japanese-study"; 
+
+    // 현재 8주차까지 자동 등록
+    const WEEK_LIST = ["week01", "week02", "week03", "week04", "week05", "week06", "week07", "week08"];
+
+    let data = [];
+    let remainingIndices = [];
+    let current = null;
+    let currentCategory = "all"; 
+    let studyCount = 0;
+
+    const weekSelect = document.getElementById("weekSelect");
+    const progressEl = document.getElementById("progress");
+    const replayBtn = document.getElementById("replayBtn");
+    const answerBtn = document.getElementById("answerBtn");
+    const answerArea = document.getElementById("answerArea");
+    const jpTextEl = document.getElementById("jpText");
+    const krTextEl = document.getElementById("krText");
+    const evaluationBtns = document.getElementById("evaluationBtns");
+    const easyBtn = document.getElementById("easyBtn");
+    const hardBtn = document.getElementById("hardBtn");
+    const resetBtn = document.getElementById("resetBtn");
+    const homeBtn = document.getElementById("homeBtn");
+
+    const audio = new Audio();
+    const STORAGE_KEY = "listeningRecallHTMLProgress";
+
+    async function loadAllWeeksData() {
+        data = [];
+        const loadedWeeks = new Set();
+
+        // 1. week01 ~ week08 폴더 파싱
+        for (const week of WEEK_LIST) {
+            await fetchAndParseHtml(`https://raw.githubusercontent.com/${GITHUB_USERNAME}/${REPO_NAME}/main/${week}/index.html`, week, loadedWeeks);
+        }
+
+        // 2. 루트 최신 index.html도 추가 파싱
+        await fetchAndParseHtml(`https://raw.githubusercontent.com/${GITHUB_USERNAME}/${REPO_NAME}/main/index.html`, "최신(현재)", loadedWeeks);
+
+        if (data.length > 0) {
+            populateWeekSelect([...loadedWeeks]);
+            if (!loadProgress()) resetRemainingIndices();
+            else weekSelect.value = currentCategory;
+            nextQuestion();
+        } else {
+            alert("학습 데이터를 불러오지 못했습니다. 깃허브 업로드 상태를 확인해 주세요.");
+        }
+    }
+
+    async function fetchAndParseHtml(url, weekLabel, loadedWeeks) {
+        try {
+            const response = await fetch(url);
+            if (!response.ok) return;
+
+            const htmlText = await response.text();
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(htmlText, 'text/html');
+            const containers = doc.querySelectorAll('.sentence-container');
+
+            containers.forEach(container => {
+                const audioSource = container.querySelector('audio source');
+                const jpP = container.querySelector('.sentence-box p');
+                const krDiv = container.querySelector('.translation');
+
+                if (jpP && krDiv && audioSource) {
+                    const rawAudioSrc = audioSource.getAttribute('src');
+                    const audioPath = weekLabel === "최신(현재)" ? rawAudioSrc : `${weekLabel}/${rawAudioSrc}`;
+                    const fullAudioUrl = `https://raw.githubusercontent.com/${GITHUB_USERNAME}/${REPO_NAME}/main/${audioPath}`;
+
+                    data.push({
+                        week: weekLabel,
+                        jp: jpP.innerHTML,
+                        kr: krDiv.textContent.trim(),
+                        audio: fullAudioUrl
+                    });
+                    loadedWeeks.add(weekLabel);
+                }
+            });
+        } catch (err) {
+            console.log(`${weekLabel} 파싱 에러:`, err);
+        }
+    }
+
+    function populateWeekSelect(weeks) {
+        weekSelect.innerHTML = '<option value="all">전체 차수 데이터</option>';
+        weeks.sort().forEach(w => {
+            const option = document.createElement("option");
+            option.value = w;
+            option.textContent = w; 
+            weekSelect.appendChild(option);
+        });
+    }
+
+    function playAudio(url) {
+        if (!url) return;
+        audio.src = url;
+        audio.play().catch(e => console.log("TV 오디오 재생 대기중:", e));
+    }
+
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+
+    function resetRemainingIndices() {
+        remainingIndices = data
+            .map((item, index) => ({ item, index }))
+            .filter(obj => currentCategory === "all" || obj.item.week === currentCategory)
+            .map(obj => obj.index);
+        
+        shuffleArray(remainingIndices);
+        studyCount = 0;
+        saveProgress();
+        updateProgress();
+    }
+
+    function saveProgress() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({
+            remainingIndices, category: currentCategory, studyCount
+        }));
+    }
+
+    function updateProgress() {
+        const totalInCategory = data.filter(item => currentCategory === "all" || item.week === currentCategory).length;
+        const solved = totalInCategory - remainingIndices.length;
+        progressEl.innerHTML = `
+            <span class="text-green-400 font-semibold">✅ 마스터 : ${solved} / ${totalInCategory}</span>
+            <span class="text-blue-400 font-semibold">🔄 누적 학습 : ${studyCount}회</span>
+        `;
+    }
+
+    function loadProgress() {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (!saved) return false;
+        const progress = JSON.parse(saved);
+        if (progress.remainingIndices && progress.remainingIndices.length > 0) {
+            remainingIndices = progress.remainingIndices;
+            currentCategory = progress.category || "all";
+            studyCount = progress.studyCount || 0;
+            return true;
+        }
+        return false;
+    }
+
+    function nextQuestion() {
+        if (remainingIndices.length === 0) {
+            alert(`🎉 축하합니다! 선택한 차수의 모든 문장 복습을 완료했습니다.`);
+            localStorage.removeItem(STORAGE_KEY);
+            resetRemainingIndices();
+        }
+
+        current = data[remainingIndices[0]];
+        if (!current) return;
+
+        answerArea.classList.add("hidden");
+        evaluationBtns.classList.add("hidden");
+        answerBtn.classList.remove("hidden");
+        
+        jpTextEl.innerHTML = current.jp;
+        krTextEl.textContent = current.kr;
+
+        playAudio(current.audio);
+        replayBtn.focus();
+    }
+
+    replayBtn.addEventListener("click", () => current && playAudio(current.audio));
+
+    answerBtn.addEventListener("click", () => {
+        answerArea.classList.remove("hidden");
+        evaluationBtns.classList.remove("hidden");
+        answerBtn.classList.add("hidden");
+        playAudio(current.audio);
+        easyBtn.focus();
+    });
+
+    easyBtn.addEventListener("click", () => {
+        remainingIndices.shift();
+        studyCount++;
+        saveProgress();
+        updateProgress();
+        nextQuestion();
+    });
+
+    hardBtn.addEventListener("click", () => {
+        const hardItem = remainingIndices.shift();
+        remainingIndices.push(hardItem);
+        studyCount++;
+        saveProgress();
+        updateProgress();
+        nextQuestion();
+    });
+
+    weekSelect.addEventListener("change", (e) => {
+        currentCategory = e.target.value;
+        localStorage.removeItem(STORAGE_KEY);
+        resetRemainingIndices();
+        nextQuestion();
+    });
+
+    resetBtn.addEventListener("click", () => {
+        if (confirm("처음부터 다시 시작하시겠습니까?")) {
+            localStorage.removeItem(STORAGE_KEY);
+            resetRemainingIndices();
+            nextQuestion();
+        }
+    });
+
+    if (homeBtn) {
+        homeBtn.addEventListener("click", () => {
+            location.href = `https://${GITHUB_USERNAME}.github.io/${REPO_NAME}/`;
+        });
+    }
+
+    // TV 리모컨 방향키 감지
+    document.addEventListener("keydown", (e) => {
+        const isAnswerVisible = !answerArea.classList.contains("hidden");
+
+        if (e.key === "ArrowDown" && !isAnswerVisible) {
+            e.preventDefault();
+            answerBtn.click();
+        } else if (e.key === "ArrowLeft" && isAnswerVisible) {
+            e.preventDefault();
+            hardBtn.focus();
+        } else if (e.key === "ArrowRight" && isAnswerVisible) {
+            e.preventDefault();
+            easyBtn.focus();
+        }
+    });
+
+    loadAllWeeksData();
+</script>
+</body>
+</html>
