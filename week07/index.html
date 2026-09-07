@@ -1,1 +1,296 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>쉐도잉 연습</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* ========================================================
+           TV 화면용 고대비/두꺼운 스크롤바 커스터마이징 
+           ======================================================== */
+        ::-webkit-scrollbar { width: 24px; height: 24px; }
+        ::-webkit-scrollbar-track { background-color: #0f172a; border-radius: 12px; }
+        ::-webkit-scrollbar-thumb { background-color: #ffb703; border-radius: 12px; border: 4px solid #0f172a; }
+        ::-webkit-scrollbar-thumb:hover { background-color: #ffeb3b; }
+        html { scrollbar-color: #ffb703 #0f172a; scrollbar-width: auto; }
 
+        body { background-color: #0f172a; color: #f8fafc; font-family: sans-serif; }
+        .card { padding: 2rem; border-radius: 0.75rem; background-color: #1e293b; }
+        
+        .sentence-container { margin-bottom: 1.5rem; } 
+        
+        /* 
+           [수정된 부분] 포커스 효과를 위해 테두리(border)와 전환(transition) 속성 추가 
+           기본 상태에서는 투명색 테두리를 주어 나중에 노란색이 생겨도 화면이 흔들리지 않음
+        */
+        .sentence-box { 
+            display: flex; align-items: center; gap: 20px; padding: 0.75rem 0.5rem; 
+            background-color: #334155; border-radius: 0.5rem; 
+            border: 3px solid transparent; 
+            transition: all 0.2s ease; 
+        }
+        
+        /* 
+           [추가된 부분] 리모컨으로 현재 선택(Focus)된 문장의 강조 스타일 
+        */
+        /* [초경량 최적화 버전] 그림자와 확대 효과를 제거하고 색상만 변경하여 TV 부하 제로화 */
+        .sentence-container.focused .sentence-box {
+            border-color: #ffb703; /* 노란색 테두리 */
+            background-color: #3f5068; /* 배경색을 밝게 변경하여 확실히 구분됨 */
+        }
+
+        .sentence-box p { font-size: 1.45rem; line-height: 1.8; transition: line-height 0.2s ease; }
+        .full-text p { line-height: 2.0; transition: line-height 0.2s ease; }
+        
+        .translation { display: none; margin-top: 0.75rem; padding: 0.5rem 1rem; color: #cbd5e1; font-size: 1.25rem; }
+        ruby rt { color: #ffb703; font-size: 0.9rem; font-weight: normal; }
+        audio { height: 36px; width: 240px; }
+
+        .hide-furigana rt { display: none; }
+        .hide-furigana .full-text p { line-height: 1.6 !important; }
+        .hide-furigana .sentence-box p { line-height: 1.5 !important; }
+    </style>
+</head>
+<body class="p-4 sm:p-6">
+<div class="max-w-[98%] mx-auto"> 
+
+    <div class="flex justify-between items-center mb-6">
+        <div></div>
+        <h1 class="text-4xl md:text-5xl font-bold">
+            쉐도잉 연습
+        </h1>
+        <button
+            id="homeBtn"
+            class="bg-slate-700 hover:bg-slate-600 w-14 h-14 rounded-full text-2xl transition-colors shadow-lg"
+            title="홈">
+            🏠
+        </button>
+    </div>
+        
+    <div class="card space-y-4 !px-2 md:!px-6">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-2 gap-4">
+            <h2 class="text-2xl font-semibold text-slate-300">전체 듣기</h2>
+            <div class="flex gap-2 flex-wrap">
+                <button id="toggleFurigana" class="bg-teal-600 hover:bg-teal-500 text-[1.1rem] px-4 py-2 rounded-lg transition-colors font-bold shadow-md">
+                    후리가나 숨기기
+                </button>
+                <button id="toggleAll" class="bg-blue-600 hover:bg-blue-500 text-[1.1rem] px-4 py-2 rounded-lg transition-colors font-bold shadow-md">
+                    해석 전체 보기
+                </button>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-4 text-lg">
+            <div>
+                <label class="text-slate-400">재生 속도 조절: </label>
+                <select id="playbackRate" class="bg-slate-700 text-white px-2 py-1 rounded outline-none border border-slate-600">
+                    <option value="075">0.75x</option>
+                    <option value="1" selected>1.0x</option>
+                </select>
+            </div>
+        </div>
+        
+        <audio controls loop class="w-full md:w-1/3 mb-4 shadow-md rounded-full">
+            <source src="audio/full.mp3" type="audio/mpeg">
+        </audio>
+
+        <div class="full-text text-xl md:text-2xl text-white bg-slate-800 py-4 px-4 rounded-lg mb-4 shadow-inner">
+            <p class="tracking-tight">
+                ここにせんべろと<ruby>書<rt>か</rt></ruby>いてあります。せんべろというのは1000<ruby>円<rt>えん</rt></ruby>でべろべろに<ruby>酔<rt>よ</rt></ruby>えるから<ruby>来<rt>き</rt></ruby>た<ruby>言葉<rt>ことば</rt></ruby>です。<br>
+                べろべろというのはお<ruby>酒<rt>さけ</rt></ruby>でかなり<ruby>酔<rt>よ</rt></ruby>っ<ruby>払<rt>ばら</rt></ruby>った<ruby>状態<rt>じょうたい</rt></ruby>です。<ruby>何<rt>なに</rt></ruby>を<ruby>言<rt>い</rt></ruby>っているか<ruby>分<rt>わ</rt></ruby>からなくなったり、ちゃんと<ruby>歩<rt>ある</rt></ruby>けないぐらいなのがべろべろです。<br>
+                なのでせんべろというのは、<ruby>安<rt>やす</rt></ruby>くべろべろになるくらい<ruby>酔<rt>よ</rt></ruby>っ<ruby>払<rt>ばら</rt></ruby>える、そういう<ruby>飲<rt>の</rt></ruby>み<ruby>屋<rt>や</rt></ruby>のことです。この<ruby>通<rt>とお</rt></ruby>りはせんべろが<ruby>集<rt>あつ</rt></ruby>まっている<ruby>通<rt>とお</rt></ruby>りです。<br>
+                ここは<ruby>立<rt>た</rt></ruby>ち<ruby>飲<rt>の</rt></ruby>みですね。でも<ruby>実<rt>じっ</rt></ruby><ruby>際<rt>さい</rt></ruby>は、よほど<ruby>弱<rt>よわ</rt></ruby>くない<ruby>限<rt>かぎ</rt></ruby>り1000<ruby>円<rt>えん</rt></ruby>ではべろべろにはなれません。
+            </p>
+        </div>
+
+        <hr class="border-slate-600 my-4">
+
+        <h2 class="text-2xl font-semibold text-slate-300 mb-4">문장별 연습</h2>
+        
+        <div class="sentence-container">
+            <div class="sentence-box">
+                <audio controls loop><source src="audio/01.mp3" type="audio/mpeg"></audio>
+                <p>ここにせんべろと<ruby>書<rt>か</rt></ruby>いてあります。せんべろというのは1000<ruby>円<rt>えん</rt></ruby>でベロベロに<ruby>酔<rt>よ</rt></ruby>えるから<ruby>来<rt>き</rt></ruby>た<ruby>言葉<rt>ことば</rt></ruby>です。</p>
+            </div>
+            <div class="translation">여기 센베로라고 적혀 있습니다. 센베로는 1000엔으로 곤드레만드레 취할 수 있다는 데서 온 말입니다.</div>
+        </div>
+
+        <div class="sentence-container">
+            <div class="sentence-box">
+                <audio controls loop><source src="audio/02.mp3" type="audio/mpeg"></audio>
+                <p>べろべろというのはお<ruby>酒<rt>さけ</rt></ruby>でかなり<ruby>酔<rt>よ</rt></ruby>っ<ruby>払<rt>ばら</rt></ruby>った<ruby>状態<rt>じょうたい</rt></ruby>です。<ruby>何<rt>なに</rt></ruby>を<ruby>言<rt>い</rt></ruby>っているか<ruby>分<rt>わ</rt></ruby>からなくなったり、ちゃんと<ruby>歩<rt>ある</rt></ruby>けないぐらいなのがべろべろです。</p>
+            </div>
+            <div class="translation">베로베로(곤드레만드레)라는 것은 술에 꽤 취한 상태입니다. 무슨 말을 하는지 모르게 되거나, 제대로 걷지 못할 정도인 것이 베로베로입니다.</div>
+        </div>
+
+        <div class="sentence-container">
+            <div class="sentence-box">
+                <audio controls loop><source src="audio/03.mp3" type="audio/mpeg"></audio>
+                <p>なのでせんべろというのは、<ruby>安<rt>やす</rt></ruby>くべろべろになるくらい<ruby>酔<rt>よ</rt></ruby>っ<ruby>払<rt>ばら</rt></ruby>える、そういう<ruby>飲<rt>の</rt></ruby>み<ruby>屋<rt>や</rt></ruby>のことです。この<ruby>通<rt>とお</rt></ruby>りはせんべろが<ruby>集<rt>あつ</rt></ruby>まっている<ruby>通<rt>とお</rt></ruby>りです。</p>
+            </div>
+            <div class="translation">그래서 센베라는 것은 저렴하게 곤드레만드레 취할 수 있는 그런 선술집을 말합니다. 이 거리는 센베로가 모여 있는 거리입니다.</div>
+        </div>
+
+        <div class="sentence-container">
+            <div class="sentence-box">
+                <audio controls loop><source src="audio/04.mp3" type="audio/mpeg"></audio>
+                <p>ここは<ruby>立<rt>た</rt></ruby>ち<ruby>飲<rt>の</rt></ruby>みですね。でも<ruby>実<rt>じっ</rt></ruby><ruby>際<rt>さい</rt></ruby>は、よほど<ruby>弱<rt>よわ</rt></ruby>くない<ruby>限<rt>かぎ</rt></ruby>り1000<ruby>円<rt>えん</rt></ruby>ではべろべろにはなれません。</p>
+            </div>
+            <div class="translation">여기는 서서 마시는 곳(타치노미)이네요. 하지만 실제로는 웬만큼 주량이 약하지 않은 한 1000엔으로 곤드레만드레 취할 수는 없습니다.</div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    // 기존 기능들 (해석 토글, 후리가나 토글, 재생 속도, 홈 버튼)
+    const toggleBtn = document.getElementById('toggleAll');
+    const translations = document.querySelectorAll('.translation');
+    let isVisible = false;
+
+    toggleBtn.addEventListener('click', () => {
+        isVisible = !isVisible;
+        translations.forEach(t => { t.style.display = isVisible ? 'block' : 'none'; });
+        toggleBtn.innerText = isVisible ? '해석 전체 숨기기' : '해석 전체 보기';
+        if(isVisible) {
+            toggleBtn.classList.replace('bg-blue-600', 'bg-slate-600');
+            toggleBtn.classList.replace('hover:bg-blue-500', 'hover:bg-slate-500');
+        } else {
+            toggleBtn.classList.replace('bg-slate-600', 'bg-blue-600');
+            toggleBtn.classList.replace('hover:bg-slate-500', 'hover:bg-blue-500');
+        }
+    });
+
+    const toggleFuriganaBtn = document.getElementById('toggleFurigana');
+    let isFuriganaVisible = true;
+
+    toggleFuriganaBtn.addEventListener('click', () => {
+        isFuriganaVisible = !isFuriganaVisible;
+        if (isFuriganaVisible) {
+            document.body.classList.remove('hide-furigana');
+            toggleFuriganaBtn.innerText = '후리가나 숨기기';
+            toggleFuriganaBtn.classList.replace('bg-slate-600', 'bg-teal-600');
+            toggleFuriganaBtn.classList.replace('hover:bg-slate-500', 'hover:bg-teal-500');
+        } else {
+            document.body.classList.add('hide-furigana');
+            toggleFuriganaBtn.innerText = '후리가나 보기';
+            toggleFuriganaBtn.classList.replace('bg-teal-600', 'bg-slate-600');
+            toggleFuriganaBtn.classList.replace('hover:bg-teal-500', 'hover:bg-slate-500');
+        }
+    });
+
+    const playbackRate = document.getElementById('playbackRate');
+    playbackRate.addEventListener('change', () => {
+        const speed = playbackRate.value;
+        document.querySelectorAll('audio').forEach(audio => {
+            const source = audio.querySelector('source');
+            if (!source) return;
+            if (!source.dataset.originalSrc) {
+                source.dataset.originalSrc = source.getAttribute('src');
+            }
+            const originalSrc = source.dataset.originalSrc;
+            if (speed === "1") {
+                source.src = originalSrc;
+            } else {
+                source.src = originalSrc.replace(".mp3", "-2.mp3");
+            }
+            audio.load();
+        });
+    });
+
+    const homeBtn = document.getElementById("homeBtn");
+    if (homeBtn) {
+        homeBtn.addEventListener("click", () => {
+            location.href = "https://tajunii.github.io/study-home/";
+        });
+    }
+
+    // ========================================================
+    // [새로운 부분] TV 리모컨 시각적 포커스(Focus) 제어 로직 
+    // ========================================================
+    const sentences = document.querySelectorAll('.sentence-container');
+    let currentFocusIndex = -1; // 현재 포커스된 문장의 인덱스 (-1은 아무것도 선택되지 않음)
+
+    // 선택된 문장을 시각적으로 강조하고 화면 중앙으로 끌어오는 함수
+    function updateFocus(newIndex) {
+        if (newIndex < 0 || newIndex >= sentences.length) return;
+        
+        // 이전 포커스 지우기
+        if (currentFocusIndex !== -1) {
+            sentences[currentFocusIndex].classList.remove('focused');
+        }
+        
+        // 새 포커스 지정
+        currentFocusIndex = newIndex;
+        const targetSentence = sentences[currentFocusIndex];
+        targetSentence.classList.add('focused');
+        
+        // 해당 문장이 화면 한가운데 오도록 부드럽게 스크롤
+        targetSentence.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    // 현재 포커스된 문장의 오디오를 재생/일시정지 하는 함수
+    function playFocusedAudio() {
+        if (currentFocusIndex === -1) return; // 선택된 문장이 없으면 무시
+        
+        const targetSentence = sentences[currentFocusIndex];
+        const audio = targetSentence.querySelector('audio');
+        if (!audio) return;
+        
+        const allAudios = document.querySelectorAll('audio');
+
+        if (audio.paused) {
+            // 다른 오디오는 모두 정지
+            allAudios.forEach(a => { if (a !== audio) a.pause(); });
+            
+            // 현재 문장 재생
+            const playPromise = audio.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(e => console.log("TV 오디오 재생 에러:", e));
+            }
+        } else {
+            audio.pause(); // 이미 재생 중이면 일시정지
+        }
+    }
+
+    // 리모컨 키보드(방향키, 확인키) 감지
+    document.addEventListener('keydown', (event) => {
+        const key = event.key;
+        const keyCode = event.keyCode;
+
+        const isUp = key === 'ArrowUp' || keyCode === 38;
+        const isDown = key === 'ArrowDown' || keyCode === 40;
+        const isEnter = key === 'Enter' || keyCode === 13 || key === 'MediaPlayPause';
+
+        if (isDown) {
+            event.preventDefault(); // 기본 스크롤 방지
+            // 아래로 한 칸 이동 (처음 누르면 0번부터 시작)
+            updateFocus(currentFocusIndex === -1 ? 0 : currentFocusIndex + 1);
+        } else if (isUp) {
+            event.preventDefault();
+            // 위로 한 칸 이동
+            updateFocus(currentFocusIndex <= 0 ? 0 : currentFocusIndex - 1);
+        } else if (isEnter) {
+            event.preventDefault();
+            // 하이라이트된 문장 재생
+            playFocusedAudio();
+        }
+    });
+
+    // 마우스(리모컨 커서)로 허공을 클릭했을 때도 재생되도록 예외 처리
+    document.addEventListener('click', (event) => {
+        const tagName = event.target.tagName.toLowerCase();
+        // 버튼 등 다른 UI를 클릭한 거라면 무시
+        if (tagName === 'button' || tagName === 'select' || tagName === 'audio' || tagName === 'input') {
+            return;
+        }
+        playFocusedAudio();
+    });
+
+    // [선택 사항] 페이지 열자마자 1번 문장에 노란 불빛이 켜져 있게 하려면 아래 주석을 푸세요.
+    // updateFocus(0); 
+    // ========================================================
+</script>
+</body>
+</html>
