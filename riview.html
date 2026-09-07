@@ -59,10 +59,9 @@
 
     <!-- 상단 헤더 -->
     <header class="w-full max-w-6xl flex justify-between items-center mb-6">
-        <h1 class="text-4xl font-bold text-indigo-200">🎧 듣기 복습 카드</h1>
+        <h1 class="text-4xl font-bold text-indigo-200">🎧 순차 듣기 복습 카드</h1>
         <div class="flex items-center gap-4">
             <select id="weekSelect" class="focusable bg-slate-800 text-slate-200 text-xl px-4 py-2 rounded-xl border border-slate-600">
-                <option value="all">전체 차수 데이터</option>
             </select>
             <button id="homeBtn" class="focusable bg-slate-800 hover:bg-slate-700 text-3xl px-4 py-2 rounded-xl">🏠</button>
         </div>
@@ -73,7 +72,7 @@
         
         <!-- 진행도 표시 -->
         <div id="progress" class="bg-slate-800/60 px-6 py-2 rounded-full text-xl mb-8 flex gap-8">
-            <span class="text-green-400 font-semibold">✅ 마스터 : 0 / 0</span>
+            <span class="text-green-400 font-semibold">✅ 완료 : 0 / 0</span>
             <span class="text-blue-400 font-semibold">🔄 누적 학습 : 0회</span>
         </div>
 
@@ -101,10 +100,10 @@
         <!-- 4단계: 평가 버튼 -->
         <div id="evaluationBtns" class="hidden justify-center gap-16 mt-6 w-full">
             <button id="hardBtn" class="focusable bg-orange-600 hover:bg-orange-500 text-white text-2xl font-bold px-10 py-5 rounded-full">
-                ◀ 어려움 (다시)
+                ◀ 어려움 (맨 뒤로)
             </button>
             <button id="easyBtn" class="focusable bg-blue-600 hover:bg-blue-500 text-white text-2xl font-bold px-10 py-5 rounded-full">
-                쉬움 (외움) ▶
+                쉬움 (완료) ▶
             </button>
         </div>
 
@@ -118,17 +117,16 @@
     </footer>
 
 <script>
-    // ⚠️ 계정명 및 저장소명 확인
     const GITHUB_USERNAME = "tajunii"; 
     const REPO_NAME = "japanese-study"; 
 
-    // 현재 8주차까지 자동 등록
+    // 주차 목록
     const WEEK_LIST = ["week01", "week02", "week03", "week04", "week05", "week06", "week07", "week08"];
 
     let data = [];
     let remainingIndices = [];
     let current = null;
-    let currentCategory = "all"; 
+    let currentCategory = "week01"; // 접속 시 week01 기본 선택
     let studyCount = 0;
 
     const weekSelect = document.getElementById("weekSelect");
@@ -151,13 +149,9 @@
         data = [];
         const loadedWeeks = new Set();
 
-        // 1. week01 ~ week08 폴더 파싱
         for (const week of WEEK_LIST) {
             await fetchAndParseHtml(`https://raw.githubusercontent.com/${GITHUB_USERNAME}/${REPO_NAME}/main/${week}/index.html`, week, loadedWeeks);
         }
-
-        // 2. 루트 최신 index.html도 추가 파싱
-        await fetchAndParseHtml(`https://raw.githubusercontent.com/${GITHUB_USERNAME}/${REPO_NAME}/main/index.html`, "최신(현재)", loadedWeeks);
 
         if (data.length > 0) {
             populateWeekSelect([...loadedWeeks]);
@@ -186,8 +180,7 @@
 
                 if (jpP && krDiv && audioSource) {
                     const rawAudioSrc = audioSource.getAttribute('src');
-                    const audioPath = weekLabel === "최신(현재)" ? rawAudioSrc : `${weekLabel}/${rawAudioSrc}`;
-                    const fullAudioUrl = `https://raw.githubusercontent.com/${GITHUB_USERNAME}/${REPO_NAME}/main/${audioPath}`;
+                    const fullAudioUrl = `https://raw.githubusercontent.com/${GITHUB_USERNAME}/${REPO_NAME}/main/${weekLabel}/${rawAudioSrc}`;
 
                     data.push({
                         week: weekLabel,
@@ -204,13 +197,21 @@
     }
 
     function populateWeekSelect(weeks) {
-        weekSelect.innerHTML = '<option value="all">전체 차수 데이터</option>';
-        weeks.sort().forEach(w => {
+        weekSelect.innerHTML = '';
+        const sortedWeeks = weeks.sort();
+
+        sortedWeeks.forEach(w => {
             const option = document.createElement("option");
             option.value = w;
-            option.textContent = w; 
+            option.textContent = w;
+            if (w === currentCategory) option.selected = true;
             weekSelect.appendChild(option);
         });
+
+        const allOption = document.createElement("option");
+        allOption.value = "all";
+        allOption.textContent = "전체 차수 데이터";
+        weekSelect.appendChild(allOption);
     }
 
     function playAudio(url) {
@@ -219,20 +220,13 @@
         audio.play().catch(e => console.log("TV 오디오 재생 대기중:", e));
     }
 
-    function shuffleArray(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-    }
-
+    // 💡 셔플(무작위) 기능을 완전히 제거하고 인덱스 순서대로 생성합니다.
     function resetRemainingIndices() {
         remainingIndices = data
             .map((item, index) => ({ item, index }))
             .filter(obj => currentCategory === "all" || obj.item.week === currentCategory)
             .map(obj => obj.index);
         
-        shuffleArray(remainingIndices);
         studyCount = 0;
         saveProgress();
         updateProgress();
@@ -248,7 +242,7 @@
         const totalInCategory = data.filter(item => currentCategory === "all" || item.week === currentCategory).length;
         const solved = totalInCategory - remainingIndices.length;
         progressEl.innerHTML = `
-            <span class="text-green-400 font-semibold">✅ 마스터 : ${solved} / ${totalInCategory}</span>
+            <span class="text-green-400 font-semibold">✅ 완료 : ${solved} / ${totalInCategory}</span>
             <span class="text-blue-400 font-semibold">🔄 누적 학습 : ${studyCount}회</span>
         `;
     }
@@ -259,7 +253,7 @@
         const progress = JSON.parse(saved);
         if (progress.remainingIndices && progress.remainingIndices.length > 0) {
             remainingIndices = progress.remainingIndices;
-            currentCategory = progress.category || "all";
+            currentCategory = progress.category || "week01";
             studyCount = progress.studyCount || 0;
             return true;
         }
@@ -268,7 +262,7 @@
 
     function nextQuestion() {
         if (remainingIndices.length === 0) {
-            alert(`🎉 축하합니다! 선택한 차수의 모든 문장 복습을 완료했습니다.`);
+            alert(`🎉 축하합니다! 선택한 차수의 순차 복습을 모두 마쳤습니다.`);
             localStorage.removeItem(STORAGE_KEY);
             resetRemainingIndices();
         }
@@ -331,11 +325,10 @@
 
     if (homeBtn) {
         homeBtn.addEventListener("click", () => {
-            location.href = `https://tajunii.github.io/study-home`;
+            location.href = `https://${GITHUB_USERNAME}.github.io/${REPO_NAME}/`;
         });
     }
 
-    // TV 리모컨 방향키 감지
     document.addEventListener("keydown", (e) => {
         const isAnswerVisible = !answerArea.classList.contains("hidden");
 
