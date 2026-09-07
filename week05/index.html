@@ -1,1 +1,332 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>쉐도잉 연습</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* ========================================================
+           TV 화면용 고대비/두꺼운 스크ロール바 커스터마이징 
+           ======================================================== */
+        ::-webkit-scrollbar { width: 24px; height: 24px; }
+        ::-webkit-scrollbar-track { background-color: #0f172a; border-radius: 12px; }
+        ::-webkit-scrollbar-thumb { background-color: #ffb703; border-radius: 12px; border: 4px solid #0f172a; }
+        ::-webkit-scrollbar-thumb:hover { background-color: #ffeb3b; }
+        html { scrollbar-color: #ffb703 #0f172a; scrollbar-width: auto; }
 
+        body { background-color: #0f172a; color: #f8fafc; font-family: sans-serif; }
+        .card { padding: 2rem; border-radius: 0.75rem; background-color: #1e293b; }
+        
+        .sentence-container { margin-bottom: 1.5rem; } 
+        
+        /* 
+           [수정된 부분] 포カー스 효과를 위해 테두리(border)와 전환(transition) 속性 추가 
+           기본 상태에서는 투명색 테두리를 주어 나중에 노란색이 생겨도 화면이 흔들리지 않음
+        */
+        .sentence-box { 
+            display: flex; align-items: center; gap: 20px; padding: 0.75rem 0.5rem; 
+            background-color: #334155; border-radius: 0.5rem; 
+            border: 3px solid transparent; 
+            transition: all 0.2s ease; 
+        }
+        
+        /* 
+           [추가된 부분] 리モ컨으로 현재 선택(Focus)된 문장의 강조 스타일 
+        */
+        /* [초경량 최적화 버전] 그림자와 확대 효과를 제거하고 색상만 변경하여 TV 부하 제ロ化 */
+        .sentence-container.focused .sentence-box {
+            border-color: #ffb703; /* 노란색 테두리 */
+            background-color: #3f5068; /* 배경색을 밝게 변경하여 확실히 구분됨 */
+        }
+
+        .sentence-box p { font-size: 1.45rem; line-height: 1.8; transition: line-height 0.2s ease; }
+        .full-text p { line-height: 2.0; transition: line-height 0.2s ease; }
+        
+        .translation { display: none; margin-top: 0.75rem; padding: 0.5rem 1rem; color: #cbd5e1; font-size: 1.25rem; }
+        ruby rt { color: #ffb703; font-size: 0.9rem; font-weight: normal; }
+        audio { height: 36px; width: 240px; }
+
+        .hide-furigana rt { display: none; }
+        .hide-furigana .full-text p { line-height: 1.6 !important; }
+        .hide-furigana .sentence-box p { line-height: 1.5 !important; }
+    </style>
+</head>
+<body class="p-4 sm:p-6">
+<div class="max-w-[98%] mx-auto"> 
+
+    <div class="flex justify-between items-center mb-6">
+        <div></div>
+        <h1 class="text-4xl md:text-5xl font-bold">
+            쉐도잉 연습
+        </h1>
+        <button
+            id="homeBtn"
+            class="bg-slate-700 hover:bg-slate-600 w-14 h-14 rounded-full text-2xl transition-colors shadow-lg"
+            title="홈">
+            🏠
+        </button>
+    </div>
+        
+    <div class="card space-y-4 !px-2 md:!px-6">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-2 gap-4">
+            <h2 class="text-2xl font-semibold text-slate-300">전체 듣기</h2>
+            <div class="flex gap-2 flex-wrap">
+                <button id="toggleFurigana" class="bg-teal-600 hover:bg-teal-500 text-[1.1rem] px-4 py-2 rounded-lg transition-colors font-bold shadow-md">
+                    후리가나 숨기기
+                </button>
+                <button id="toggleAll" class="bg-blue-600 hover:bg-blue-500 text-[1.1rem] px-4 py-2 rounded-lg transition-colors font-bold shadow-md">
+                    해석 전체 보기
+                </button>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-4 text-lg">
+            <div>
+                <label class="text-slate-400">재생 속도 조절: </label>
+                <select id="playbackRate" class="bg-slate-700 text-white px-2 py-1 rounded outline-none border border-slate-600">
+                    <option value="075">0.75x</option>
+                    <option value="1" selected>1.0x</option>
+                </select>
+            </div>
+        </div>
+        
+        <audio controls loop class="w-full md:w-1/3 mb-4 shadow-md rounded-full">
+            <source src="audio/full.mp3" type="audio/mpeg">
+        </audio>
+
+        <div class="full-text text-xl md:text-2xl text-white bg-slate-800 py-4 px-4 rounded-lg mb-4 shadow-inner">
+            <p class="tracking-tight">
+                さらに<ruby>新成人<rt>しんせいじん</rt></ruby>の<ruby>代表<rt>だいひょう</rt></ruby>が、<ruby>大人<rt>おとな</rt></ruby>になるにあたっての<ruby>決意<rt>けつい</rt></ruby>など<ruby>挨拶<rt>あいさつ</rt></ruby>をします。<br>
+                <ruby>豪雪地帯<rt>ごうせつちたい</rt></ruby>では、ゴールデンウィークやお<ruby>盆<rt>ぼん</rt></ruby>に<ruby>行<rt>おこな</rt></ruby>われるところもあります。<br>
+                <ruby>成人式<rt>せいじんしき</rt></ruby>は<ruby>一生<rt>いっしょう</rt></ruby>に<ruby>一度<rt>いちど</rt></ruby>の<ruby>儀式<rt>ぎしき</rt></ruby>ですから、<ruby>特別<rt>とくべつ</rt></ruby>な<ruby>服装<rt>ふくそう</rt></ruby>で<ruby>臨<rt>のぞ</rt></ruby>みます。<ruby>男性<rt>だんせい</rt></ruby>はスーツ、<ruby>女性<rt>じょせい</rt></ruby>は「<ruby>振袖<rt>ふりそで</rt></ruby>」で<ruby>出席<rt>しゅっせき</rt></ruby>するのが<ruby>一般的<rt>いっぱんてき</rt></ruby>です。<br>
+                <ruby>振袖<rt>ふりそで</rt></ruby>とは、<ruby>未婚<rt>みこん</rt></ruby>の<ruby>女性<rt>じょせい</rt></ruby>が<ruby>着<rt>き</rt></ruby>る<ruby>袖<rt>そで</rt></ruby>の<ruby>長<rt>なが</rt></ruby>い<ruby>着物<rt>きもの</rt></ruby>のこと。<ruby>振袖<rt>ふりそで</rt></ruby>は<ruby>高価<rt>こうか</rt></ruby>な<ruby>上<rt>うえ</rt></ruby>に、<ruby>帯<rt>おび</rt></ruby>や<ruby>草履<rt>ぞうり</rt></ruby>など<ruby>着物<rt>きもの</rt></ruby><ruby>以外<rt>いがい</rt></ruby>の<ruby>小物<rt>こもの</rt></ruby>も<ruby>揃<rt>そろ</rt></ruby>えなければなりません。<br>
+                そのため、レンタルで<ruby>済<rt>す</rt></ruby>ます<ruby>家庭<rt>かてい</rt></ruby>もありますが、お<ruby>祝<rt>いわ</rt></ruby>い<ruby>事<rt>ごと</rt></ruby>なので<ruby>娘<rt>むすめ</rt></ruby>のために<ruby>購入<rt>こうにゅう</rt></ruby>する<ruby>親<rt>おや</rt></ruby>も<ruby>多<rt>おお</rt></ruby>いです。<br>
+                <ruby>成人<rt>せいじん</rt></ruby>の<ruby>日<rt>ひ</rt></ruby>には、「<ruby>赤飯<rt>せきはん</rt></ruby>」を<ruby>炊<rt>た</rt></ruby>いてお<ruby>祝<rt>いわ</rt></ruby>いする<ruby>家庭<rt>かてい</rt></ruby>もあります。<ruby>赤飯<rt>せきはん</rt></ruby>とは、もち<ruby>米<rt>ごめ</rt></ruby>に<ruby>小豆<rt>あずき</rt></ruby>を<ruby>混<rt>ま</rt></ruby>ぜて<ruby>炊<rt>た</rt></ruby>いたご<ruby>飯<rt>はん</rt></ruby>のこと。<br>
+                <ruby>小豆<rt>あずき</rt></ruby>の<ruby>色<rt>いろ</rt></ruby>が<ruby>米<rt>こめ</rt></ruby>に<ruby>付<rt>つ</rt></ruby>いてピンク<ruby>色<rt>いろ</rt></ruby>になることから、めでたい<ruby>色<rt>いろ</rt></ruby>である「<ruby>赤<rt>あか</rt></ruby>」を<ruby>表<rt>あらわ</rt></ruby>す<ruby>料理<rt>りょうり</rt></ruby>として、<ruby>日本<rt>にほん</rt></ruby>ではお<ruby>祝<rt>いわ</rt></ruby>い<ruby>事<rt>ごと</rt></ruby>に<ruby>欠<rt>か</rt></ruby>かせないものです。<br>
+                また、<ruby>親戚<rt>しんせき</rt></ruby>や<ruby>知人<rt>ちじん</rt></ruby>から<ruby>成人<rt>せいじん</rt></ruby>をお<ruby>祝<rt>いわ</rt></ruby>いする<ruby>贈<rt>おく</rt></ruby>り<ruby>物<rt>もの</rt></ruby>やお<ruby>祝<rt>いわ</rt></ruby>い<ruby>金<rt>きん</rt></ruby>をもらう<ruby>場合<rt>ばあい</rt></ruby>もあります。
+            </p>
+        </div>
+
+        <hr class="border-slate-600 my-4">
+
+        <h2 class="text-2xl font-semibold text-slate-300 mb-4">문장별 연습</h2>
+        
+        <div class="sentence-container">
+            <div class="sentence-box">
+                <audio controls loop><source src="audio/01.mp3" type="audio/mpeg"></audio>
+                <p>さらに<ruby>新成人<rt>しんせいじん</rt></ruby>の<ruby>代表<rt>だいひょう</rt></ruby>が、<ruby>大人<rt>おとな</rt></ruby>になるにあたっての<ruby>決意<rt>けつい</rt></ruby>など<ruby>挨拶<rt>あいさつ</rt></ruby>をします。</p>
+            </div>
+            <div class="translation">또한 신성인의 대표가, 성인이 됨에 있어서의 결의 등의 인사를 합니다.</div>
+        </div>
+
+        <div class="sentence-container">
+            <div class="sentence-box">
+                <audio controls loop><source src="audio/02.mp3" type="audio/mpeg"></audio>
+                <p><ruby>豪雪地帯<rt>ごうせつちたい</rt></ruby>では、ゴールデンウィークやお<ruby>盆<rt>ぼん</rt></ruby>に<ruby>行<rt>おこな</rt></ruby>われるところもあります。</p>
+            </div>
+            <div class="translation">폭설 지대에서는 골든위크나 오봉(추석)에 열리는 곳도 있습니다.</div>
+        </div>
+
+        <div class="sentence-container">
+            <div class="sentence-box">
+                <audio controls loop><source src="audio/03.mp3" type="audio/mpeg"></audio>
+                <p><ruby>成人式<rt>せいじんしき</rt></ruby>は<ruby>一生<rt>いっしょう</rt></ruby>に<ruby>一度<rt>いちど</rt></ruby>の<ruby>儀式<rt>ぎしき</rt></ruby>ですから、<ruby>特別<rt>とくべつ</rt></ruby>な<ruby>服装<rt>ふくそう</rt></ruby>で<ruby>臨<rt>のぞ</rt></ruby>みます。<ruby>男性<rt>だんせい</rt></ruby>はスーツ、<ruby>女性<rt>じょせい</rt></ruby>は「<ruby>振袖<rt>ふりそで</rt></ruby>」で<ruby>出席<rt>しゅっせき</rt></ruby>するのが<ruby>一般的<rt>いっぱんてき</rt></ruby>です。</p>
+            </div>
+            <div class="translation">성인식은 일생에 한 번뿐인 의식이므로 특별한 복장으로 임합니다. 남성은 정장, 여성은 '후리소데'를 입고 참석하는 것이 일반적입니다.</div>
+        </div>
+
+        <div class="sentence-container">
+            <div class="sentence-box">
+                <audio controls loop><source src="audio/04.mp3" type="audio/mpeg"></audio>
+                <p><ruby>振袖<rt>ふりそで</rt></ruby>とは、<ruby>未婚<rt>みこん</rt></ruby>の<ruby>女性<rt>じょせい</rt></ruby>が<ruby>着<rt>き</rt></ruby>る<ruby>袖<rt>そで</rt></ruby>の<ruby>長<rt>なが</rt></ruby>い<ruby>着物<rt>きもの</rt></ruby>のこと。<ruby>振袖<rt>ふりそで</rt></ruby>は<ruby>高価<rt>こうか</rt></ruby>な<ruby>上<rt>うえ</rt></ruby>に、<ruby>帯<rt>おび</rt></ruby>や<ruby>草履<rt>ぞうり</rt></ruby>など<ruby>着物<rt>きもの</rt></ruby><ruby>以外<rt>いがい</rt></ruby>の<ruby>小物<rt>こもの</rt></ruby>も<ruby>揃<rt>そろ</rt></ruby>えなければなりません。</p>
+            </div>
+            <div class="translation">후리소데란 미혼 여성이 입는 소매가 긴 기모노를 뜻합니다. 후리소데는 고가인 데다, 띠(오비)나 짚신(조리) 등 기모노 이외의 장신구도 갖추어야 합니다.</div>
+        </div>
+
+        <div class="sentence-container">
+            <div class="sentence-box">
+                <audio controls loop><source src="audio/05.mp3" type="audio/mpeg"></audio>
+                <p>そのため、レンタルで<ruby>済<rt>す</rt></ruby>ます<ruby>家庭<rt>かてい</rt></ruby>もありますが、お<ruby>祝<rt>いわ</rt></ruby>い<ruby>事<rt>ごと</rt></ruby>なので<ruby>娘<rt>むすめ</rt></ruby>のために<ruby>購入<rt>こうにゅう</rt></ruby>する<ruby>親<rt>おや</rt></ruby>も<ruby>多<rt>おお</rt></ruby>いです。</p>
+            </div>
+            <div class="translation">그렇기 때문에 대여로 해결하는 가정도 있지만, 경사이므로 딸을 위해 구입하는 부모도 많습니다.</div>
+        </div>
+
+        <div class="sentence-container">
+            <div class="sentence-box">
+                <audio controls loop><source src="audio/06.mp3" type="audio/mpeg"></audio>
+                <p><ruby>成人<rt>せいじん</rt></ruby>の<ruby>日<rt>ひ</rt></ruby>には、「<ruby>赤飯<rt>せきはん</rt></ruby>」を<ruby>炊<rt>た</rt></ruby>いてお<ruby>祝<rt>いわ</rt></ruby>いする<ruby>家庭<rt>かてい</rt></ruby>もあります。<ruby>赤飯<rt>せきはん</rt></ruby>とは、もち<ruby>米<rt>ごめ</rt></ruby>に<ruby>小豆<rt>あずき</rt></ruby>を<ruby>混<rt>ま</rt></ruby>ぜて<ruby>炊<rt>た</rt></ruby>いたご<ruby>飯<rt>はん</rt></ruby>のこと。</p>
+            </div>
+            <div class="translation">성인의 날에는 팥밥을 지어 축하하는 가정도 있습니다. 팥밥이란 찹쌀에 팥을 섞어 지은 밥을 말합니다.</div>
+        </div>
+
+        <div class="sentence-container">
+            <div class="sentence-box">
+                <audio controls loop><source src="audio/07.mp3" type="audio/mpeg"></audio>
+                <p><ruby>小豆<rt>あずき</rt></ruby>の<ruby>色<rt>いろ</rt></ruby>が<ruby>米<rt>こめ</rt></ruby>に<ruby>付<rt>つ</rt></ruby>いてピンク<ruby>色<rt>いろ</rt></ruby>になることから、めでたい<ruby>色<rt>いろ</rt></ruby>である「<ruby>赤<rt>あか</rt></ruby>」を<ruby>表<rt>あらわ</rt></ruby>す<ruby>料理<rt>りょうり</rt></ruby>として、<ruby>日本<rt>にほん</rt></ruby>ではお<ruby>祝<rt>いわ</rt></ruby>い<ruby>事<rt>ごと</rt></ruby>に<ruby>欠<rt>か</rt></ruby>かせないものです。</p>
+            </div>
+            <div class="translation">팥 색깔이 쌀에 배어 분홍색이 되는 것에서 비롯하여, 경사스러운 색인 '빨간색'을 나타내는 요리로서 일본에서는 축하할 일에 빠질 수 없는 것입니다.</div>
+        </div>
+
+        <div class="sentence-container">
+            <div class="sentence-box">
+                <audio controls loop><source src="audio/08.mp3" type="audio/mpeg"></audio>
+                <p>また、<ruby>親戚<rt>しんせき</rt></ruby>や<ruby>知人<rt>ちじん</rt></ruby>から<ruby>成人<rt>せいじん</rt></ruby>をお<ruby>祝<rt>いわ</rt></ruby>いする<ruby>贈<rt>おく</rt></ruby>り<ruby>物<rt>もの</rt></ruby>やお<ruby>祝<rt>いわ</rt></ruby>い<ruby>金<rt>きん</rt></ruby>をもらう<ruby>場合<rt>ばあい</rt></ruby>もあります。</p>
+            </div>
+            <div class="translation">또한 친척이나 지인으로부터 성인을 축하하는 선물이나 축의금을 받는 경우도 있습니다.</div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    // 기존 기능들 (해석 토글, 후리가나 토글, 재생 속도, 홈 버튼)
+    const toggleBtn = document.getElementById('toggleAll');
+    const translations = document.querySelectorAll('.translation');
+    let isVisible = false;
+
+    toggleBtn.addEventListener('click', () => {
+        isVisible = !isVisible;
+        translations.forEach(t => { t.style.display = isVisible ? 'block' : 'none'; });
+        toggleBtn.innerText = isVisible ? '해석 전체 숨기기' : '해석 전체 보기';
+        if(isVisible) {
+            toggleBtn.classList.replace('bg-blue-600', 'bg-slate-600');
+            toggleBtn.classList.replace('hover:bg-blue-500', 'hover:bg-slate-500');
+        } else {
+            toggleBtn.classList.replace('bg-slate-600', 'bg-blue-600');
+            toggleBtn.classList.replace('hover:bg-slate-500', 'hover:bg-blue-500');
+        }
+    });
+
+    const toggleFuriganaBtn = document.getElementById('toggleFurigana');
+    let isFuriganaVisible = true;
+
+    toggleFuriganaBtn.addEventListener('click', () => {
+        isFuriganaVisible = !isFuriganaVisible;
+        if (isFuriganaVisible) {
+            document.body.classList.remove('hide-furigana');
+            toggleFuriganaBtn.innerText = '후리가나 숨기기';
+            toggleFuriganaBtn.classList.replace('bg-slate-600', 'bg-teal-600');
+            toggleFuriganaBtn.classList.replace('hover:bg-slate-500', 'hover:bg-teal-500');
+        } else {
+            document.body.classList.add('hide-furigana');
+            toggleFuriganaBtn.innerText = '후리가나 보기';
+            toggleFuriganaBtn.classList.replace('bg-teal-600', 'bg-slate-600');
+            toggleFuriganaBtn.classList.replace('hover:bg-teal-500', 'hover:bg-slate-500');
+        }
+    });
+
+    const playbackRate = document.getElementById('playbackRate');
+    playbackRate.addEventListener('change', () => {
+        const speed = playbackRate.value;
+        document.querySelectorAll('audio').forEach(audio => {
+            const source = audio.querySelector('source');
+            if (!source) return;
+            if (!source.dataset.originalSrc) {
+                source.dataset.originalSrc = source.getAttribute('src');
+            }
+            const originalSrc = source.dataset.originalSrc;
+            if (speed === "1") {
+                source.src = originalSrc;
+            } else {
+                source.src = originalSrc.replace(".mp3", "-2.mp3");
+            }
+            audio.load();
+        });
+    });
+
+    const homeBtn = document.getElementById("homeBtn");
+    if (homeBtn) {
+        homeBtn.addEventListener("click", () => {
+            location.href = "https://tajunii.github.io/study-home/";
+        });
+    }
+
+    // ========================================================
+    // [새로운 부분] TV 리モコン 시각적 포カース(Focus) 제어 로직 
+    // ========================================================
+    const sentences = document.querySelectorAll('.sentence-container');
+    let currentFocusIndex = -1; // 현재 포커스된 문장의 인덱스 (-1은 아무것도 선택되지 않음)
+
+    // 선택된 문장을 시각적으로 강조하고 화면 중앙으로 끌어오는 함수
+    function updateFocus(newIndex) {
+        if (newIndex < 0 || newIndex >= sentences.length) return;
+        
+        // 이전 포커스 지우기
+        if (currentFocusIndex !== -1) {
+            sentences[currentFocusIndex].classList.remove('focused');
+        }
+        
+        // 새 포커스 지정
+        currentFocusIndex = newIndex;
+        const targetSentence = sentences[currentFocusIndex];
+        targetSentence.classList.add('focused');
+        
+        // 해당 문장이 화면 한가운데 오도록 부드럽게 스크롤
+        targetSentence.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    // 현재 포커스된 문장의 오디오를 재생/일시정지 하는 함수
+    function playFocusedAudio() {
+        if (currentFocusIndex === -1) return; // 선택된 문장이 없으면 무し
+        
+        const targetSentence = sentences[currentFocusIndex];
+        const audio = targetSentence.querySelector('audio');
+        if (!audio) return;
+        
+        const allAudios = document.querySelectorAll('audio');
+
+        if (audio.paused) {
+            // 다른 오디오는 모두 정지
+            allAudios.forEach(a => { if (a !== audio) a.pause(); });
+            
+            // 현재 문장 재생
+            const playPromise = audio.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(e => console.log("TV 오디오 재생 에러:", e));
+            }
+        } else {
+            audio.pause(); // 이미 재생 중이면 일시정지
+        }
+    }
+
+    // 리モコン 키보드(방향키, 확인키) 감지
+    document.addEventListener('keydown', (event) => {
+        const key = event.key;
+        const keyCode = event.keyCode;
+
+        const isUp = key === 'ArrowUp' || keyCode === 38;
+        const isDown = key === 'ArrowDown' || keyCode === 40;
+        const isEnter = key === 'Enter' || keyCode === 13 || key === 'MediaPlayPause';
+
+        if (isDown) {
+            event.preventDefault(); // 기본 스크롤 방지
+            // 아래로 한 칸 이동 (처음 누르면 0번부터 시작)
+            updateFocus(currentFocusIndex === -1 ? 0 : currentFocusIndex + 1);
+        } else if (isUp) {
+            event.preventDefault();
+            // 위로 한 칸 이동
+            updateFocus(currentFocusIndex <= 0 ? 0 : currentFocusIndex - 1);
+        } else if (isEnter) {
+            event.preventDefault();
+            // 하이라이트된 문장 재생
+            playFocusedAudio();
+        }
+    });
+
+    // 마우스(리モコン 커서)로 허공을 클릭했을 때도 재생되도록 예외 처리
+    document.addEventListener('click', (event) => {
+        const tagName = event.target.tagName.toLowerCase();
+        // 버튼 등 다른 UI를 클릭한 거라면 무시
+        if (tagName === 'button' || tagName === 'select' || tagName === 'audio' || tagName === 'input') {
+            return;
+        }
+        playFocusedAudio();
+    });
+
+    // [선택 사항] 페이지 열자마자 1번 문장에 노란 불빛이 켜져 있게 하려면 아래 주석을 푸세요.
+    // updateFocus(0); 
+    // ========================================================
+</script>
+</body>
+</html>
